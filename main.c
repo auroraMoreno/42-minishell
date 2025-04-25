@@ -6,11 +6,12 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/04/25 18:02:54 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:04:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main()
+int main(void)
 {
+    int i; 
     return (0);
 }
