@@ -12,6 +12,6 @@
 
 int main(void)
 {
-    int i; 
-    return (0);
+    int j; 
+    return (1);
 }
