@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/02 13:12:50 by aumoreno         ###   ########.fr       */
+/*   Created: 2022/09/25 10:41:01 by aumoreno          #+#    #+#             */
+/*   Updated: 2022/09/25 10:41:01 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int main(void)
+int	ft_isdigit(int c)
 {
-    printf("Prueba makefile\n");
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }

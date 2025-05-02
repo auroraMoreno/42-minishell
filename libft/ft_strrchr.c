@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/02 13:12:50 by aumoreno         ###   ########.fr       */
+/*   Created: 2022/09/25 10:39:14 by aumoreno          #+#    #+#             */
+/*   Updated: 2023/06/24 14:21:01 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+char	*ft_strrchr(const char *s, int c)
 {
-    printf("Prueba makefile\n");
+	const char	*innit;
+	char		ctr;
+
+	innit = s;
+	ctr = c;
+	while (*s)
+		s++;
+	while (*s != ctr)
+	{
+		if (s == innit)
+			return (0);
+		s--;
+	}
+	return ((char *) s);
 }

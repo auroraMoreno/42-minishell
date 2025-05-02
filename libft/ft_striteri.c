@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/02 13:12:50 by aumoreno         ###   ########.fr       */
+/*   Created: 2023/04/05 10:40:15 by aumoreno          #+#    #+#             */
+/*   Updated: 2023/06/24 11:47:53 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
-    printf("Prueba makefile\n");
+	unsigned int	i;
+
+	if (s != NULL || f != NULL)
+	{
+		i = 0;
+		while (s[i] != '\0')
+		{
+			f (i, &s[i]);
+			i++;
+		}
+	}
 }

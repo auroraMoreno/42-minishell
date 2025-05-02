@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/02 13:12:50 by aumoreno         ###   ########.fr       */
+/*   Created: 2022/09/25 10:41:37 by aumoreno          #+#    #+#             */
+/*   Updated: 2022/09/25 10:41:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-    printf("Prueba makefile\n");
+	void	*str;
+
+	str = (void *)malloc(nmemb * size);
+	if (str == 0)
+		return (0);
+	ft_bzero (str, (nmemb * size));
+	return (str);
 }

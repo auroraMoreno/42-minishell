@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/02 13:12:50 by aumoreno         ###   ########.fr       */
+/*   Created: 2022/09/25 10:41:08 by aumoreno          #+#    #+#             */
+/*   Updated: 2023/06/24 11:57:34 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int main(void)
+int	ft_isascii(int c)
 {
-    printf("Prueba makefile\n");
+	if (c >= 0 && c <= 127)
+		return (1);
+	return (0);
 }
