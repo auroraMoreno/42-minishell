@@ -6,7 +6,7 @@
 #    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/02 12:53:08 by aumoreno          #+#    #+#              #
-#    Updated: 2025/05/02 12:54:23 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/05/02 16:01:47 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS = main.c
 LIBFT_PATH = libft/
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -lreadline
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@ -I $(LIBFT_PATH)
