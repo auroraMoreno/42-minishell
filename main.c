@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/02 16:43:20 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/03 12:40:40 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,18 @@ int main(int argc, char **argv)
     char cwd[PATH_MAX]; // poner en un struct (directory_info ?)
     char *user; // struct directory info ? 
     char *prompt;
-    char *add_space;
+    char *prompt_formatted;
     char *cmd;
     user = ft_strjoin(getenv("USER"), ":~");
     if(getcwd(cwd, sizeof(cwd)) != NULL && user != NULL)
     { 
-        // esto concat y pasarlo a readline y hacer el bucle 
-        // faltaria tmb add lo de CTRL + D finaliza y ver lo de CTRL + C 
-        // tmb gestionar leaks y alojar mem 
-        prompt = ft_strjoin(user, cwd);
-        //prompt = ft_strjoin(prompt, "$ "); TO-DO: MIRAR ESTO DEL $ 
-        add_space = ft_strjoin(prompt, " ");
-        
+        // TO_DO: alojar mem ? 
         while(1)
         {
-            cmd = readline(add_space); // de esta forma, no estoy cogiendo aun el cwd cada vez TO-DO 
+            prompt = ft_strjoin(user, cwd);
+            //prompt = ft_strjoin(prompt, "$ "); TO-DO: MIRAR ESTO DEL $ 
+            prompt_formatted = ft_strjoin(prompt, " ");
+            cmd = readline(prompt_formatted);
             printf("%s\n", cmd); 
 
             if(!cmd)
@@ -48,7 +45,7 @@ int main(int argc, char **argv)
         printf("didnt work"); 
    free(user);
    free(prompt);
-   free(add_space);
+   free(prompt_formatted);
    free(cmd);
    return (0);
 }
