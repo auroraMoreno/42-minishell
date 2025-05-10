@@ -14,11 +14,11 @@
 
 void handle_sigint(int sig)
 {
-    
     (void)sig;
     rl_on_new_line();
-    rl_replace_line("",0);
     rl_redisplay();
+    rl_replace_line("aumoreno:~/home/aumoreno/Desktop/minishell/42-minishell",0);
+    //printf("caught CTRL + C %d", sig);
 }
 
 int main(int argc, char **argv)
