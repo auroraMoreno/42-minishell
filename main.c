@@ -14,9 +14,11 @@
 
 void handle_sigint(int sig)
 {
-    // poner un new line 
     
-
+    (void)sig;
+    rl_on_new_line();
+    rl_replace_line("",0);
+    rl_redisplay();
 }
 
 int main(int argc, char **argv)
@@ -35,8 +37,8 @@ int main(int argc, char **argv)
     if (getcwd(cwd, sizeof(cwd)) != NULL && user != NULL)
     {
         signal(SIGQUIT, SIG_IGN);
-        signal(SIGINT, handle_sigint);
         // TO_DO: alojar mem ?
+        signal(SIGINT, handle_sigint);
         while (1)
         {
             prompt = ft_strjoin(user, cwd);
@@ -44,8 +46,9 @@ int main(int argc, char **argv)
             prompt_formatted = ft_strjoin(prompt, " ");
             cmd = readline(prompt_formatted);
             
-            if (!cmd || !user || !prompt || !prompt_formatted) // por esto no va el ctrl c
+            if (!cmd || !user || !prompt || !prompt_formatted)
                 break;
+            add_history(cmd);
             printf("%s", cmd);
             free(prompt);
             free(prompt_formatted);
@@ -54,6 +57,8 @@ int main(int argc, char **argv)
     }
     else
         printf("didnt work");
+
+    rl_clear_history();
 
     if (user)
         free(user);
