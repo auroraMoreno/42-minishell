@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/05 18:17:26 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:38:27 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void handle_sigint(int sig)
 {
-    (void)sig;
-    rl_on_new_line();
-    rl_redisplay();
-    rl_replace_line("aumoreno:~/home/aumoreno/Desktop/minishell/42-minishell",0);
-    //printf("caught CTRL + C %d", sig);
+	(void) sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 int main(int argc, char **argv)
