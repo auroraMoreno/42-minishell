@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/19 20:10:43 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:41:48 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <signal.h> 
 #include  <errno.h>
 
+
 typedef struct s_builtin_type
 {
     char *built_in_name;
@@ -27,8 +28,9 @@ typedef struct s_builtin_type
     
 }t_built_in_type;
 
+
 /*executer*/
-void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[]);
+void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], char *env[]);
 
 /*built in functions*/
 void ft_init_builtins(t_built_in_type builtins[]);

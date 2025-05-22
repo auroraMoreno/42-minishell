@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/19 20:14:02 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:59:33 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,15 @@ int ft_cd(char *path)
     (void)path;
     printf("Este es el built in cd\n");
     //comprobar que el path es válido
-    // if(chdir(path) < 0)
-    // {
-    //     if()
-    // }
-
+   // if(chdir(path) < 0)
+        // TO-DO: hacer una funcion que le pasamos el errno y nos da un error
+        //ft_cd_errors(errno);
+       // return (0);
     //comprobar que tenemos acceso a ese path
 
     // cambiar el directrio: chdir ?
+    
+    chdir(".."); //cambia el path pero no cambia el prompt user
     
     return (0);
 }
@@ -81,13 +82,25 @@ int ft_unset()
     return (0);
 }
 
-int ft_env()
+int ft_env(char *env[])
 {
+    int i;
+
+    if(!env)
+        return (-1);
+
+    i = 0;
+    while(env[i])
+    {
+        printf("%s\n", env[i]);
+        i++;
+    }
     return (0);
 }
 
-int ft_exit()
+int ft_exit(int status)
 {
+    exit(status);
     return (0);
 }
 

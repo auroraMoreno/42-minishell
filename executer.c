@@ -6,26 +6,29 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/19 20:14:47 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:54:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[])
+void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], char **env)
 {
 
     (void)flags;
     // hacer comprobación de si es built_in
+    //TO-DO: Hacer comprobacion de nulls y demas y lanzar errors, dentro del bucle tmb 
     int i = 0;
     while(i < 7)
     {
         if(!ft_strncmp(builtins[i].built_in_name, cmd, ft_strlen(cmd)))
         {
-            
-            //printf("%s es un built in \n", cmd);
-            builtins[i].foo(cmd, NULL);      
+            if(!ft_strncmp("env", cmd, ft_strlen(cmd)))
+                builtins[i].foo(env);      
+            else   
+                builtins[i].foo(cmd, NULL); 
+            break;  
         }
         i++;
     }
