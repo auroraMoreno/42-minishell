@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/22 12:59:33 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:24:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,24 @@ int ft_pwd()
     return (0);
 }
 
-int ft_export()
+int ft_export(char **var_name, char *env[])
 {
+    //solo el name porq el value se supone que ya está 
+    // segun el comportamiento de export si la var a exportar no existe, lista las variables exportadass
+    int i; 
+    if(!var_name)//list 
+    {
+      i = 0;
+      while(env[i])
+      {
+        printf("declare -x %s\n",env[i]); // TO-DO: arregalar que el valor esté surrounded con ""
+        i++;
+      }   
+    }    
+    else
+        printf("we set export\n");
+        // hacer el export de la variable (no idea)
+    
     return (0);
 }
 
