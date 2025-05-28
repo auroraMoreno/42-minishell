@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/03 16:08:52 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/28 01:04:57 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 #define MINISHELL_H
 
 #include "./libft/libft.h"
-#include <linux/limits.h>
+//#include <linux/limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h> 
+#include <stdbool.h>
 #endif
 
