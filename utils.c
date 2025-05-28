@@ -23,3 +23,9 @@ void ft_print_env(char *env[])
         i++;
     }
 }
+
+// To-Do: init env 
+void ft_init_env(t_env env, char *envp[])
+{
+    
+}

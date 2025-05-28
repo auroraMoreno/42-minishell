@@ -49,8 +49,8 @@ int main(int argc, char **argv, char *envp[])
     char *prompt_formatted;
     char *cmd;
     t_built_in_type built_ins[7];
-    //t_env_var **env;
-
+    t_env env;
+    
     user = ft_strjoin(getenv("USER"), ":~");
 
     signal(SIGQUIT, SIG_IGN);
@@ -60,12 +60,11 @@ int main(int argc, char **argv, char *envp[])
     while (1) // poner el bucle rodeando al if
     {
         if (getcwd(cwd, sizeof(cwd)) != NULL && user != NULL) 
-        //modificar esto ^ para que coja siempre el getcwd 
         {
-            //ft_get_env(env, );
-            
             ft_init_builtins(built_ins);
-        
+
+            ft_init_env(env, envp);
+
             prompt = ft_strjoin(user, cwd);
             // prompt = ft_strjoin(prompt, "$ "); TO-DO: MIRAR ESTO DEL $
             prompt_formatted = ft_strjoin(prompt, " ");
@@ -74,7 +73,6 @@ int main(int argc, char **argv, char *envp[])
             if (!cmd || !user || !prompt || !prompt_formatted)
                 break;
             add_history(cmd);
-            // printf("%s", cmd);
 
             // execute 
                 

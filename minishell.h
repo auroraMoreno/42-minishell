@@ -28,6 +28,12 @@ typedef struct s_builtin_type
     
 }t_built_in_type;
 
+typedef struct s_env
+{
+    char *key;
+    char *value;
+
+}t_env;
 
 
 /*executer*/
