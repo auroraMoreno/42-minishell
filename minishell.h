@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/22 15:41:48 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:45:39 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_builtin_type
     int (*foo)(); //considerar un union para distintos prototypes 
     
 }t_built_in_type;
+
 
 
 /*executer*/

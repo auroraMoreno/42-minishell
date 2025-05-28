@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/23 16:24:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:08:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,12 @@ int ft_export(char **var_name, char *env[])
     else
         printf("we set export\n");
         // hacer el export de la variable (no idea)
+        // pueden venir varias variables asi que deberia de ser un bucle ? 
+        //si export + var_name="value"
+        
+        // si export + var_name
+
+        //si export + $var_name DUDA
     
     return (0);
 }
