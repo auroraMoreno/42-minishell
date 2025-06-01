@@ -6,13 +6,13 @@
 #    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/02 12:53:08 by aumoreno          #+#    #+#              #
-#    Updated: 2025/05/02 16:01:47 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/05/17 14:01:15 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 EXEC = minishell
 
-SRCS = main.c
+SRCS = main.c built_ins.c executer.c
 
 LIBFT_PATH = libft/
 
