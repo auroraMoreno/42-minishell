@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/22 15:34:50 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:37:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv, char *envp[])
     char *prompt_formatted;
     char *cmd;
     t_built_in_type built_ins[7];
-    t_env env;
+    t_data data;
     
     user = ft_strjoin(getenv("USER"), ":~");
 
@@ -57,13 +57,16 @@ int main(int argc, char **argv, char *envp[])
     // TO_DO: alojar mem ?
     signal(SIGINT, handle_sigint);
     
+    ft_init_builtins(built_ins);
+
+    data.env = ft_init_env(envp);
+    
     while (1) // poner el bucle rodeando al if
     {
         if (getcwd(cwd, sizeof(cwd)) != NULL && user != NULL) 
         {
-            ft_init_builtins(built_ins);
 
-            ft_init_env(env, envp);
+            //print env
 
             prompt = ft_strjoin(user, cwd);
             // prompt = ft_strjoin(prompt, "$ "); TO-DO: MIRAR ESTO DEL $
@@ -76,7 +79,7 @@ int main(int argc, char **argv, char *envp[])
 
             // execute 
                 
-            ft_handle_exe(cmd, NULL, built_ins, envp);
+            ft_handle_exe(cmd, NULL, built_ins, data);
 
         
             free(prompt);
@@ -92,6 +95,8 @@ int main(int argc, char **argv, char *envp[])
 
     //ft_print_builtins(built_ins);
 
+    ft_free_env(&data.env);
+    
     if (user)
         free(user);
     if (prompt)
