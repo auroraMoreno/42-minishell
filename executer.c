@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/03 11:27:05 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:36:56 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,13 @@ void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data da
                 char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
                 builtins[i].foo(args , data.env);
             }
+            else if(!ft_strncmp("unset", cmd, ft_strlen(cmd)))
+            {
+                char *args[] = {"A","B", NULL};
+                builtins[i].foo(args , data.env);
+            }
             else   
+            
                 builtins[i].foo(cmd, NULL); 
             break;  
         }
