@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/03 13:36:56 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:32:38 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data da
             }
             else   
             
-                builtins[i].foo(cmd, NULL); 
+                builtins[i].foo("hola que tal", NULL); 
             break;  
         }
         i++;
