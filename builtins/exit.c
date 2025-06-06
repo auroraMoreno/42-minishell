@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:48 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/04 13:59:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:07:42 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@
  exit status is that of the last command executed. Any trap on EXIT is executed
  before the shell terminates.*/
 int ft_exit(int status)
-{
+{ 
+    if(status < 0 || status > 255)
+        exit(EXIT_FAILURE);
+    //TO-DO: comprobar que status es un status valido?
     exit(status);
-    return (status); // quitar eso, exit does not return 
+    return (status); // TO-DO: quitar eso, exit does not return, considerar union
 }

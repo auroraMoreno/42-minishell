@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/02 12:18:06 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:45:02 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ char *ft_find_equal_sign(char *str)
     int i = 0;
 
     substr = (char *)malloc(sizeof(char) * ft_strlen(str));
+
+    if(!substr)
+        ft_error("error in malloc");
 
     while(str[i] != '=')
     {
@@ -42,9 +45,13 @@ t_list *ft_process_env_values(char *key_val)
         return (0);
     
     //voy hasta el igual 
-    env->key = ft_find_equal_sign(key_val); // TO-DO: free de esto,
+    env->key = ft_find_equal_sign(key_val);
+    if(!env->key)
+        ft_error("Error setting env key");
     // voy hasta despues del igual:
     env->value = ft_substr(key_val, ft_strlen(env->key) + 2 ,ft_strlen(key_val) - ft_strlen(env->key) + 1);
+    if(!env->key)
+        ft_error("Error setting env value");
     // creo nuevo nodo de la lista
     new = ft_lstnew(env);
     //devuelvo ese nuevo nodo 
