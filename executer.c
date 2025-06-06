@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/04 12:32:38 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:49:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data da
                 char *args[] = {"A","B", NULL};
                 builtins[i].foo(args , data.env);
             }
+            else if(!ft_strncmp("cd", cmd, ft_strlen(cmd)))
+                builtins[i].foo(NULL, data.env);      
             else   
             
                 builtins[i].foo("hola que tal", NULL); 

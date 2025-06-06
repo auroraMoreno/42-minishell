@@ -6,19 +6,11 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:26:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/29 16:39:25 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:31:30 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*void ft_cd_errors(int errno)
-{
-    if(errno == EACCES)
-        //escribir en el stdout de ERROR usar funcion stdl y pasarle 2 
-        
-        
-}*/
 
 void ft_error(char *str)
 {
