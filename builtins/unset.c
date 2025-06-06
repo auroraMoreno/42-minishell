@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:04:00 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/06 13:57:13 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:42:05 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ t_list *ft_find_element(t_list **env_list, char *var_name)
 {
     t_list *curr;
     t_list *prev;
-    //t_list *to_del;
     t_env *env;
     
     curr = *env_list;
@@ -62,10 +61,11 @@ int ft_unset(char *var_names[], t_data data)
                 ft_lstdelone(to_del, ft_free_env_node);
                 printf("var unset\n");
             }
+            else
+                ft_error("bash unset: Variable not found.");
             i++;
         }
     }
-    
     
     return (0);
 }

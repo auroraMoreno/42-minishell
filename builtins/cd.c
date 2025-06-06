@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/06 12:51:15 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:44:09 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,12 @@ int ft_cd(char *path, t_list *env)
     t_list *curr;
     t_env *env_node;
     char new_path[PATH_MAX];
-    path = ".."; //TO-DO: CAMBIAR
+    path = "../only_sudo"; //TO-DO: CAMBIAR
     if(chdir(path) == -1)
+    {
         ft_cd_errors(errno, path);
+        return (errno);
+    }
     //cambiar el oldpwd y pwd de env    
     getcwd(new_path, sizeof(new_path));                 
     curr = env;

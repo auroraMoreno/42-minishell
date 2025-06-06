@@ -6,12 +6,11 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/06 13:41:18 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:27:38 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 int ft_export(char *var_name[], t_data data)
 {
