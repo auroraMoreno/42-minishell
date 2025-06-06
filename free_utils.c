@@ -1,19 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 20:26:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/05 12:31:30 by aumoreno         ###   ########.fr       */
+/*   Created: 2025/05/30 11:21:47 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/06/02 12:37:44 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_error(char *str)
+void	ft_free_env_node(void *content)
 {
-    ft_putendl_fd(str,2);
-    exit(EXIT_FAILURE);
+	t_env *env = (t_env *)content;
+
+	if (!env)
+		return;
+
+	free(env->key);   // only if they were malloc'd!
+	free(env->value); // only if they were malloc'd!
+	free(env);
+}
+void ft_free_env(t_list **env_list)
+{
+   	if (env_list && *env_list)
+		ft_lstclear(env_list, ft_free_env_node);
 }

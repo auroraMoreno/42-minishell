@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/05/26 10:45:39 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:18:46 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define MINISHELL_H
 
 #include "./libft/libft.h"
-#include <limits.h>
+#include <linux/limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h> 
@@ -28,10 +28,29 @@ typedef struct s_builtin_type
     
 }t_built_in_type;
 
+typedef struct s_env
+{
+    char *key;
+    char *value;
+
+}t_env;
+
+typedef struct s_data // usar struct pipex de cesar 
+{
+    t_list *env;
+}
+t_data;
+
+typedef struct s_cmd
+{
+    char *cmd_name; // el nombre del comando 
+    char **args; // valores rollo nombre de variables
+    char **flags; //aqui serian rollo -n para echo y demas 
+}t_cmd;
 
 
 /*executer*/
-void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], char *env[]);
+void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data data);
 
 /*built in functions*/
 void ft_init_builtins(t_built_in_type builtins[]);
@@ -42,6 +61,19 @@ int ft_export();
 int ft_unset();
 int ft_env();
 int ft_exit();
+
+/*utils*/
+t_list *ft_init_env(char *envp[]);
+t_list *ft_process_env_values(char *key_val);
+char *ft_find_equal_sign(char *str);
+
+
+/*freeing memory methods*/
+void ft_free_env(t_list **env_list);
+void    ft_free_env_node(void *content);
+
+/*error methods*/
+void ft_error(char *str);
 
 #endif
 

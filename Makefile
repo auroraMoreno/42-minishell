@@ -6,13 +6,15 @@
 #    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/02 12:53:08 by aumoreno          #+#    #+#              #
-#    Updated: 2025/05/17 14:01:15 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/06/04 12:12:15 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 EXEC = minishell
 
-SRCS = main.c built_ins.c executer.c
+SRCS = main.c utils.c \
+		builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/unset.c builtins/env.c builtins/exit.c \
+		executer.c free_utils.c errors.c
 
 LIBFT_PATH = libft/
 

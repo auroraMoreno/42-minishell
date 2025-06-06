@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 20:26:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/05 12:31:30 by aumoreno         ###   ########.fr       */
+/*   Created: 2025/06/04 12:03:54 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/06/06 15:57:09 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void ft_error(char *str)
+int ft_env(t_data data)
 {
-    ft_putendl_fd(str,2);
-    exit(EXIT_FAILURE);
+    t_list *curr;
+    t_env *env; 
+      
+    curr = data.env;
+    while(curr)
+    { 
+    env = curr->content; 
+    printf("%s=%s\n",env->key, env->value); // TO-DO: arregalar que el valor esté surrounded con ""
+    curr = curr->next;
+    }  
+    return (0); //TO-DO no devuelve nada 
 }
