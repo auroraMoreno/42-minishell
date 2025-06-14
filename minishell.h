@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/01 19:47:13 by cesar            ###   ########.fr       */
+/*   Updated: 2025/06/02 20:50:31 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include <signal.h> 
 #include  <errno.h>
+#include <stdbool.h>
 
 
 typedef struct s_builtin_type
