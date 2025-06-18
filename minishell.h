@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/03 11:18:46 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/18 09:48:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <linux/limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <signal.h> 
 #include  <errno.h>
 
@@ -38,6 +40,7 @@ typedef struct s_env
 typedef struct s_data // usar struct pipex de cesar 
 {
     t_list *env;
+    char **env_parsed;
 }
 t_data;
 
@@ -45,7 +48,8 @@ typedef struct s_cmd
 {
     char *cmd_name; // el nombre del comando 
     char **args; // valores rollo nombre de variables
-    char **flags; //aqui serian rollo -n para echo y demas 
+    char **flags; //aqui serian rollo -n para echo y demas +
+    int is_built_in;
 }t_cmd;
 
 
