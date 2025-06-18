@@ -6,24 +6,22 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/18 09:31:07 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:57:13 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//TO-DO: mejorar este método 
-
-void ft_execute_cmd(char *cmd, char *flag, t_data data)
+void ft_execute_cmd(char *cmd_path, char **flag, t_data data)
 {
-    printf("%s", cmd);
     if(fork() == 0) // TO-DO: check de errores 
     {
-        printf("inside fork");
-        execve(cmd, (void *)flag, data.env_parsed);
+        if(execve(cmd_path, flag, data.env_parsed) < 0)
+        ft_error("error en execve");
     }
 }
 
+//TO-DO: mejorar este método 
 void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data data)
 {
 
@@ -36,7 +34,6 @@ void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data da
     {
         if(!ft_strncmp(builtins[i].built_in_name, cmd, ft_strlen(cmd)))
         {
-            printf("is built in");
             if(!ft_strncmp("env", cmd, ft_strlen(cmd)))
                 builtins[i].foo(data.env);      
             else if(!ft_strncmp("export", cmd, ft_strlen(cmd)))
@@ -61,14 +58,8 @@ void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data da
     
     if(is_built_in == 0)
     {
-        ft_execute_cmd(cmd, flags, data);
+        char *cmd1[] = {"ls", NULL};
+        ft_execute_cmd("/usr/bin/ls", cmd1, data);
         wait(NULL);
     }
 }
-
-/*if(cmd.is_built_in)
-    // si es built in
-    // llamar a la función built in 
-else 
-    // si no es built in
-*/ 
