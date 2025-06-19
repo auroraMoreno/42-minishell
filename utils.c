@@ -6,13 +6,25 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/18 13:37:24 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:12:46 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// To-Do: init env 
+int ft_strcmp(const char *s1, const char *s2)
+{
+    int i = 0;
+        
+    while(s1[i] || s2[i])
+    {
+        if(s1[i] == s2[i])
+            i++;
+        else if(s1[i] != s2[i])
+		    return (1);
+    }
+    return (0);
+}
 
 char *ft_find_equal_sign(char *str)
 {

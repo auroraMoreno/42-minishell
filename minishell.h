@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/18 09:48:51 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/19 09:49:46 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int ft_exit();
 t_list *ft_init_env(char *envp[]);
 t_list *ft_process_env_values(char *key_val);
 char *ft_find_equal_sign(char *str);
+int ft_strcmp(const char *s1, const char *s2);
 
 
 /*freeing memory methods*/
