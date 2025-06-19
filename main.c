@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/02 12:37:36 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:32:43 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,6 @@ void handle_sigint(int sig)
 	rl_redisplay();
 }
 
-/*void ft_print_builtins(t_built_in_type builtins[])
-{
-    if(!builtins)
-        printf("Error in built in");
-    else 
-    {
-        int i = 0;
-        while(i <= 6)
-        {
-            printf("%s\n", builtins[i].built_in_name);
-            //printf("%s\n", builtins[i].foo);
-            i++;
-        }
-    }
-    
-}*/
-
 int main(int argc, char **argv, char *envp[])
 {
     (void)argc; //TO-DO: comprobar que vienen argumentos 
@@ -45,32 +28,32 @@ int main(int argc, char **argv, char *envp[])
     
     char cwd[PATH_MAX]; // poner en un struct (directory_info ?)
     char *user;         // struct directory info ?
-    char *prompt;
-    char *prompt_formatted;
-    char *cmd;
-    t_built_in_type built_ins[7];
-    t_data data;
+    char *prompt = NULL;
+    char *prompt_formatted = NULL;
+    char *cmd = NULL;
+    t_built_in_type built_ins[7]; //TO-DO: malloc this ? 
+    t_data data; //TO-DO: should this be a pointer ? 
     
     user = ft_strjoin(getenv("USER"), ":~");
-
-    signal(SIGQUIT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN); // TO-DO: Ctrl D signal doesn't seem to be working properly 
     // TO_DO: alojar mem ?
     signal(SIGINT, handle_sigint);
     
     ft_init_builtins(built_ins);
 
-    data.env = ft_init_env(envp);
+    data.env = ft_init_env(envp); //TO-DO: review 
+    data.env_parsed = envp; // TO-DO: review too 
     
-    while (1) // poner el bucle rodeando al if
+    while (1)
     {
+        //TO-DO: refact this code 
         if (getcwd(cwd, sizeof(cwd)) != NULL && user != NULL) 
         {
-
-            //print env
-
             prompt = ft_strjoin(user, cwd);
+            if(!prompt) break;
             // prompt = ft_strjoin(prompt, "$ "); TO-DO: MIRAR ESTO DEL $
             prompt_formatted = ft_strjoin(prompt, " ");
+            if(!prompt_formatted) break;
             cmd = readline(prompt_formatted);
         
             if (!cmd || !user || !prompt || !prompt_formatted)
@@ -78,13 +61,11 @@ int main(int argc, char **argv, char *envp[])
             add_history(cmd);
 
             // execute 
-                
             ft_handle_exe(cmd, NULL, built_ins, data);
+            if (prompt) free(prompt);
+            if (prompt_formatted) free(prompt_formatted);
+            if (cmd) free(cmd);
 
-        
-            free(prompt);
-            free(prompt_formatted);
-            free(cmd);
         }
         else
             printf("didnt work");
@@ -93,10 +74,9 @@ int main(int argc, char **argv, char *envp[])
 
     rl_clear_history();
 
-    //ft_print_builtins(built_ins);
-
-    ft_free_env(&data.env);
+    ft_free_env(&data.env); // TO-DO: review 
     
+    // TO-DO: review 
     if (user)
         free(user);
     if (prompt)
