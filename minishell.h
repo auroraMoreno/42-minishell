@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/19 09:49:46 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:58:12 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <sys/wait.h>
 #include <signal.h> 
 #include  <errno.h>
+
+//#include "./pipex/pipex_bonus.h"
 
 
 typedef struct s_builtin_type
@@ -40,6 +42,7 @@ typedef struct s_env
 typedef struct s_data // usar struct pipex de cesar 
 {
     t_list *env;
+    
     char **env_parsed;
 }
 t_data;
@@ -47,6 +50,7 @@ t_data;
 typedef struct s_cmd
 {
     char *cmd_name; // el nombre del comando 
+    char *cmd_path; //método build path 
     char **args; // valores rollo nombre de variables
     char **flags; //aqui serian rollo -n para echo y demas +
     int is_built_in;
@@ -54,7 +58,7 @@ typedef struct s_cmd
 
 
 /*executer*/
-void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data data);
+void ft_handle_exe(t_cmd cmd_data, t_built_in_type builtins[], t_data data);
 
 /*built in functions*/
 void ft_init_builtins(t_built_in_type builtins[]);
@@ -66,11 +70,16 @@ int ft_unset();
 int ft_env();
 int ft_exit();
 
+/*init functions*/
+t_cmd ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
+
 /*utils*/
 t_list *ft_init_env(char *envp[]);
 t_list *ft_process_env_values(char *key_val);
 char *ft_find_equal_sign(char *str);
 int ft_strcmp(const char *s1, const char *s2);
+char	*find_route(char *instruction, char *path);
+void	free_matrix(char **matrix);
 
 
 /*freeing memory methods*/

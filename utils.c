@@ -6,11 +6,12 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/19 11:12:46 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:17:58 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -61,7 +62,7 @@ t_list *ft_process_env_values(char *key_val) // tengo que hacer un dup
     if(!env->key)
         ft_error("Error setting env key");
     // voy hasta despues del igual:
-    env->value = ft_substr(key_val, ft_strlen(env->key) + 2 ,ft_strlen(key_val) - ft_strlen(env->key) + 1);
+    env->value = ft_substr(key_val, ft_strlen(env->key) + 1 ,ft_strlen(key_val) - ft_strlen(env->key) + 1);
     if(!env->key)
         ft_error("Error setting env value");
     // creo nuevo nodo de la lista

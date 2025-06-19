@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/18 12:32:43 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:31:49 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 void handle_sigint(int sig)
 {
-	(void) sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if(sig == SIGINT)
+    {
+        write(1, "\n", 1);
+        rl_on_new_line();
+        rl_replace_line("", 0);
+        rl_redisplay();
+    }
 }
 
 int main(int argc, char **argv, char *envp[])
@@ -31,12 +33,14 @@ int main(int argc, char **argv, char *envp[])
     char *prompt = NULL;
     char *prompt_formatted = NULL;
     char *cmd = NULL;
+    // TO_DO: alojar mem ?
     t_built_in_type built_ins[7]; //TO-DO: malloc this ? 
     t_data data; //TO-DO: should this be a pointer ? 
+    t_cmd cmd_data;
+
     
     user = ft_strjoin(getenv("USER"), ":~");
     signal(SIGQUIT, SIG_IGN); // TO-DO: Ctrl D signal doesn't seem to be working properly 
-    // TO_DO: alojar mem ?
     signal(SIGINT, handle_sigint);
     
     ft_init_builtins(built_ins);
@@ -59,9 +63,11 @@ int main(int argc, char **argv, char *envp[])
             if (!cmd || !user || !prompt || !prompt_formatted)
                 break;
             add_history(cmd);
-
-            // execute 
-            ft_handle_exe(cmd, NULL, built_ins, data);
+            //parser
+            
+            // execute TO-DO: esto modificarlo cuando parser / syntax este hecho 
+            cmd_data = ft_init_cmd(cmd, built_ins); 
+            ft_handle_exe(cmd_data, built_ins, data);
             if (prompt) free(prompt);
             if (prompt_formatted) free(prompt_formatted);
             if (cmd) free(cmd);
