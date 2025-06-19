@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/18 10:57:13 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:22:20 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void ft_execute_cmd(char *cmd_path, char **flag, t_data data)
     if(fork() == 0) // TO-DO: check de errores 
     {
         if(execve(cmd_path, flag, data.env_parsed) < 0)
-        ft_error("error en execve");
+            ft_error("error en execve");
     }
 }
 
