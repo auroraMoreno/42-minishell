@@ -6,7 +6,7 @@
 	t_token	*token_list;
 
 	tokens = divide_in_tokens(cmd);
-	token_list = insert_tokens_in_list(tokens);
+	//token_list = insert_tokens_in_list(tokens);
 	//free_matrix(tokens);
 	//check_syntax(token_list);
 }
@@ -16,6 +16,7 @@ int	main(void)
 	char	*cmd;
 
 	cmd = readline("> ");
+	//cmd = "echo 'foo\"bar'\">baz\"";
 	parse_input(cmd);
 	return (0);
 }
