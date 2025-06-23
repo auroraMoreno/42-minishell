@@ -112,6 +112,7 @@ void	check_operator(int *i, int *start, char *cmd, int *nbr)
 	else // solo para '|'
 	{
 		(*nbr)++;
+		printf("nbr incrementa por operador\n");
 		*start = *i + 1;
 	}
 }
@@ -171,12 +172,40 @@ int	check_delimiter(int *i, int *start, char *cmd, int *nbr)
 
 int	get_delimiter(int *i, int *start, char *cmd, int *nbr)
 {
+	int	j;
+	int	fake_start;
 	int	aux;
 	// uso una copia de "nbr" porque en la llamada a la función, nbr es también el iterador de "delimiter_pos"
+
+	j = *i;
+	printf("j = %d && i = %d && start = %d\n", j, *i, *start);
+	fake_start = *start;
 	aux = *nbr;
-	check_no_quote(i, start, cmd, &aux);
-	if (aux > *nbr)
-		return (*i);
+	check_no_quote(&j, &fake_start, cmd, &aux);
+	printf("aux = %d && nbr = %d\n", aux, *nbr);
+	if (aux == *nbr + 1)
+	{
+		*i = j;
+		*start = fake_start;
+		printf("SE CUMPLE 2 | i = %d & start = %d\n", *i, *start);
+		return (*start);
+	}
+	else if (aux > *nbr + 1)
+	{
+		if (*i == j)
+		{
+			*start = *i;
+			(*i)--;
+			printf("SE CUMPLE 1 | i = %d & start = %d\n", *i, *start);
+			return (*start);
+		}
+		else if (j > *i)
+		{
+			*i += (j - *i) / (aux - *nbr);
+			*start = *i + 1;
+			return (*start);
+		}
+	}
 	return (-1);
 }
 
@@ -199,7 +228,10 @@ void	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
 		if (is_quote(cmd[i]))
 			check_quote(&in_quote, &quote_chr, cmd[i]);
 		if (!in_quote && (check_delimiter(&i, &start, cmd, &nbr) != -1)) // porque al llamar dos veces a get_delimiters(), la primera modificaría "i" y "start" antes de la segunda
-			delimiters_pos[nbr++] = get_delimiter(&i, &start, cmd, &nbr);
+		{
+			if (check_delimiter(&i, &start, cmd, &nbr) >= delimiters_pos[nbr - 1])
+				delimiters_pos[nbr++] = get_delimiter(&i, &start, cmd, &nbr);
+		}	
 		i++;
 	}
 	delimiters_pos[token_nbr] = ft_strlen(cmd);
@@ -220,49 +252,58 @@ char	**just_one_token(char *cmd_trimmed)
 	return (tokens);
 }
 
-char	**tokens_split(char cmd, int token_nbr, int *delimiters_pos)
+char*	push_token(char *cmd, int start, int end)
 {
-	char	**tokens;
+	int		size;
 	char	*to_trim;
+	char	*token;
+
+	size = end - start;
+	to_trim = ft_substr(cmd, start, size);
+	if (!to_trim)
+		return (NULL);
+	token = ft_strtrim(to_trim, " ");
+	free(to_trim);
+	if (!token)
+		return (NULL);
+	return (token);
+}
+
+void	free_matrix(char **matrix)
+{
+	int	i;
+
+	i = 0;
+	while (matrix[i])
+	{
+		free(matrix[i]);
+		i++;
+	}
+	free(matrix);
+	return;
+}
+
+char	**tokens_split(char *cmd, int token_nbr, int *delimiters_pos)
+{
 	int		i;
+	char	**tokens;
+
 	tokens = (char **)malloc((token_nbr + 1) * sizeof(char*));
 	if (!tokens)
 		return (NULL);
-	to_trim = ft_substr(cmd, delimiters_pos[0], delimiters_pos[1]);
-	if (!to_trim)
-			free (tokens);
-	tokens[0] = ft_strtrim(to_trim, " ");
-	if (!tokens[0])
-		free (tokens);
-	free (to_trim);
-	i = 1;
-	while (i < token_nbr - 1)
+	i = 0;
+	while (i < token_nbr)
 	{
-		printf("extract before trim between %d & %d\n", delimiters_pos[i], delimiters_pos[i + 1]);
-		if (is_space(cmd[delimiters_pos[i]]))
+		tokens[i] = push_token(cmd, delimiters_pos[i], delimiters_pos[i + 1]);
+		if (!tokens[i])
 		{
-			to_trim = ft_substr(cmd, delimiters_pos[i] + 1, delimiters_pos[i + 1] - delimiters_pos[i] - 1);
+			free_matrix(tokens);
+			return (NULL);
 		}
-		else
-		{
-			if (delimiters_pos[i] == delimiters_pos[i + 1])
-			delimiters_pos[i + 1] += 1;
-			to_trim = ft_substr(cmd, delimiters_pos[i], delimiters_pos[i + 1] - delimiters_pos[i]);
-		}
-			printf("new delimiters_pos[i] = %d\n", delimiters_pos[i]);
-		/*if (!to_trim)
-			free_matrix(tokens, i);*/
-		tokens[i] = ft_strtrim(to_trim, " ");
-		/*if (!tokens[i])
-			free_matrix(tokens, i);*/
-		free (to_trim);
 		i++;
 	}
-	to_trim = ft_substr(cmd, delimiters_pos[i], delimiters_pos[i + 1] - delimiters_pos[i] + 1);
-	tokens[token_nbr - 1] = ft_strtrim(to_trim, " ");
-	free (to_trim);
 	tokens[token_nbr] = NULL;
-	return(tokens);
+	return (tokens);
 }
 
 char	**divide_in_tokens(char *cmd) // cambiar nombre por get_tokens
@@ -276,7 +317,7 @@ char	**divide_in_tokens(char *cmd) // cambiar nombre por get_tokens
 	cmd_trimmed = ft_strtrim(cmd, " ");
 	if (!cmd_trimmed)
 		return (NULL);
-	printf("cmd_trimmed = %s\n", cmd_trimmed);
+	printf("\ncmd_trimmed = %s\n\n", cmd_trimmed);
 	token_nbr = count_tokens(cmd_trimmed);
 	printf("nbr of tokens == %d\n", token_nbr);
 	if (!token_nbr)
@@ -292,16 +333,16 @@ char	**divide_in_tokens(char *cmd) // cambiar nombre por get_tokens
 		printf("token delimiters %d = %d\n", i, delimiters_pos[i]);
 		i++;
 	}
-	tokens = tokens_split(cmd_trimmed, token_nbr, tokens);
+	tokens = tokens_split(cmd_trimmed, token_nbr, delimiters_pos);
+	if (!tokens)
+		return (NULL);
 	i = 0;
-	while (i < token_nbr)
+	while (i <= token_nbr)
 	{
 		printf("token %d = %s\n", i, tokens[i]);
 		i++;
 	}
-	free(cmd_trimmed);
-	free(delimiters_pos);
-	return (NULL);
+	free (cmd_trimmed);
+	free (delimiters_pos);
+	return (tokens);
 }
-
-
