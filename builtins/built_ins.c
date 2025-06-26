@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/19 16:57:14 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/26 09:09:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,12 @@ t_cmd ft_init_cmd(char *cmd, t_built_in_type built_ins[]) // aqui pueden venir v
     cmd_data.cmd_name = cmd;
     cmd_data.flags = NULL;
     cmd_data.args = NULL;
-    cmd_data.cmd_path = find_route(cmd, getenv("PATH"));
-    printf("%s", cmd_data.cmd_path);
-    //check if built in:
     cmd_data.is_built_in = ft_check_built_in(cmd,built_ins);
-    printf("%d", cmd_data.is_built_in);
+    if(!cmd_data.is_built_in)
+        cmd_data.cmd_path = find_route(cmd, getenv("PATH"));
+    else 
+        cmd_data.cmd_path = NULL;
+    //check if built in:
     return (cmd_data);
 }
 

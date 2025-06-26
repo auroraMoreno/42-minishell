@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/19 16:45:17 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/26 09:33:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,47 +28,37 @@ void ft_handle_exe(t_cmd cmd_data,  t_built_in_type builtins[], t_data data)
     // hacer comprobación de si es built_in
     //TO-DO: Hacer comprobacion de nulls y demas y lanzar errors, dentro del bucle tmb 
     //int is_built_in = 0;
-    int i = 0;
-
     //add un if que sea if command is built in para poder quitar var built in 
 
-    //{
-        //if(!ft_strncmp(builtins[i].built_in_name, cmd, ft_strlen(cmd)))
-        // {
-            if(cmd_data.is_built_in == 1)
-            {             
-                //acabar esto    
-                while(i < 7)
-                { //TO-DO: modificar esto a que recorra builtins 
-                    if(!ft_strcmp("echo", cmd_data.cmd_name))
-                        builtins[i].foo("hola que tal", NULL); 
-                    else if(!ft_strcmp("cd", cmd_data.cmd_name))
-                        builtins[i].foo(NULL, data.env);  
-                    else if(!ft_strcmp("pwd", cmd_data.cmd_name))
-                        builtins[i].foo(NULL);    
-                    else if(!ft_strcmp("export", cmd_data.cmd_name))
-                    {
-                        char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
-                        builtins[i].foo(args , data.env);
-                    }
-                    else if(!ft_strcmp("unset", cmd_data.cmd_name))
-                    {
-                        char *args[] = {"A","B", NULL};
-                        builtins[i].foo(args , data.env);
-                    }
-                    else if(!ft_strcmp("env", cmd_data.cmd_name))
-                        builtins[i].foo(data.env);      
-                    else if(!ft_strcmp("exit", cmd_data.cmd_name))
-                        builtins[i].foo(1); //Fix esto porq no puede siempre llegarle 1  
-                    i++;
-                    break;  
-                }
-    //}
+    if(cmd_data.is_built_in == 1)
+    {             
+        //acabar esto    
+             //TO-DO: modificar esto a que recorra builtins 
+            if(!ft_strcmp("echo", cmd_data.cmd_name))
+                builtins[0].foo("hola que tal", NULL); 
+            else if(!ft_strcmp("cd", cmd_data.cmd_name))
+                builtins[1].foo(NULL, data.env);  
+            else if(!ft_strcmp("pwd", cmd_data.cmd_name))
+                builtins[2].foo();  
+            else if(!ft_strcmp("export", cmd_data.cmd_name))
+            {
+                char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
+                builtins[3].foo(args , data.env);
+            }
+            else if(!ft_strcmp("unset", cmd_data.cmd_name))
+            {
+                char *args[] = {"A","B", NULL};
+                builtins[4].foo(args , data.env);
+            }
+            else if(!ft_strcmp("env", cmd_data.cmd_name))
+                builtins[5].foo(data.env);      
+            else if(!ft_strcmp("exit", cmd_data.cmd_name))
+                builtins[6].foo(1); //Fix esto porq no puede siempre llegarle 1  
     }
     else
     {
         char *cmd1[] = {cmd_data.cmd_name, NULL};
-        ft_execute_cmd(cmd_data.cmd_path, cmd1, data);
+        ft_execute_cmd(cmd_data.cmd_path, cmd1, data); //To-Do si es null el path check
         wait(NULL);
     }
 }
