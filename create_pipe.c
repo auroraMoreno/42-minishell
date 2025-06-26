@@ -1,16 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*   create_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/08 12:10:13 by ccarro-d          #+#    #+#             */
-/*   Updated: 2025/06/26 10:11:21 by aumoreno         ###   ########.fr       */
+/*   Created: 2025/06/26 10:37:46 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/06/26 11:55:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "minishell.h"
+
+//hace un metodo init t_pipe 
+void ft_init_pipe(t_pipe *piped, t_cmd cmd_data, t_data data)
+{
+    //vendria de data 
+    piped->cmd_nbr = 3; //prueba 
+
+    // esto vendria del cmd_data que tiene cmd_name 
+    char *cmds_test[] = {"ls -a","wc", "ls -l"};
+    char *cmds_routes_test[] = {"/usr/bin/ls", "/usr/bin/wc", "/usr/bin/ls"};
+    piped->cmds = cmds_test;
+    //el cmd_route vendria del cmd_data que tiene el cmd_path (metodo find route )
+    piped->cmd_routes  =  cmds_routes_test;
+}
+
+
 
 void	exec_first_cmd(t_pipe *piped, int cmd_pos)
 {
@@ -100,6 +116,8 @@ void	exec_cmd(t_pipe *piped, int cmd_pos)
 
 void	pipex(t_pipe *piped) // cambiar el struct o usar el struct  
 {
+    //To Do: add heredoc 
+    
 	//int		current_pipe_fds[2];
 	//int		previous_pipe_fd;
 	int		cmd_pos;
@@ -118,11 +136,6 @@ void	pipex(t_pipe *piped) // cambiar el struct o usar el struct
 			exec_cmd(piped, cmd_pos);
 		if (piped->previous_pipe_fd != -1)
 			close(piped->previous_pipe_fd);
-		if (piped->here_doc && cmd_pos == 0)
-		{
-			close(piped->heredoc_pipe_fds[0]);
-			close(piped->heredoc_pipe_fds[1]);
-		}
 		if (cmd_pos < piped->cmd_nbr - 1)
 		{
 			close(piped->current_pipe_fds[1]);
@@ -131,5 +144,3 @@ void	pipex(t_pipe *piped) // cambiar el struct o usar el struct
 		waitpid(piped->cmd_id, NULL, 0);
 	}
 }
-//  Ejemplo usando el operador pipe:	grep x infile.txt | wc > outfile.txt
-//  Ejemplo usando el programa pipex:	./pipex "infile.txt" "grep x" "wc" "outfile.txt"

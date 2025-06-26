@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/26 09:09:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:17:02 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int ft_check_built_in(char *cmd, t_built_in_type built_ins[])
     return (0);
 }
 
+
+// 
 
 t_cmd ft_init_cmd(char *cmd, t_built_in_type built_ins[]) // aqui pueden venir varios 
 {

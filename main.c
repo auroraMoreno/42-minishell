@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/19 13:31:49 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:16:11 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int main(int argc, char **argv, char *envp[])
             //parser
             
             // execute TO-DO: esto modificarlo cuando parser / syntax este hecho 
-            cmd_data = ft_init_cmd(cmd, built_ins); 
-            ft_handle_exe(cmd_data, built_ins, data);
+            cmd_data = ft_init_cmd(cmd, built_ins); // convertir esto en lista  
+            ft_handle_exe(cmd_data, built_ins, data); // le va llegar una lista
             if (prompt) free(prompt);
             if (prompt_formatted) free(prompt_formatted);
             if (cmd) free(cmd);

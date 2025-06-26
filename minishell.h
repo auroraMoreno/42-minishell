@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/19 16:58:12 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:57:07 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <sys/wait.h>
 #include <signal.h> 
 #include  <errno.h>
+# include <fcntl.h>
 
 //#include "./pipex/pipex_bonus.h"
 
@@ -42,7 +43,7 @@ typedef struct s_env
 typedef struct s_data // usar struct pipex de cesar 
 {
     t_list *env;
-    
+    int cmd_num_args;
     char **env_parsed;
 }
 t_data;
@@ -56,6 +57,22 @@ typedef struct s_cmd
     int is_built_in;
 }t_cmd;
 
+typedef struct s_pipe
+{
+	int		here_doc;
+	char	*delimiter;
+	int		heredoc_pipe_fds[2]; // de momento no
+    
+	int		cmd_nbr; //init man
+	char	**cmds; // son los comandos sueltos, ls y tal EXECVE init man 
+	char	**cmd_routes; //las rutas EXECVE init man
+	char	*filein; // create method init man (a lo mejor no hace falta init man)
+	char	*fileout; //create method init man
+	char	**env; // usar la de dataa  init man
+	int		current_pipe_fds[2]; //para el metodo pipe (init sol)
+	int		previous_pipe_fd; // init solo
+	pid_t	cmd_id; // init auto 
+}	t_pipe;
 
 /*executer*/
 void ft_handle_exe(t_cmd cmd_data, t_built_in_type builtins[], t_data data);
@@ -72,6 +89,11 @@ int ft_exit();
 
 /*init functions*/
 t_cmd ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
+
+/*pipe functions*/
+void ft_init_pipe(t_pipe *piped, t_cmd cmd_data, t_data data);
+void	pipex(t_pipe *piped);
+
 
 /*utils*/
 t_list *ft_init_env(char *envp[]);

@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/26 09:33:51 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:14:54 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,20 @@ void ft_execute_cmd(char *cmd_path, char **flag, t_data data)
 }
 
 //TO-DO: mejorar este método 
+// el primer param de aqui va a ser una lista de cmd 
 void ft_handle_exe(t_cmd cmd_data,  t_built_in_type builtins[], t_data data)
 {
 
     // hacer comprobación de si es built_in
     //TO-DO: Hacer comprobacion de nulls y demas y lanzar errors, dentro del bucle tmb 
-    //int is_built_in = 0;
-    //add un if que sea if command is built in para poder quitar var built in 
+    //rodear esto con un bucle porq no va llegar solo un cmd_data \
+    // si rodeo todo con un bucle hasta que ya no haya comandos 
+
+    t_pipe *piped;
 
     if(cmd_data.is_built_in == 1)
     {             
+        // TO DO: hacer una funcion handle built in 
         //acabar esto    
              //TO-DO: modificar esto a que recorra builtins 
             if(!ft_strcmp("echo", cmd_data.cmd_name))
@@ -57,8 +61,19 @@ void ft_handle_exe(t_cmd cmd_data,  t_built_in_type builtins[], t_data data)
     }
     else
     {
+        // si hay un next entonces llamamos al pipex 
+
+        //si no hay un next llamar al metodo de ejecutar normal 
         char *cmd1[] = {cmd_data.cmd_name, NULL};
-        ft_execute_cmd(cmd_data.cmd_path, cmd1, data); //To-Do si es null el path check
+
+        //hacer metodo open infile y open outfile (de momento localizado en init pipe)
+        if(cmd_data->next) // To Do : Implemententar esto
+        {
+            ft_init_pipe(piped, cmd_data, data);
+            pipex(piped);
+        } 
+        else
+            ft_execute_cmd(cmd_data.cmd_path, cmd1, data); //To-Do si es null el path check
         wait(NULL);
     }
 }

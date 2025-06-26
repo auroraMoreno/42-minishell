@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
+#    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/06/19 16:57:40 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/06/26 10:50:09 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 
 SRCS = main.c utils.c \
 	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/unset.c builtins/env.c builtins/exit.c \
-	executer.c free_utils.c errors.c 
+	executer.c create_pipe.c free_utils.c errors.c 
 # pipex/main_bonus.c pipex/pipex_bonus.c pipex/utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
