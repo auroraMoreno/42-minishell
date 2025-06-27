@@ -192,19 +192,18 @@ int	get_delimiter(int *i, int *start, char *cmd, int *nbr)
 	}
 	else if (aux > *nbr + 1)
 	{
-		if (*i == j)
+		if (*i > *start || *i == j)
 		{
 			*start = *i;
 			(*i)--;
 			printf("SE CUMPLE 1 | i = %d & start = %d\n", *i, *start);
-			return (*start);
 		}
 		else if (j > *i)
 		{
 			*i += (j - *i) / (aux - *nbr);
 			*start = *i + 1;
-			return (*start);
 		}
+		return (*start);
 	}
 	return (-1);
 }

@@ -16,7 +16,7 @@ int	main(void)
 	char	*cmd;
 
 	//cmd = readline("> ");
-	cmd = "l's -'l|grep \"hello\" ><<>>>>>redir.txt>";
+	cmd = "|||||l's -|||||'l|||||gr>ep<<<<<<<<<<<<<<<<>>>> \"ZZh>>>>ello\" asdf>>>>>>>>>><<>>>>>>redir.txt>";
 	parse_input(cmd);
 	return (0);
 }
