@@ -75,7 +75,7 @@ void	print_list(t_token *token_list)
 	return ;
 }
 
-t_token	*insert_tokens_in_list(char	**tokens)
+t_token	*tokens_in_list(char	**tokens)
 {
 	t_token	*token_list;
 	t_token	*token_node;
