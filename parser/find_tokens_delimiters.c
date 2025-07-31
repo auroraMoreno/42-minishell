@@ -31,23 +31,37 @@ int	get_delimiter(int *i, int *start, char *cmd, int *nbr)
 		*i = j;
 		*start = fake_start;
 	}
-	else if (aux > *nbr + 1)
+	else if ((aux > (*nbr + 1)) && (*i > *start || *i == j))
 	{
-		if (*i > *start || *i == j)
-		{
-			*start = *i;
-			(*i)--;
-		}
-		else if (j > *i)
-		{
-			*i += (j - *i) / (aux - *nbr);
-			*start = *i + 1;
-		}
+		*start = *i;
+		(*i)--;
+	}
+	else if ((aux > (*nbr + 1)) && (j > *i))
+	{
+		*i += (j - *i) / (aux - *nbr);
+		*start = *i + 1;
 	}
 	return (*start);
 }
 
-void	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
+int check_array(int *delimiters_pos, int token_number)
+{
+	int	i;
+
+	i = 0;
+	if (delimiters_pos[i++] != 0)
+		return (-1);
+	while (i < (token_number + 1))
+	{
+		//printf("delimiter_por[%d] = %d && delimiter_pos[%d] = %d\n", i, delimiters_pos[i], (i - 1), delimiters_pos[i - 1]);
+		if (delimiters_pos[i] <= delimiters_pos[i - 1])
+			return (-1);
+		i++;
+	}
+	return (0);
+}
+
+int	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
 {
 	int		nbr;
 	int		i;
@@ -73,4 +87,5 @@ void	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
 		i++;
 	}
 	delimiters_pos[token_nbr] = ft_strlen(cmd);
+	return (check_array(delimiters_pos, token_nbr));
 }
