@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/26 12:14:54 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/07/02 12:44:05 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void ft_execute_cmd(char *cmd_path, char **flag, t_data data)
 
 //TO-DO: mejorar este método 
 // el primer param de aqui va a ser una lista de cmd 
-void ft_handle_exe(t_cmd cmd_data,  t_built_in_type builtins[], t_data data)
+void ft_handle_exe(t_list *cmd_data,  t_built_in_type builtins[], t_data data)
 {
 
     // hacer comprobación de si es built_in
