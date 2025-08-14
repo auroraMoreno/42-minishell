@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/14 10:06:10 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/14 10:06:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include <signal.h> 
 #include  <errno.h>
 #include <stdbool.h>
-
+# include <fcntl.h>
 
 typedef enum e_token_type
 {
@@ -53,7 +53,7 @@ typedef struct s_cmd
 	int				heredoc;
 	struct s_cmd	*next;
 	
-}	t_cmd;# include <fcntl.h>
+}	t_cmd;
 
 //#include "./pipex/pipex_bonus.h"
 
@@ -64,7 +64,6 @@ typedef struct s_builtin_type
     int (*foo)(); //considerar un union para distintos prototypes 
     
 }t_built_in_type;
-
 
 
 //PARSER
