@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/14 10:06:57 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 11:37:40 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@
 #include <stdbool.h>
 # include <fcntl.h>
 
+#define ERROR 0
+#define SUCCESS 1
+
+t_data *g_data; //malloc
+
+//define un typedef status 
+
 typedef enum e_token_type
 {
 	WORD,
@@ -37,6 +44,7 @@ typedef enum e_token_type
 	DELIMETER
 }	t_token_type;
 
+
 typedef struct s_token
 {
 	char			*value;
@@ -44,16 +52,73 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_redir
+{
+	t_token token; 
+	char *file;
+	struct s_redir *next;
+	
+}t_redir;
+
+//add propiedad para redirecciones 
 typedef struct s_cmd
 {
-	char			**argv;
+	char *cmd_name; // el nombre del comando 
+    char *cmd_path; //método build path 
+    char **args; // valores rollo nombre de variables
+    char *flags;
+    int is_built_in;
+	char			**argv; // remove 
 	char			*infile;
 	char			*outfile;
 	int				append;
 	int				heredoc;
+	t_redir			*redir;
 	struct s_cmd	*next;
 	
 }	t_cmd;
+
+
+typedef struct s_env
+{
+    char *key;
+    char *value;
+
+}t_env;
+
+// global
+typedef struct s_data // usar struct pipex de cesar 
+{
+	char *prompt;
+	char *cmd_line;
+	int exit_status; 
+	char pwd[PATH_MAX];
+	t_list *env;
+	char built_ins[7];
+    char **env_parsed;
+	t_cmd *cmds;
+	//TO-DO: add shell-level
+	//int cmd_num_args;
+}
+t_data;
+
+typedef struct s_pipe
+{
+	int		here_doc;
+	char	*delimiter;
+	int		heredoc_pipe_fds[2]; // de momento no
+    
+	int		cmd_nbr; //init man
+	char	**cmds; // son los comandos sueltos, ls y tal EXECVE init man 
+	char	**cmd_routes; //las rutas EXECVE init man
+	char	*filein; // create method init man (a lo mejor no hace falta init man)
+	char	*fileout; //create method init man
+	char	**env; // usar la de dataa  init man
+	int		current_pipe_fds[2]; //para el metodo pipe (init sol)
+	int		previous_pipe_fd; // init solo
+	pid_t	cmd_id; // init auto 
+}	t_pipe;
+
 
 //#include "./pipex/pipex_bonus.h"
 
@@ -136,59 +201,18 @@ void			print_list(t_token *token_list);
 //UTILS
 void	free_matrix(char **matrix);
 
-typedef struct s_env
-{
-    char *key;
-    char *value;
-
-}t_env;
-
-typedef struct s_data // usar struct pipex de cesar 
-{
-    t_list *env;
-    int cmd_num_args;
-    char **env_parsed;
-}
-t_data;
-
-typedef struct s_cmd
-{
-    char *cmd_name; // el nombre del comando 
-    char *cmd_path; //método build path 
-    char **args; // valores rollo nombre de variables
-    char **flags; //aqui serian rollo -n para echo y demas +
-    int is_built_in;
-}t_cmd;
-
-typedef struct s_pipe
-{
-	int		here_doc;
-	char	*delimiter;
-	int		heredoc_pipe_fds[2]; // de momento no
-    
-	int		cmd_nbr; //init man
-	char	**cmds; // son los comandos sueltos, ls y tal EXECVE init man 
-	char	**cmd_routes; //las rutas EXECVE init man
-	char	*filein; // create method init man (a lo mejor no hace falta init man)
-	char	*fileout; //create method init man
-	char	**env; // usar la de dataa  init man
-	int		current_pipe_fds[2]; //para el metodo pipe (init sol)
-	int		previous_pipe_fd; // init solo
-	pid_t	cmd_id; // init auto 
-}	t_pipe;
-
 /*executer*/
-void ft_handle_exe(t_cmd cmd_data, t_built_in_type builtins[], t_data data);
-
+// void ft_executer(t_cmd cmd_data, t_built_in_type builtins[], t_data data);
+void ft_executer(t_cmd *cmd);
 /*built in functions*/
 void ft_init_builtins(t_built_in_type builtins[]);
-int ft_echo();
-int ft_cd();
+int ft_echo(char *str, char *flags);
+int ft_cd(char *path, t_list *env);
 int ft_pwd();
-int ft_export();
-int ft_unset();
-int ft_env();
-int ft_exit();
+int ft_export(char *var_name[], t_data data);
+int ft_unset(char *var_names[], t_data data);
+int ft_env(t_data data);
+int ft_exit(int status);
 
 /*init functions*/
 t_cmd ft_init_cmd(char *cmd, t_built_in_type built_ins[]);

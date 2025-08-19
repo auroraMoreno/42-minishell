@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/07/02 12:47:11 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:51:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ char	*find_route(char *instruction, char *path)
 	return (NULL);
 }
 
-int ft_check_built_in(char *cmd, t_built_in_type built_ins[])
+int ft_check_built_in(char *cmd, char built_ins[])
 {
     int i = 0;
     while(i < 7)
     {
-        if(!ft_strcmp(cmd, built_ins[i].built_in_name))
+        if(!ft_strcmp(cmd, built_ins[i]))
             return(1);
         i++;
     }
@@ -68,36 +68,28 @@ int ft_check_built_in(char *cmd, t_built_in_type built_ins[])
 }
 
 
-// 
-
-void ft_init_builtins(t_built_in_type builtins[])
+// TO-DO: refact funciones built ins
+void ft_built_ins(t_cmd *cmd, t_env *env)
 {
-    //echo
-    builtins[0].built_in_name = "echo";
-    builtins[0].foo = ft_echo; 
-    
-    //cd
-    builtins[1].built_in_name = "cd";
-    builtins[1].foo = ft_cd;
-    
-    //pwd
-    builtins[2].built_in_name = "pwd";
-    builtins[2].foo = ft_pwd;
-    
-    //export
-    builtins[3].built_in_name = "export";
-    builtins[3].foo = ft_export;
-    
-    //unset
-    builtins[4].built_in_name = "unset";
-    builtins[4].foo = ft_unset;
-
-    //env
-    builtins[5].built_in_name = "env";
-    builtins[5].foo = ft_env;
-    
-    //exit
-    builtins[6].built_in_name = "exit";
-    builtins[6].foo = ft_exit; 
-    
+	if(!ft_strcmp("echo", cmd->cmd_name))
+		ft_echo(cmd->args, NULL);
+	else if(!ft_strcmp("cd", cmd->cmd_name))
+		ft_cd(NULL, env);
+	else if(!ft_strcmp("pwd", cmd->cmd_name))
+		ft_pwd();
+	else if(!ft_strcmp("export", cmd->cmd_name))
+	{
+		char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
+		ft_export(args, g_data);
+	}
+	else if(!ft_strcmp("unset", cmd->cmd_name))
+	{
+		char *args[] = {"A","B", NULL};
+		ft_unset(args, g_data);
+	}
+	else if(!ft_strcmp("env", cmd->cmd_name))
+	   ft_env(g_data);
+	else if(!ft_strcmp("exit", cmd->cmd_name))
+		ft_exit(1);
 }
+
