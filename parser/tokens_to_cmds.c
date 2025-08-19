@@ -3,6 +3,7 @@
 t_cmd	*tokens_to_cmds(t_token *token_list)
 {
 	t_cmd	*cmd_list;
+	t_cmd	*cmd_node;
 	t_token	*tmp;
 	int		i;
 
@@ -12,9 +13,9 @@ t_cmd	*tokens_to_cmds(t_token *token_list)
 	tmp = token_list;
 	while (tmp->next != NULL)
 	{
-		if (tmp->type == PIPE)
-		i++;
-		tmp	= tmp->next;
+		cmd_node = new_cmd(tmp);
+		add_cmd(&cmd_list, cmd_node);
+		tmp = tmp->next;
 	}
 	cmd_list = (t_cmd *)malloc(i * sizeof(t_cmd));
 }

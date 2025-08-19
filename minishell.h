@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/07/31 19:28:03 by cesar            ###   ########.fr       */
+/*   Updated: 2025/08/19 17:19:34 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define MINISHELL_H
 
 #include "./libft/libft.h"
-#include <linux/limits.h>
+#include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/types.h>
@@ -32,9 +32,10 @@ typedef enum e_token_type
 	REDIR_OUT,
 	REDIR_APPEND,
 	HEREDOC,
+	IO_NUMBER,
 	ENV_VAR,
 	ASSIGNMENT_WORD,
-	DELIMETER
+	DELIMITER
 }	t_token_type;
 
 typedef struct s_token
@@ -52,6 +53,11 @@ typedef struct s_cmd
 	int				append;
 	int				heredoc;
 	struct s_cmd	*next;
+	int				io_number;	// fd target por defecto (si se aplica)
+	t_list			*assignments;	// lista de char* "NAME=VALUE" para este cmd
+	int				infile_fd;	// -1 si sin open (si quieres)
+	int				outfile_fd;	// -1 si sin open
+	char			*heredoc_tmpfile;	// si guardas heredoc
 	
 }	t_cmd;
 
@@ -148,13 +154,13 @@ typedef struct s_data // usar struct pipex de cesar
 }
 t_data;
 
-typedef struct s_cmd
+/*typedef struct s_cmd
 {
     char *cmd_name; // el nombre del comando 
     char **args; // valores rollo nombre de variables
     char **flags; //aqui serian rollo -n para echo y demas +
     int is_built_in;
-}t_cmd;
+}t_cmd;*/
 
 
 /*executer*/

@@ -95,17 +95,31 @@ char	**input_to_tokens(char *cmd)
 		return (NULL);
 	token_nbr = count_tokens(cmd_trimmed);
 	if (!token_nbr)
-		return (NULL); // falta liberar cmd_trimmed
+	{
+		free (cmd_trimmed);
+		return (NULL);
+	}
 	if (token_nbr == 1)
 		return (just_one_token(cmd_trimmed));
 	delimiters_pos = (int *)malloc((token_nbr + 1) * sizeof(int));
 	if (!delimiters_pos)
-		return (NULL); // falta liberar cmd_trimmed
+	{
+		free (cmd_trimmed);
+		return (NULL);
+	}
 	if (find_delimiters(cmd_trimmed, token_nbr, delimiters_pos) == -1)
-		return (NULL);  // falta liberar cmd_trimmed y delimiters_pos
-		tokens = tokens_split(cmd_trimmed, token_nbr, delimiters_pos);
+	{
+		free (cmd_trimmed);
+		free (delimiters_pos);
+		return (NULL);
+	}
+	tokens = tokens_split(cmd_trimmed, token_nbr, delimiters_pos);
 	if (!tokens)
-		return (NULL); // falta liberar cmd_trimmmed y delimiters_pos
+	{
+		free (cmd_trimmed);
+		free (delimiters_pos);
+		return (NULL);
+	}
 	free (cmd_trimmed);
 	free (delimiters_pos);
 	return (tokens);
