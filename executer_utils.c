@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 11:37:49 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:34:58 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,32 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)
         // si no es STDIN hacemos dup para que lea del fd_input y no del teclado (stdin)
         //porq necesitamos que stdin lea del fd_input y no del teclado
         //si algo va mal error 
-        if(dup2(fd_input, STDERR_FILENO) == -1)
+        if(dup2(fd_input, STDIN_FILENO) == -1)
             ft_error("Error dup2");
         close(fd_input);
     }
     if(fd_output != STDOUT_FILENO)
     {
-        //misma lógica pero para stdout
+        //misma lógica pero para stdout 
         if(dup2(fd_output, STDOUT_FILENO) == -1)
             ft_error("Error dup2"); 
         close(fd_output);
     }
     
-    //hacemos redir
+    //hacemos redir 
     if(cmd->redir)
         ft_handle_redir();
 
     //checkeamos si hay cmds/args
-
+    // comprobamos si hay comandos porq aunq no haya hay que hacer redirecciones
+    if(!cmd->cmd_name)
+        exit(EXIT_SUCCESS);
     //checkeamos si es un built in
-
-    //checkeamos si es un cmd normal
+    if(cmd->is_built_in)
+        ft_built_ins(cmd, g_data->env);
+    //exe para un cmd normal 
+    ft_execute_cmd();
 
     //exit para finalizar el proceso hijo 
+    exit(EXIT_SUCCESS);
 }

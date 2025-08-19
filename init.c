@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/15 12:02:04 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:43:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,4 @@ void ft_init_data(char **env)
     ft_init_builtins();
     getcwd(g_data->pwd, sizeof(g_data->pwd)); //TO-DO: error check? 
     g_data->exit_status = 0;
-    
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/18 19:34:52 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:01:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ void ft_single_cmd(t_cmd *cmd, int fd, t_list *env)
 {
     pid_t pid;
     int status; 
+    int fds[2];
+    
     pid = fork();
     if(pid == -1)
         ft_error("error in fork");
     if(pid = 0)
-        ft_child_process(); // aunq solo hay un comando pero para redir (TO-DO)
+        ft_child_process(cmd, fds[0], fds[1]); // aunq solo hay un comando pero para redir (TO-DO)
     if(fd != STDIN_FILENO) //cerramos esto we dont needed anymore solo para conectar este cmd con el anterior
         close(fd);
     
@@ -45,6 +47,7 @@ void ft_single_cmd(t_cmd *cmd, int fd, t_list *env)
 // return status
 void ft_execute_cmds(t_cmd *cmd, int fd_input, t_list *env)
 {
+    
     //check si cmd not nul
     if(!cmd)
         return ; //TO-DO: check errores 
@@ -57,14 +60,16 @@ void ft_execute_cmds(t_cmd *cmd, int fd_input, t_list *env)
     //cuando haya mas haremos un check de que si no hay next, simple cmd exe
     
     //si hay next => fork y pipe
-
+    if(cmd->next)
+        ft_create_pipe_fork() ;
     // checkeamos pid para child process
-
+    
     // cerramos fds 
-
+    
     // recursividad, volvemos a llamar a exe hasta que no haya mas cmd nexts
-
+    ft_execute_cmds(cmd, STDIN_FILENO, env);
     //hacemos los waits 
+    ft_wait(); // ??
 }
 
 //TO-DO: mejorar este método 
@@ -86,23 +91,4 @@ void ft_executer(t_cmd *cmd_data)
     //considerar no pasarle el g_data porq es global jeje 
     ft_execute_cmds(cmd_data, STDIN_FILENO, g_data->env); // de momento solo uno habrá pasarle lista
     
-    /*
-    else
-    {
-        // si hay un next entonces llamamos al pipex 
-
-        //si no hay un next llamar al metodo de ejecutar normal 
-        char *cmd1[] = {cmd_data.cmd_name, NULL};
-
-        //hacer metodo open infile y open outfile (de momento localizado en init pipe)
-        if(cmd_data->next) // To Do : Implemententar esto
-        {
-            ft_init_pipe(piped, cmd_data, data);
-            pipex(piped);
-        } 
-        else
-            ft_execute_cmd(cmd_data.cmd_path, cmd1, data); //To-Do si es null el path check
-        wait(NULL);
-    }
-    */
 }

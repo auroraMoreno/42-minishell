@@ -6,16 +6,16 @@
 #    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/06/26 10:50:09 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/08/19 16:41:34 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # === Project Config ===
 NAME = minishell
 
-SRCS = main.c utils.c \
+SRCS = main.c utils.c signals.c cmd_utils.c \
 	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/unset.c builtins/env.c builtins/exit.c \
-	executer.c create_pipe.c free_utils.c errors.c 
+	executer.c executer_utils.c init.c create_pipe.c free_utils.c errors.c 
 # pipex/main_bonus.c pipex/pipex_bonus.c pipex/utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
@@ -25,7 +25,7 @@ LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 # === Compiler/Flags ===
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft
 INCLUDES = -I$(LIBFT_DIR)

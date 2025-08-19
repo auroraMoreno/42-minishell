@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_refact.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/15 12:52:54 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:42:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void handle_sigint(int sig)
 
 void ft_run_shell()
 {
-    t_cmd cmd; // aqui de momento solo viene 1 porq quiero probar
+    t_cmd *cmd; // aqui de momento solo viene 1 porq quiero probar
     while(1)
     {
         //TO-DO add signals? 
         
         g_data->cmd_line = readline(g_data->prompt);
-        if(!g_data->cmd_line)
+        if(!g_data->cmd_line) // EOF ERROR
         {
             //free
             //send error:
@@ -47,8 +47,12 @@ void ft_run_shell()
         // executer 
         ft_executer(cmd);
         //free 
+        if(g_data->cmd_line)
+            free(g_data->cmd_line);
             
     }
+    
+    rl_clear_history();
 }
 
 int main(int argc, char **argv, char **env)
@@ -61,7 +65,7 @@ int main(int argc, char **argv, char **env)
 
         //init de los built in
         //init data shell: prompt, 
-    ft_init_data();
+    ft_init_data(env);
 
     //signals: not sure if they belong here 
     signal(SIGINT, handle_sigint);
@@ -72,7 +76,8 @@ int main(int argc, char **argv, char **env)
         // check for EOF error
 
     //free mem
-
+    ft_free_env(&g_data->env);
+    
     return (0);
     
 
