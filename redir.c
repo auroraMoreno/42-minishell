@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:01:23 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 11:44:10 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:13:20 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,5 @@ void ft_handle_redir(t_cmd *cmd)
     //outfile redir
     if(cmd->outfile)
         ft_handle_out_redir(cmd);
-
-        
-    
+            
 }

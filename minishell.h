@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 18:32:03 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:08:38 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 // variable global
 t_data *g_data; //malloc?
 
-//define un typedef status 
-
 typedef enum e_token_type
 {
 	WORD,
@@ -53,13 +51,6 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_redir
-{
-	t_token token; 
-	char *file;
-	struct s_redir *next;
-	
-}t_redir;
 
 //add propiedad para redirecciones 
 typedef struct s_cmd
@@ -70,11 +61,10 @@ typedef struct s_cmd
     char			*flags;
     int				is_built_in;
 	char			**argv; // remove 
-	char			*infile;
-	char			*outfile;
+	char			*infile; 
+	char			*outfile; 
 	int				append; 
 	int				heredoc;
-	//t_redir			*redir;
 	struct s_cmd	*next;
 	
 }	t_cmd;
@@ -235,6 +225,7 @@ t_list 			*ft_process_env_values(char *key_val);
 char 			*ft_find_equal_sign(char *str);
 int 			ft_strcmp(const char *s1, const char *s2);
 char			*find_route(char *instruction, char *path);
+char			*get_route(char *cmd, char **envp);
 void			free_matrix(char **matrix);
 
 

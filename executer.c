@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 18:31:29 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 19:35:41 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,6 @@ void ft_prepare_executer(t_cmd *cmd_data)
 
     //le llegará los cmd procesados con sus herdocs y expanders 
     //considerar no pasarle el g_data porq es global jeje 
-    ft_executer(cmd_data, STDIN_FILENO, g_data->env); // de momento solo uno habrá pasarle lista
+    ft_executer(cmd_data, STDIN_FILENO, g_data->env); // de momento solo uno; habrá pasarle lista
     
 }

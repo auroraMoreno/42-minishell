@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 18:31:03 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 19:29:35 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,11 @@ void ft_wait_child_status()
 
 void ft_exec_cmd(t_cmd *cmd, t_env *env)
 {
-       
+       //get path cmd
+        cmd->cmd_path = get_route(cmd->cmd_name, g_data->env_parsed);
+       //execve
+       if(execve(cmd->cmd_path,cmd->args, g_data->env_parsed) == -1)
+        ft_error("Error executing command."); 
 }
 
 void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)

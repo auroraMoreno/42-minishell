@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 17:42:23 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 19:34:50 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void ft_run_shell()
         //cmd init
         cmd = ft_init_cmd(g_data->cmd_line, g_data->built_ins); //sustituir por init_cmd_list  
         // executer 
-        ft_executer(cmd);
+        ft_prepare_executer(cmd);
         //free 
         if(g_data->cmd_line)
             free(g_data->cmd_line);
