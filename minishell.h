@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 11:37:40 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:18:52 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ typedef struct s_cmd
 	char			**argv; // remove 
 	char			*infile;
 	char			*outfile;
-	int				append;
+	int				append; 
 	int				heredoc;
-	t_redir			*redir;
+	//t_redir			*redir;
 	struct s_cmd	*next;
 	
 }	t_cmd;
@@ -93,7 +93,7 @@ typedef struct s_data // usar struct pipex de cesar
 	char *cmd_line;
 	int exit_status; 
 	char pwd[PATH_MAX];
-	t_list *env;
+	t_list *env; // deberia ser ** ? 
 	char built_ins[7];
     char **env_parsed;
 	t_cmd *cmds;
@@ -203,9 +203,14 @@ void	free_matrix(char **matrix);
 
 /*executer*/
 // void ft_executer(t_cmd cmd_data, t_built_in_type builtins[], t_data data);
-void ft_executer(t_cmd *cmd);
+void ft_prepare_executer(t_cmd *cmd_data);
+void ft_executer(t_cmd *cmd, int fd_input, t_list *env);
+
+/*executer utils*/
+void ft_child_process(t_cmd *cmd, int fd_input, int fd_output);
+
 /*built in functions*/
-void ft_init_builtins(t_built_in_type builtins[]);
+void ft_built_ins(t_cmd *cmd, t_env *env);
 int ft_echo(char *str, char *flags);
 int ft_cd(char *path, t_list *env);
 int ft_pwd();

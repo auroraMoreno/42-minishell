@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/18 19:34:52 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:20:10 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void ft_single_cmd(t_cmd *cmd, int fd, t_list *env)
     if(pid == -1)
         ft_error("error in fork");
     if(pid = 0)
-        ft_child_process(); // aunq solo hay un comando pero para redir (TO-DO)
+        ft_child_process(cmd, fd, STDOUT_FILENO); // aunq solo hay un comando pero para redir (TO-DO)
     if(fd != STDIN_FILENO) //cerramos esto we dont needed anymore solo para conectar este cmd con el anterior
         close(fd);
     
@@ -43,7 +43,7 @@ void ft_single_cmd(t_cmd *cmd, int fd, t_list *env)
 
 // recursivad, volvemos a llamar a este metodo 
 // return status
-void ft_execute_cmds(t_cmd *cmd, int fd_input, t_list *env)
+void ft_executer(t_cmd *cmd, int fd_input, t_list *env)
 {
     //check si cmd not nul
     if(!cmd)
@@ -70,7 +70,7 @@ void ft_execute_cmds(t_cmd *cmd, int fd_input, t_list *env)
 //TO-DO: mejorar este método 
 // el primer param de aqui va a ser una lista de cmd 
 // TO-DO: expander, add heredocs, process comands 
-void ft_executer(t_cmd *cmd_data)
+void ft_prepare_executer(t_cmd *cmd_data)
 {
 
     // hacer comprobación de si es built_in
@@ -84,7 +84,7 @@ void ft_executer(t_cmd *cmd_data)
 
     //le llegará los cmd procesados con sus herdocs y expanders 
     //considerar no pasarle el g_data porq es global jeje 
-    ft_execute_cmds(cmd_data, STDIN_FILENO, g_data->env); // de momento solo uno habrá pasarle lista
+    ft_executer(cmd_data, STDIN_FILENO, g_data->env); // de momento solo uno habrá pasarle lista
     
     /*
     else

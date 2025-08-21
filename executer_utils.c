@@ -6,11 +6,21 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 11:37:49 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:39:08 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void ft_wait_child_status()
+{
+    
+}
+
+void ft_exec_cmd(t_cmd *cmd, t_env *env)
+{
+       
+}
 
 void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)
 {
@@ -33,14 +43,16 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)
     }
     
     //hacemos redir
-    if(cmd->redir)
-        ft_handle_redir();
+    if(cmd->infile || cmd->outfile || cmd->append)
+        ft_handle_redir(cmd);
 
     //checkeamos si hay cmds/args
-
+    if(!cmd->cmd_name || !cmd->cmd_path)
+        exit(EXIT_SUCCESS);
     //checkeamos si es un built in
-
+    if(cmd->is_built_in)
+        ft_built_ins(cmd, g_data->env);
     //checkeamos si es un cmd normal
-
-    //exit para finalizar el proceso hijo 
+    ft_exec_cmd(cmd, g_data->env);
+    
 }
