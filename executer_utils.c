@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 12:39:08 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/21 18:31:03 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)
         // si no es STDIN hacemos dup para que lea del fd_input y no del teclado (stdin)
         //porq necesitamos que stdin lea del fd_input y no del teclado
         //si algo va mal error 
-        if(dup2(fd_input, STDERR_FILENO) == -1)
+        if(dup2(fd_input, STDIN_FILENO) == -1)
             ft_error("Error dup2");
         close(fd_input);
     }
     if(fd_output != STDOUT_FILENO)
     {
-        //misma lógica pero para stdout
+        //misma lógica pero para stdout 
         if(dup2(fd_output, STDOUT_FILENO) == -1)
             ft_error("Error dup2"); 
         close(fd_output);

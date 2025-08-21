@@ -3,58 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 12:46:02 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/07/03 10:27:08 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 16:12:22 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd ft_init_cmd(char *cmd, t_built_in_type built_ins[]) // aqui pueden venir varios 
+t_cmd *ft_init_cmd(char *cmd, t_built_in_type built_ins[]) // aqui pueden venir varios 
 {
-    t_cmd cmd_data; 
+    t_cmd *cmd_data; 
     char **tokens; //modificar cuando lexer y parser
     int i;
     int j;
     if(!cmd)
     {
-        cmd_data.cmd_name = NULL;
+        cmd_data->cmd_name = NULL;
         return (cmd_data);
     }
     tokens = ft_split(cmd, ' ');
     
-    cmd_data.cmd_name = ft_strdup(tokens[0]);
+    cmd_data->cmd_name = ft_strdup(tokens[0]);
 
     i = 0;
     while(tokens[i])
         i++;
     if(i > 1)
     {
-        cmd_data.args = (char **)malloc(sizeof(char *) * i);
-        if(!cmd_data.args)
+        cmd_data->args = (char **)malloc(sizeof(char *) * i);
+        if(!cmd_data->args)
             return cmd_data;
         
         j = 1;
         while (j < i)
         {
-            cmd_data.args[j - 1] = ft_strdup(tokens[j]);
+            cmd_data->args[j - 1] = ft_strdup(tokens[j]);
             j++;
         }
-        cmd_data.args[i - 1] = NULL;
+        cmd_data->args[i - 1] = NULL;
     }    
     else
     {
-        cmd_data.args = NULL;
+        cmd_data->args = NULL;
     }
     
-    cmd_data.flags = NULL;
-    cmd_data.is_built_in = ft_check_built_in(cmd,built_ins);
-    if(!cmd_data.is_built_in)
-        cmd_data.cmd_path = find_route(cmd, getenv("PATH"));
+    cmd_data->flags = NULL;
+    cmd_data->is_built_in = ft_check_built_in(cmd,built_ins);
+    if(!cmd_data->is_built_in)
+        cmd_data->cmd_path = find_route(cmd, getenv("PATH"));
     else 
-        cmd_data.cmd_path = NULL;
+        cmd_data->cmd_path = NULL;
     //check if built in:
     return (cmd_data);
 }

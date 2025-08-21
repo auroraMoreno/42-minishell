@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/18 11:51:36 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:24:54 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*find_route(char *instruction, char *path)
 int ft_check_built_in(char *cmd, char built_ins[])
 {
     int i = 0;
-    while(i < 7)
+    while(i < 7) 
     {
         if(!ft_strcmp(cmd, built_ins[i]))
             return(1);
