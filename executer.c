@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 19:35:41 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/22 12:29:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void ft_single_cmd(t_cmd *cmd, int fd, t_list *env)
     if(fd != STDIN_FILENO) //cerramos esto we dont needed anymore solo para conectar este cmd con el anterior
         close(fd);
     
-    status = ft_wait_child_status();
+    status = ft_wait();
     if(status == ERROR)
         return (ERROR);
     
@@ -47,6 +47,9 @@ void ft_single_cmd(t_cmd *cmd, int fd, t_list *env)
 // return status
 void ft_executer(t_cmd *cmd, int fd_input, t_list *env)
 {
+    int fds[2];
+    pid_t pid;
+    
     
     //check si cmd not nul
     if(!cmd)
@@ -60,14 +63,20 @@ void ft_executer(t_cmd *cmd, int fd_input, t_list *env)
     //cuando haya mas haremos un check de que si no hay next, simple cmd exe
     
     //si hay next => fork y pipe
-    if(cmd->next)
-        ft_create_pipe_fork() ;
+    pid = ft_create_pipe_fork(fds, pid); // esto devolverá error si algo va mal
     // checkeamos pid para child process
-    
+    if(pid == 0)
+    {
+        close(fds[0]); //cerramos el fd de lectura hijo no va leer de aqui, 
+        //llamamos al child proecess;
+        ft_child_process(cmd, fd_input, fds[1]);
+    }
     // cerramos fds 
-    
+    if(fd_input != STDIN_FILENO) //la ha pasado al hijo ya no hace falta, la cerramos 
+        close(fd_input);
+    close(fds[1]); //cerramos para que el padre no escriba en el recien creado (lo hace el hijo)
     // recursividad, volvemos a llamar a exe hasta que no haya mas cmd nexts
-    ft_execute_cmds(cmd, STDIN_FILENO, env);
+    ft_execute_cmds(cmd, STDIN_FILENO, env); //should return ? 
     //hacemos los waits 
     ft_wait(); // ??
 }
