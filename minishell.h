@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/23 18:19:48 by cesar            ###   ########.fr       */
+/*   Updated: 2025/08/24 23:58:35 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,33 @@
 #include  <errno.h>
 #include <stdbool.h>
 
+/*
+
+typedef enum e_redir_kind {
+    R_IN,       // <
+    R_OUT,      // >
+    R_APPEND,   // >>
+    R_HEREDOC   // <<
+} t_redir_kind;
+
+typedef struct s_redir {
+    int           from_fd;          // fd origen que rediriges (por defecto 0 para < y <<, 1 para > y >>, o el IO_NUMBER si lo hubo)
+    t_redir_kind  kind;             // tipo de redirección
+    char         *target;           // filename (>, >>, <) o delimitador (<<)
+    int           quoted_delim;     // 1 si delimitador estaba entre comillas -> no expandir heredoc
+    char         *heredoc_tmpfile;  // si guardas el heredoc en un tmpfile
+    struct s_redir *next;
+} t_redir;
+
+typedef struct s_cmd {
+    char     **argv;        // argv[0] = ejecutable, resto args (ya con quote removal / expansiones)
+    t_list   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
+    t_redir  *redirs;       // lista de redirecciones (0..N)
+    int       is_builtin;   // opcional
+    struct s_cmd *next;     // siguiente en el pipeline
+} t_cmd;
+
+*/
 
 typedef enum e_token_type
 {
