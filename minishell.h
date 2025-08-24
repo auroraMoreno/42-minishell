@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 17:19:34 by cesar            ###   ########.fr       */
+/*   Updated: 2025/08/23 18:19:48 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ typedef enum e_token_type
 	REDIR_APPEND,
 	HEREDOC,
 	IO_NUMBER,
-	ENV_VAR,
 	ASSIGNMENT_WORD,
-	DELIMITER
 }	t_token_type;
 
 typedef struct s_token

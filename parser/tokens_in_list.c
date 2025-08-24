@@ -1,20 +1,57 @@
 #include "../minishell.h"
 
+int	ft_is_assignment(char	*token)
+{
+	int	i;
+
+	if (!token || !*token)
+		return (0);
+	if (!(ft_isalpha(token[0] || token[0] == '_')))
+		return (0);
+	i = 1;
+	while (token[i] && token[i] != '_')
+	{
+		if (!(ft_isalnum(token[i] || token[i] == '_')))
+			return (0);
+		i++;
+	}
+	return (token[i] == '=');
+}
+
+int	ft_is_number(char	*token)
+{
+	int	i;
+
+	if (!token || !*token)
+		return (0);
+	i = 0;
+	while (token[i])
+	{
+		if (!ft_isdigit(token[i]))
+			return (0);
+		i++;
+	}
+	return (i);
+}
+
 t_token_type	get_token_type(char	*token)
 {
-	int	len;
-
-	len = ft_strlen(token);
-	if (!ft_strncmp(token, "|", len))
-		return (PIPE);
-	else if (!ft_strncmp(token, "<", len))
-		return (REDIR_IN);
-	else if (!ft_strncmp(token, ">", len))
-		return (REDIR_OUT);
-	else if (!ft_strncmp(token, "<<", len))
+	if (!token || !*token)
+		return (WORD);
+	if (!ft_strncmp(token, "<<", ft_strlen(token)))
 		return (HEREDOC);
-	else if (!ft_strncmp(token, ">>", len))
+	else if (!ft_strncmp(token, ">>", ft_strlen(token)))
 		return (REDIR_APPEND);
+	else if (!ft_strncmp(token, "<", ft_strlen(token)))
+		return (REDIR_IN);
+	else if (!ft_strncmp(token, ">", ft_strlen(token)))
+		return (REDIR_OUT);
+	else if (ft_is_number(token))
+		return (IO_NUMBER);
+	else if (ft_is_assignment(token))
+		return (ASSIGNMENT_WORD);
+	else if (!ft_strncmp(token, "|", ft_strlen(token)))
+		return (PIPE);
 	else
 		return (WORD);
 }
