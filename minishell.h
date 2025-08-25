@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 20:08:38 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/25 13:44:26 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@ typedef struct s_cmd
 	char			*outfile; 
 	int				append; 
 	int				heredoc;
+	int				fd_in;
+	int				fd_out;
+	pid_t			id_process;
 	struct s_cmd	*next;
 	
 }	t_cmd;
@@ -77,7 +80,7 @@ typedef struct s_env
 
 }t_env;
 
-// global
+
 typedef struct s_data // usar struct pipex de cesar 
 {
 	char *prompt;
@@ -87,9 +90,9 @@ typedef struct s_data // usar struct pipex de cesar
 	t_list *env; // deberia ser ** ? 
 	char built_ins[7];
     char **env_parsed;
-	t_cmd *cmds;
+	t_list *cmds;
 	//TO-DO: add shell-level
-	//int cmd_num_args;
+	int cmd_nbr;
 }
 t_data;
 
@@ -121,42 +124,10 @@ typedef struct s_builtin_type
     
 }t_built_in_type;
 
-
-//PARSER
-
-void			parse_input(char *cmd);
-
-char			**input_to_tokens(char *cmd);
-int				count_tokens(char *cmd);
-char			**just_one_token(char *cmd_trimmed);
-char			**tokens_split(char *cmd, int token_nbr, int *delimiters_pos);
-char			*push_token(char *cmd, int start, int end);
-
-int				find_delimiters(char *cmd, int token_nbr, int *delimiters_pos);
-int				get_delimiter(int *i, int *start, char *cmd, int *nbr);
-int				check_delimiter(int *i, int *start, char *cmd, int *nbr);
-int				check_array(int *delimiters_pos, int token_number);
-
-int				is_space(char c);
-int				is_quote(char c);
-int				is_operator(char c);
-
-void			check_quote(bool *in_quote, char *quote_chr, char to_check);
-void			check_space(int *i, int *start, char *cmd, int *nbr);
-void			check_operator(int *i, int *start, char *cmd, int *nbr);
-void			check_no_quote(int *i, int *start, char *cmd, int *nbr);
-
-t_token			*tokens_in_list(char	**tokens);
-t_token_type	get_token_type(char	*token);
-t_token			*new_token(char	*token, t_token_type token_type);
-void			add_token(t_token **head, t_token *new);
-void			print_list(t_token *token_list);
-
-
-//UTILS
-void	free_matrix(char **matrix);
-
-
+/*init functions*/
+void 			ft_init_data(char **env);
+t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
+t_list			*ft_init_env(char *envp[]);
 
 //PARSER
 
@@ -192,16 +163,15 @@ void			print_list(t_token *token_list);
 //UTILS
 void			free_matrix(char **matrix);
 
-/*executer*/
-// void ft_executer(t_cmd cmd_data, t_built_in_type builtins[], t_data data);
+/*EXECUTER*/
 void ft_prepare_executer(t_cmd *cmd_data);
 void ft_executer(t_cmd *cmd, int fd_input, t_list *env);
 
 /*executer utils*/
 void ft_child_process(t_cmd *cmd, int fd_input, int fd_output);
 
-/*built in functions*/
-void ft_built_ins(t_cmd *cmd, t_env *env);
+/*BUILT IN functions*/
+int ft_built_ins(t_cmd *cmd, t_env *env);
 int ft_echo(char *str, char *flags);
 int ft_cd(char *path, t_list *env);
 int ft_pwd();
@@ -210,14 +180,15 @@ int ft_unset(char *var_names[], t_data data);
 int ft_env(t_data data);
 int ft_exit(int status);
 
-/*init functions*/
-void 			ft_init_data(char **env);
-t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
-t_list			*ft_init_env(char *envp[]);
+/*signals*/
+void handle_sigint(int sig);
 
 /*pipe functions*/
 void			ft_init_pipe(t_pipe *piped, t_cmd cmd_data, t_data data);
 void			pipex(t_pipe *piped);
+
+/*redirection functions*/
+void ft_handle_redir(t_cmd *cmd);
 
 
 /*utils*/

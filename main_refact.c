@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_refact.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 19:34:50 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/25 11:07:24 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv, char **env)
     //free mem
     ft_free_env(&g_data->env);
     
-    return (0);
+    return (g_data->exit_status); //QUITAR VARIABLE GLOBAL!!
     
 
 }

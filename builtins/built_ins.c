@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 18:24:54 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/25 13:43:40 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int ft_check_built_in(char *cmd, char built_ins[])
 
 
 // TO-DO: refact funciones built ins
-void ft_built_ins(t_cmd *cmd, t_env *env)
+int ft_built_ins(t_cmd *cmd, t_env *env)
 {
 	if(!ft_strcmp("echo", cmd->cmd_name))
 		ft_echo(cmd->args, NULL);
@@ -91,5 +91,6 @@ void ft_built_ins(t_cmd *cmd, t_env *env)
 	   ft_env(g_data);
 	else if(!ft_strcmp("exit", cmd->cmd_name))
 		ft_exit(1);
+	return (0); //TO-DO return exit status 
 }
 

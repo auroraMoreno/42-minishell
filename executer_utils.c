@@ -6,34 +6,65 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/22 12:29:42 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/25 14:24:14 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-pid_t ft_create_pipe_fork()
+void ft_exec_cmd(t_cmd *cmd, t_data *data)
 {
+    if(cmd->is_built_in)
+    {
+        data->exit_status = ft_built_ins(cmd, data->env);
+        if(data->exit_status != -1)
+            ft_exit(); //TO-DO
+    }
+    //check path 
+    if(!cmd->cmd_path)
+        ft_error("command not found");
     
 }
 
-void ft_wait()
+
+pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
 {
-    
+    pid_t process_id;
+
+    //in && out check?? 
+    process_id = fork();
+    if(process_id == -1)
+        return (-1);
+    else if(process_id == 0)
+    {
+        if(dup2(cmd->fd_in, STDIN_FILENO) == -1)
+            return (-1);
+        if(dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+            return (-1);
+        ft_exec_cmd(cmd, data);
+    }
+    return (process_id);
 }
 
-void ft_exec_cmd(t_cmd *cmd, t_env *env)
+// importante current status para cuando haya varios comandos!! para saber si alguno falló anteriormente
+void ft_return_status(int status)
 {
-       //get path cmd
-        cmd->cmd_path = get_route(cmd->cmd_name, g_data->env_parsed);
-       //execve
-       if(execve(cmd->cmd_path,cmd->args, g_data->env_parsed) == -1)
-        ft_error("Error executing command."); 
+    if(WIFEXITED(status))
+        g_data->exit_status = WEXITSTATUS(status);
+    else if(WIFSIGNALED(status))
+        g_data->exit_status = WTERMSIG(status) + 128; //TO-DO: quit core dumped
+    else  
+        g_data->exit_status = 1;
+    if(g_data != 0)
+        return ERROR;
+    return SUCCESS;
 }
 
-void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)
+
+void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data)
 {
+    if(fd_input == -1 && fd_output == -1)
+        return (-1);
     // poner bien los stdin/out para que el proceso lea /escriba por donde le toque
     if(fd_input != STDIN_FILENO)
     {
@@ -52,7 +83,7 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output)
         close(fd_output);
     }
     
-    //hacemos redir
+    //hacemos redir, add heredoc (TO-DO)
     if(cmd->infile || cmd->outfile || cmd->append)
         ft_handle_redir(cmd);
 
