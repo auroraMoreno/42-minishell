@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 14:24:14 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:05:01 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,24 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     //check path 
     if(!cmd->cmd_path)
         ft_error("command not found");
-    
+
+    //cerrar fds 
+    ft_close_fds(); // ? 
+    //señales: check creo que esto no es así 
+    signal(SIGINT, ft_handle_sigint);
+    signal(SIGQUIT, SIG_IGN);
+    //executing
+    execve(cmd->cmd_path,cmd->argv ,data->env);
+
+    //errors from execve 
+    //TO-DO: return errosrs accordingly
+    if(errno == EACCES)
+        return (-1);
+    else if(errno == ENOENT)
+        return (-1); 
+    else 
+        return(-1);
+    //return status code 
 }
 
 
@@ -31,7 +48,9 @@ pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
 {
     pid_t process_id;
 
-    //in && out check?? 
+    if(fd_in == -1 || fd_out == -1)
+        return (-1);
+    
     process_id = fork();
     if(process_id == -1)
         return (-1);
@@ -46,8 +65,29 @@ pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
     return (process_id);
 }
 
+
+
+int ft_wait_children_process(t_list *cmd_list, t_data *data)
+{
+    int i;
+    t_cmd *cmd; 
+
+
+    i = 0; 
+    while(i < data->cmd_nbr)
+    {
+        cmd = (t_cmd *)cmd_list->content;
+        if(cmd->id_process != -1)
+            waitpid(cmd->id_process, &data->exit_status, NULL);
+        i++;
+    }
+
+    return(ft_return_status(data->exit_status));
+}
+
+
 // importante current status para cuando haya varios comandos!! para saber si alguno falló anteriormente
-void ft_return_status(int status)
+int ft_return_status(int status)
 {
     if(WIFEXITED(status))
         g_data->exit_status = WEXITSTATUS(status);
@@ -56,7 +96,8 @@ void ft_return_status(int status)
     else  
         g_data->exit_status = 1;
     if(g_data != 0)
-        return ERROR;
+        return ERROR; //CHANGE THIS TO RETURN EXIT STATUS? 
+        
     return SUCCESS;
 }
 

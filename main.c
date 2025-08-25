@@ -3,84 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/15 11:20:50 by aumoreno         ###   ########.fr       */
+/*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/08/25 18:06:21 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-
-int main(int argc, char **argv, char *envp[])
+void ft_run_shell(t_data *data)
 {
-    (void)argc;
-    (void)argv; 
-    
-    char cwd[PATH_MAX]; // poner en un struct (directory_info ?)
-    char *user;         // struct directory info ?
-    char *prompt = NULL;
-    char *prompt_formatted = NULL;
-    char *cmd = NULL;
-    // TO_DO: alojar mem ?
-    t_built_in_type built_ins[7]; //TO-DO: malloc this ? 
-    t_data data; //TO-DO: should this be a pointer ? 
-    t_cmd cmd_data;
-
-    
-    user = ft_strjoin(getenv("USER"), ":~");
-    signal(SIGQUIT, SIG_IGN); // TO-DO: Ctrl D signal doesn't seem to be working properly 
-    signal(SIGINT, handle_sigint);
-    
-    ft_init_builtins(built_ins);
-
-    data.env = ft_init_env(envp); //TO-DO: review 
-    data.env_parsed = envp; // TO-DO: review too 
-    
-    while (1)
+    t_cmd *cmd; // aqui de momento solo viene 1 porq quiero probar
+    while(1)
     {
-        //TO-DO: refact this code 
-        if (getcwd(cwd, sizeof(cwd)) != NULL && user != NULL) 
+        //TO-DO add signals? 
+        
+        g_data->cmd_line = readline(g_data->prompt);
+        if(!g_data->cmd_line) // EOF ERROR
         {
-            prompt = ft_strjoin(user, cwd);
-            if(!prompt) break;
-            // prompt = ft_strjoin(prompt, "$ "); TO-DO: MIRAR ESTO DEL $
-            prompt_formatted = ft_strjoin(prompt, " ");
-            if(!prompt_formatted) break;
-            cmd = readline(prompt_formatted);
-        
-            if (!cmd || !user || !prompt || !prompt_formatted)
-                break;
-            add_history(cmd);
-            //parser
-            
-            // execute TO-DO: esto modificarlo cuando parser / syntax este hecho 
-            cmd_data = ft_init_cmd(cmd, built_ins); // convertir esto en lista  
-            ft_handle_exe(cmd_data, built_ins, data); // le va llegar una lista
-            if (prompt) free(prompt);
-            if (prompt_formatted) free(prompt_formatted);
-            if (cmd) free(cmd);
-
+            //free
+            //send error:
+            ft_error("Exiting..."); //TO-DO: mensaje error 
         }
-        else
-            printf("didnt work");
+        add_history(g_data->cmd_line);
         
+        //parser / lexer
+
+        //cmd init
+        cmd = ft_init_cmd(g_data->cmd_line, g_data->built_ins); //sustituir por init_cmd_list  
+        // executer 
+        ft_prepare_executer(cmd, data);
+        //free 
+        if(g_data->cmd_line)
+            free(g_data->cmd_line);
+            
     }
-
-    rl_clear_history();
-
-    ft_free_env(&data.env); // TO-DO: review 
     
-    // TO-DO: review 
-    if (user)
-        free(user);
-    if (prompt)
-        free(prompt);
-    if(prompt_formatted) 
-        free(prompt_formatted);
-    if(cmd)
-        free(cmd);
-    return (0);
+    rl_clear_history();
+}
+
+int main(int argc, char **argv, char **env)
+{
+    //void argc y argv de momento no me hacen falta
+    (void)argc;
+    (void)argv;
+
+    t_data *data; 
+    
+    //hacemos init necesarios:
+        //init env
+
+        //init de los built in
+        //init data shell: prompt, 
+    ft_init_data(env);
+
+    //signals: not sure if they belong here 
+    signal(SIGINT, ft_handle_sigint);
+    signal(SIGQUIT, SIG_IGN);
+    
+    // run shell 
+    ft_run_shell(data);
+        // check for EOF error
+
+    //free mem
+    ft_free_env(&g_data->env);
+    
+    return (g_data->exit_status); //QUITAR VARIABLE GLOBAL!!
+    
+
 }
