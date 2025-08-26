@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 18:07:14 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:55:04 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
 
     //checkeamos si es un built in
     if(cmd->is_built_in)
-        ft_built_ins(cmd, data->env);
+        ft_built_ins(cmd, data);
     
     pid = fork(); 
     if(pid == -1)
@@ -58,7 +58,7 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
 
     signal(SIGINT, ft_handle_sigint);
     
-    return (ft_return_status(exit_status)); //esto por defecto siempre success
+    return (ft_return_status(data, exit_status)); //esto por defecto siempre success
 }
 
 // recursivad, volvemos a llamar a este metodo 

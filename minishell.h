@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 12:50:57 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 18:31:53 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,41 @@
 #define ERROR 0
 #define SUCCESS 1
 
-// variable global
-t_data *g_data; //malloc?
+typedef struct s_data // usar struct pipex de cesar 
+{
+	char *prompt;
+	char *cmd_line;
+	int exit_status; 
+	char *pwd;
+	t_list *env; // deberia ser ** ? 
+	char built_ins[7];
+    char **env_cpy;
+	t_list *cmds;
+	int shell_lvl;
+	//TO-DO: add shell-level
+	int cmd_nbr;
+}
+t_data;
+
+//add propiedad para redirecciones 
+typedef struct s_cmd
+{
+	char			*cmd_name; // el nombre del comando 
+    char			*cmd_path; //método build path 
+    char			**args; // valores rollo nombre de variables
+    char			*flags;
+    int				is_built_in;
+	char			**argv;
+	char			*infile; 
+	char			*outfile; 
+	int				append; 
+	int				heredoc;
+	int				fd_in;
+	int				fd_out;
+	pid_t			id_process;
+	struct s_cmd	*next;
+	
+}	t_cmd;
 
 typedef enum e_token_type
 {
@@ -52,69 +85,12 @@ typedef struct s_token
 }	t_token;
 
 
-//add propiedad para redirecciones 
-typedef struct s_cmd
-{
-	char			*cmd_name; // el nombre del comando 
-    char			*cmd_path; //método build path 
-    char			**args; // valores rollo nombre de variables
-    char			*flags;
-    int				is_built_in;
-	char			**argv;
-	char			*infile; 
-	char			*outfile; 
-	int				append; 
-	int				heredoc;
-	int				fd_in;
-	int				fd_out;
-	pid_t			id_process;
-	struct s_cmd	*next;
-	
-}	t_cmd;
-
-
 typedef struct s_env
 {
     char *key;
     char *value;
 
 }t_env;
-
-
-typedef struct s_data // usar struct pipex de cesar 
-{
-	char *prompt;
-	char *cmd_line;
-	int exit_status; 
-	char pwd[PATH_MAX];
-	t_list *env; // deberia ser ** ? 
-	char built_ins[7];
-    char **env_cpy;
-	t_list *cmds;
-	//TO-DO: add shell-level
-	int cmd_nbr;
-}
-t_data;
-
-typedef struct s_pipe
-{
-	int		here_doc;
-	char	*delimiter;
-	int		heredoc_pipe_fds[2]; // de momento no
-    
-	int		cmd_nbr; //init man
-	char	**cmds; // son los comandos sueltos, ls y tal EXECVE init man 
-	char	**cmd_routes; //las rutas EXECVE init man
-	char	*filein; // create method init man (a lo mejor no hace falta init man)
-	char	*fileout; //create method init man
-	char	**env; // usar la de dataa  init man
-	int		current_pipe_fds[2]; //para el metodo pipe (init sol)
-	int		previous_pipe_fd; // init solo
-	pid_t	cmd_id; // init auto 
-}	t_pipe;
-
-
-//#include "./pipex/pipex_bonus.h"
 
 // to remove 
 typedef struct s_builtin_type
@@ -124,12 +100,11 @@ typedef struct s_builtin_type
     
 }t_built_in_type;
 
-
-
 /*init functions*/
-void 			ft_init_data(char **env);
+void			ft_init_data(t_data *data, char **env);
 t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
 t_list			*ft_init_env(char *envp[]);
+void 			ft_init_builtins(t_data *data);
 void			ft_run_shell(t_data *data);
 
 //PARSER
@@ -158,8 +133,13 @@ void			check_no_quote(int *i, int *start, char *cmd, int *nbr);
 
 t_token			*tokens_in_list(char	**tokens);
 t_token_type	get_token_type(char	*token);
-t_token			*new_token(char	*token, t_token_type token_type);
-void			add_token(t_token **head, t_token *new);
+t_toke signal(SIGINT, SIG_IGN); // para que sue muera el hijo no la shell
+
+    waitpid(pid, &exit_status, 0);
+
+    signal(SIGINT, ft_handle_sigint);
+    
+    return (ft_return_status(data, exit_status)); //esto por defe			add_token(t_token **head, t_token *new);
 void			print_list(t_token *token_list);
 
 
@@ -176,27 +156,25 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data);
 void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
 pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data);
 void ft_exec_cmd(t_cmd *cmd, t_data *data);
-int ft_return_status(int status);
+int ft_return_status(t_data *data, int status);
 int ft_wait_children_process(t_list *cmd, t_data *data);
 
 
 
 /*BUILT IN functions*/
-int ft_built_ins(t_cmd *cmd, t_env *env);
-int ft_echo(char *str, char *flags);
-int ft_cd(char *path, t_list *env, t_data *data);
-int ft_pwd(t_data *data, t_cmd *cmd);
-int ft_export(char *var_name[], t_data data);
-int ft_unset(char *var_names[], t_data data);
+int ft_built_ins(t_cmd *cmd, t_data *data);
+int ft_echo(t_cmd *cmd, t_data *data);
+int ft_cd(t_cmd *cmd, t_data *data);
+int ft_pwd(t_cmd *cmd, t_data *data);
+int ft_export(t_cmd *cmd, t_data *data);
+int ft_unset(t_cmd *cmd, t_data *data);
 int ft_env(t_cmd *cmd, t_data *data);
-int ft_exit(int status);
+int ft_exit(t_cmd *cmd, t_data *data);
+int ft_check_built_in(char *cmd, char built_ins[]);
 
 /*signals*/
 void ft_handle_sigint(int sig);
 
-/*pipe functions*/
-void			ft_init_pipe(t_pipe *piped, t_cmd cmd_data, t_data data);
-void			pipex(t_pipe *piped);
 
 /*redirection functions*/
 void ft_handle_redir(t_cmd *cmd);
@@ -217,7 +195,7 @@ void			ft_free_env_node(void *content);
 
 /*error methods*/
 void 			ft_error(char *str);
-int ft_formatted_error(char *msg, char *cmd, t_data *data);
+int				ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif
 

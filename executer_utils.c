@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 18:05:01 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:55:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
 {
     if(cmd->is_built_in)
     {
-        data->exit_status = ft_built_ins(cmd, data->env);
+        data->exit_status = ft_built_ins(cmd, data);
         if(data->exit_status != -1)
             ft_exit(); //TO-DO
     }
@@ -82,20 +82,20 @@ int ft_wait_children_process(t_list *cmd_list, t_data *data)
         i++;
     }
 
-    return(ft_return_status(data->exit_status));
+    return(ft_return_status(data, data->exit_status));
 }
 
 
 // importante current status para cuando haya varios comandos!! para saber si alguno falló anteriormente
-int ft_return_status(int status)
+int ft_return_status(t_data *data, int status)
 {
     if(WIFEXITED(status))
-        g_data->exit_status = WEXITSTATUS(status);
+        data->exit_status = WEXITSTATUS(status);
     else if(WIFSIGNALED(status))
-        g_data->exit_status = WTERMSIG(status) + 128; //TO-DO: quit core dumped
+        data->exit_status = WTERMSIG(status) + 128; //TO-DO: quit core dumped
     else  
-        g_data->exit_status = 1;
-    if(g_data != 0)
+        data->exit_status = 1;
+    if(data != 0)
         return ERROR; //CHANGE THIS TO RETURN EXIT STATUS? 
         
     return SUCCESS;
@@ -133,8 +133,8 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data)
         exit(EXIT_SUCCESS);
     //checkeamos si es un built in
     if(cmd->is_built_in)
-        ft_built_ins(cmd, g_data->env);
+        ft_built_ins(cmd, data);
     //checkeamos si es un cmd normal
-    ft_exec_cmd(cmd, g_data->env);
+    ft_exec_cmd(cmd, data->env);
     
 }

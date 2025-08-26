@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 12:50:57 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:45:39 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,32 +38,33 @@ t_list *ft_init_env(char *envp[]) // El problema está aquí
     return (first);
 }
 
-void ft_init_builtins()
+//TO-DO: review mejor forma de hacer init de built ins ?
+void ft_init_builtins(t_data *data)
 {
     //echo
-    g_data->built_ins[0] = "echo";
+    data->built_ins[0] = "echo";
     //cd
-    g_data->built_ins[1]= "cd";
+    data->built_ins[1]= "cd";
     //pwd
-    g_data->built_ins[2] = "pwd";
+    data->built_ins[2] = "pwd";
     //export
-    g_data->built_ins[3] = "export";
+    data->built_ins[3] = "export";
     //unset
-    g_data->built_ins[4] = "unset";
+    data->built_ins[4] = "unset";
     //env
-    g_data->built_ins[5] = "env";
+    data->built_ins[5] = "env";
     //exit
-    g_data->built_ins[6] = "exit";
+    data->built_ins[6] = "exit";
 }
 
-void ft_init_data(char **env)
+void ft_init_data(t_data *data, char **env)
 {
-    g_data->prompt = "shellprompt"; //TO-DO: formatear esto
-    g_data->cmd_line = NULL;
-    g_data->env = ft_init_env(env); //TO-DO: check para mem leaks 
-    g_data->env_cpy = ft_cpy_env(env);
+    data->prompt = "shellprompt"; //TO-DO: formatear esto
+    data->cmd_line = NULL;
+    data->env = ft_init_env(env); //TO-DO: check para mem leaks 
+    data->env_cpy = ft_cpy_env(env);
     // considerar poner aquí los built_ins 
-    ft_init_builtins();
-    getcwd(g_data->pwd, sizeof(g_data->pwd)); //TO-DO: error check? 
-    g_data->exit_status = 0;
+    ft_init_builtins(data);
+    data->pwd = getcwd(NULL, 0); //TO-DO: FREE MEMORY
+    data->exit_status = 0;
 }

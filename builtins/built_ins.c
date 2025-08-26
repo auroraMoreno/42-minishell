@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 13:43:40 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:12:20 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,30 @@ int ft_check_built_in(char *cmd, char built_ins[])
 
 
 // TO-DO: refact funciones built ins
-int ft_built_ins(t_cmd *cmd, t_env *env)
+int ft_built_ins(t_cmd *cmd, t_data *data)
 {
+	int exit_code;
 	if(!ft_strcmp("echo", cmd->cmd_name))
-		ft_echo(cmd->args, NULL);
+		exit_code = ft_echo(cmd, data);
 	else if(!ft_strcmp("cd", cmd->cmd_name))
-		ft_cd(NULL, env);
+		exit_code = ft_cd(cmd, data);
 	else if(!ft_strcmp("pwd", cmd->cmd_name))
-		ft_pwd();
+		exit_code = ft_pwd(cmd, data);
 	else if(!ft_strcmp("export", cmd->cmd_name))
 	{
 		char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
-		ft_export(args, g_data);
+		exit_code = ft_export(args, g_data);
 	}
 	else if(!ft_strcmp("unset", cmd->cmd_name))
 	{
 		char *args[] = {"A","B", NULL};
-		ft_unset(args, g_data);
+		exit_code = ft_unset(args, g_data);
 	}
 	else if(!ft_strcmp("env", cmd->cmd_name))
-	   ft_env(g_data);
+	   exit_code = ft_env(cmd, data);
 	else if(!ft_strcmp("exit", cmd->cmd_name))
-		ft_exit(1);
-	return (0); //TO-DO return exit status 
+		exit_code = ft_exit(cmd, data);
+	data->exit_status = exit_code; // ?
+	return (data->exit_status); //TO-DO return exit status 
 }
 

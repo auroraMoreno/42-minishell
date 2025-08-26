@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 18:06:21 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:50:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,24 @@ void ft_run_shell(t_data *data)
     {
         //TO-DO add signals? 
         
-        g_data->cmd_line = readline(g_data->prompt);
-        if(!g_data->cmd_line) // EOF ERROR
+        data->cmd_line = readline(data->prompt);
+        if(!data->cmd_line) // EOF ERROR
         {
             //free
             //send error:
             ft_error("Exiting..."); //TO-DO: mensaje error 
         }
-        add_history(g_data->cmd_line);
+        add_history(data->cmd_line);
         
         //parser / lexer
 
         //cmd init
-        cmd = ft_init_cmd(g_data->cmd_line, g_data->built_ins); //sustituir por init_cmd_list  
+        cmd = ft_init_cmd(data->cmd_line, data->built_ins); //sustituir por init_cmd_list  
         // executer 
         ft_prepare_executer(cmd, data);
         //free 
-        if(g_data->cmd_line)
-            free(g_data->cmd_line);
+        if(data->cmd_line)
+            free(data->cmd_line);
             
     }
     
@@ -49,14 +49,14 @@ int main(int argc, char **argv, char **env)
     (void)argc;
     (void)argv;
 
-    t_data *data; 
+    t_data *data; // TO-DO: malloc 
     
     //hacemos init necesarios:
         //init env
 
         //init de los built in
         //init data shell: prompt, 
-    ft_init_data(env);
+    ft_init_data(data, env);
 
     //signals: not sure if they belong here 
     signal(SIGINT, ft_handle_sigint);
@@ -67,9 +67,11 @@ int main(int argc, char **argv, char **env)
         // check for EOF error
 
     //free mem
-    ft_free_env(&g_data->env);
+    ft_free_env(data->env);
+    ft_free_all(); // TO-DO 
+
     
-    return (g_data->exit_status); //QUITAR VARIABLE GLOBAL!!
+    return (data->exit_status); //QUITAR VARIABLE GLOBAL!!
     
 
 }
