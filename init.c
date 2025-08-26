@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/19 17:43:36 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 12:50:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void ft_init_data(char **env)
     g_data->prompt = "shellprompt"; //TO-DO: formatear esto
     g_data->cmd_line = NULL;
     g_data->env = ft_init_env(env); //TO-DO: check para mem leaks 
-    g_data->env_parsed = env;
+    g_data->env_cpy = ft_cpy_env(env);
     // considerar poner aquí los built_ins 
     ft_init_builtins();
     getcwd(g_data->pwd, sizeof(g_data->pwd)); //TO-DO: error check? 

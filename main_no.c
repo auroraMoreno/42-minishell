@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_no.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:02:39 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/15 11:20:50 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 12:50:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv, char *envp[])
     ft_init_builtins(built_ins);
 
     data.env = ft_init_env(envp); //TO-DO: review 
-    data.env_parsed = envp; // TO-DO: review too 
+    data.env_cpy = envp; // TO-DO: review too 
     
     while (1)
     {

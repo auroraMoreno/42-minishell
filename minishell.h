@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 03:05:57 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 12:50:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct s_data // usar struct pipex de cesar
 	char pwd[PATH_MAX];
 	t_list *env; // deberia ser ** ? 
 	char built_ins[7];
-    char **env_parsed;
+    char **env_cpy;
 	t_list *cmds;
 	//TO-DO: add shell-level
 	int cmd_nbr;
