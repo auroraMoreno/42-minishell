@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 00:32:11 by cesar            ###   ########.fr       */
+/*   Updated: 2025/08/26 18:33:20 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <readline/history.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h> 
+#include <signal.h>
 #include  <errno.h>
 #include <stdbool.h>
 
@@ -46,7 +46,6 @@ typedef struct s_cmd {
     bool       is_builtin;   // opcional
     struct s_cmd *next;     // siguiente en el pipeline
 } t_cmd;
-
 
 typedef enum e_token_type
 {
@@ -86,8 +85,8 @@ typedef struct s_token
 typedef struct s_builtin_type
 {
     char *built_in_name;
-    int (*foo)(); //considerar un union para distintos prototypes 
-    
+    int (*foo)(); //considerar un union para distintos prototypes
+
 }t_built_in_type;
 
 
@@ -169,7 +168,7 @@ typedef struct s_env
 
 }t_env;
 
-typedef struct s_data // usar struct pipex de cesar 
+typedef struct s_data // usar struct pipex de cesar
 {
     t_list *env;
     char **env_parsed;
@@ -178,7 +177,7 @@ t_data;
 
 /*typedef struct s_cmd
 {
-    char *cmd_name; // el nombre del comando 
+    char *cmd_name; // el nombre del comando
     char **args; // valores rollo nombre de variables
     char **flags; //aqui serian rollo -n para echo y demas +
     int is_built_in;
