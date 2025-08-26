@@ -1,104 +1,96 @@
 #include "../minishell.h"
 
-int	count_pipes(t_token *token_list)
+int	*new_cmd(void)
 {
-	int		i;
+	t_cmd	*current_cmd;
 
-	i = 0;
-	while (token_list->next)
-	{
-		if (token_list->type == PIPE)
-			i++;
-		token_list = token_list->next;
-	}
-	if (token_list->value == '|')
-		i++;
-	return (i);
-}
-
-int	check_pipes(t_token *token_list, int pipes_nbr, int **pipes_pos)
-{
-	int	i;
-
-	pipes_pos = (int *)malloc(pipes_nbr * sizeof(int));
-	if (!pipes_pos)
+	current_cmd = NULL;
+	current_cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!current_cmd)
 		return (0);
-	i = 0;
-	while (token_list->next)
-	{
-		if (token_list->type == PIPE)
-			*pipes_pos++ = i;
-		i++;
-		token_list = token_list->next;
-	}
-	if (token_list->value == '|')
-		return (0);
-	i = 0;
-	if (*pipes_pos[i] == 0)
-		return (0);
-	while (++i < pipes_nbr)
-	{
-		if (*pipes_pos[i] == *pipes_pos[i] + 1)
-			return (0);
-	}
+	current_cmd->argv = NULL;
+	current_cmd->assignments = NULL;
+	current_cmd->redirs = NULL;
+	current_cmd->is_builtin = false;
+	current_cmd->next = NULL;
 	return (1);
 }
 
-void	detect_cmds(t_token *token_list, int cmds_nbr, int **cmds_pos)
+int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 {
-	int	pipes_nbr;
-	int	*pipes_pos;
-	int	i;
+	int	ret;
 
-	cmds_nbr = 0;
-	pipes_nbr = count_pipes(token_list);
-	if (pipes_nbr > 0)
+	ret = 0;
+	if (!current_cmd || !*token_list)
+		return (ret);
+	while (*token_list && (*token_list)->type != PIPE)
 	{
-		if (!check_pipes(token_list, pipes_nbr, &pipes_pos))
-			return ;
+		if ((*token_list)->type == WORD)
+			ret = add_word(current_cmd, *token_list);
+		else if ((*token_list)->type == IO_NUMBER)
+			ret = add_ionum(current_cmd, *token_list);
+		else if ((*token_list)->type == ASSIGNMENT_WORD)
+			ret = add_assign(current_cmd, *token_list);
+		else if ((*token_list)->type == REDIR_IN
+			|| (*token_list)->type == REDIR_OUT
+			|| (*token_list)->type == REDIR_APPEND
+			|| (*token_list)->type == HEREDOC)
+			ret = add_redir(current_cmd, *token_list);
+		*token_list = (*token_list)->next;
+		if (ret == 0)
+			return (ret);
 	}
-	cmds_nbr = (1 + pipes_nbr);
-	cmds_pos = (int *)malloc(cmds_nbr * sizeof(int));
-	if (!cmds_pos)
-		cmds_pos = NULL;
-	i = 0;
-	while (token_list->next)
+	return (ret);
+}
+
+int	content_in_cmd(t_cmd *current_cmd)
+{
+	if (!(current_cmd->argv || current_cmd->assignments || current_cmd->redirs))
+		return (0);
+	return (1);
+}
+
+void	add_cmd(t_cmd **cmd_lst_start, t_cmd **cmd_lst_end, t_cmd *current_cmd)
+{
+	if (!*cmd_lst_start)
 	{
-		if (pipes_nbr)
-			*cmds_pos++ = pipes_pos++;
-		token_list = token_list->next;
-		i++;
+		*cmd_lst_start = current_cmd;
+		*cmd_lst_end = *cmd_lst_start;
 	}
-	*cmds_pos = i;
-	free (pipes_pos);
+	else
+	{
+		(*cmd_lst_end)->next = current_cmd;
+		*cmd_lst_end = current_cmd;
+	}
+	return ;
 }
 
 t_cmd	*tokens_to_cmds(t_token *token_list)
 {
-	t_cmd	*cmd_list;
-	t_cmd	*cmd_node;
-	int		cmds_nbr;
-	int		*cmds_pos;
-	int		i;
+	t_cmd	*cmd_list_start;
+	t_cmd	*cmd_list_end;
+	t_cmd	*current_cmd;
 
-	if (!token_list)
+	if (!token_list || token_list->type == PIPE)
 		return (NULL);
-	detect_cmds(token_list, &cmds_nbr, &cmds_pos);
-	if (!cmds_nbr || !cmds_pos)
-		return (NULL);
-	cmd_list = (t_cmd *)malloc(cmds_nbr * sizeof(t_cmd));
-	if (!cmd_list)
-		return (NULL);
-	i = 0;
-	while (cmds_nbr-- > 0)
+	cmd_list_start = NULL;
+	cmd_list_end = NULL;
+	while (token_list)
 	{
-		cmd_node = (t_cmd *)malloc(sizeof(t_cmd));
-		while (i++ < *cmds_pos)
+		if (!new_cmd())
+			return (free_cmds(cmd_list_start, NULL));
+		if (!craft_cmd(current_cmd, &token_list))
+			return (free_cmds(cmd_list_start, current_cmd));
+		if (!content_in_cmd(current_cmd))
+			return (free_cmds(cmd_list_start, current_cmd));
+		add_cmd(&cmd_list_start, &cmd_list_end, current_cmd);
+		if (token_list && token_list->type == PIPE)
 		{
-			craft_cmd(token_list, &cmd_node);
+			if (!token_list->next || token_list->next->type == PIPE)
+				return (free_cmds(cmd_list_start, current_cmd));
 			token_list = token_list->next;
 		}
-		i++;
-		cmds_pos++;
 	}
+	return (cmd_list_start);
 }
+

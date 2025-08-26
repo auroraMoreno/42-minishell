@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/24 23:58:35 by cesar            ###   ########.fr       */
+/*   Updated: 2025/08/26 00:32:11 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 #include <signal.h> 
 #include  <errno.h>
 #include <stdbool.h>
-
-/*
 
 typedef enum e_redir_kind {
     R_IN,       // <
@@ -45,11 +43,10 @@ typedef struct s_cmd {
     char     **argv;        // argv[0] = ejecutable, resto args (ya con quote removal / expansiones)
     t_list   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
     t_redir  *redirs;       // lista de redirecciones (0..N)
-    int       is_builtin;   // opcional
+    bool       is_builtin;   // opcional
     struct s_cmd *next;     // siguiente en el pipeline
 } t_cmd;
 
-*/
 
 typedef enum e_token_type
 {
@@ -70,7 +67,7 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_cmd
+/*typedef struct s_cmd
 {
 	char			**argv;
 	char			*infile;
@@ -83,8 +80,8 @@ typedef struct s_cmd
 	int				infile_fd;	// -1 si sin open (si quieres)
 	int				outfile_fd;	// -1 si sin open
 	char			*heredoc_tmpfile;	// si guardas heredoc
-	
-}	t_cmd;
+	struct s_cmd *next;     // siguiente en el pipeline
+}	t_cmd;*/
 
 typedef struct s_builtin_type
 {
