@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 13:44:26 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 00:43:05 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,11 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output);
 /*BUILT IN functions*/
 int ft_built_ins(t_cmd *cmd, t_env *env);
 int ft_echo(char *str, char *flags);
-int ft_cd(char *path, t_list *env);
-int ft_pwd();
+int ft_cd(char *path, t_list *env, t_data *data);
+int ft_pwd(t_data *data, t_cmd *cmd);
 int ft_export(char *var_name[], t_data data);
 int ft_unset(char *var_names[], t_data data);
-int ft_env(t_data data);
+int ft_env(t_cmd *cmd, t_data *data);
 int ft_exit(int status);
 
 /*signals*/
@@ -206,6 +206,7 @@ void			ft_free_env_node(void *content);
 
 /*error methods*/
 void 			ft_error(char *str);
+int ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif
 

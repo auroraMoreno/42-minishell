@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:01:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/05 12:11:15 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 00:18:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 PROBLEMA CON ECHO si le viene NULL si coge que no -n pero si viene "" entonces no lo coge 
 
 */
-int ft_echo(char *str, char *flags)
+int ft_echo(char *str)
 {
     if(flags) // comprobar que -n? si no es un flag que echo admite, bash lo pinta igual 
     {
