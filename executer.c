@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 12:04:11 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:07:14 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,17 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data)
     while(i < data->cmd_nbr)
     {
         cmd = (t_cmd *)cmd_list->content;
-        cmd->id_process = ft_create_fork();
-
+        cmd->id_process = ft_create_fork(cmd,cmd->fd_in,cmd->fd_out,data); //pasarle los fds? 
+        cmd = cmd_list->next;
         i++;
     }
+    //wait pids for child process and return status code
+    
+    data->exit_status = ft_wait_children_process(cmd, data);
+    return (data->exit_status);
 }
 
+//TO-DO: fix
 int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
 {
     pid_t pid;
@@ -43,17 +48,17 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
         ft_error("error in fork");
     // todo tiene que ser un hijo menos los built ins porq si no cerramos la minishell 
     if(pid = 0)
-        ft_child_process(cmd, fd, STDOUT_FILENO); // aunq solo hay un comando pero para redir (TO-DO)
+        ft_child_process(cmd, fd, STDOUT_FILENO, data);
     if(fd != STDIN_FILENO) //cerramos esto we dont needed anymore solo para conectar este cmd con el anterior
         close(fd);
     
     signal(SIGINT, SIG_IGN); // para que sue muera el hijo no la shell
 
-    waitpid(pid, &status, 0);
+    waitpid(pid, &exit_status, 0);
 
-    signal(SIGINT, handle_sigint);
+    signal(SIGINT, ft_handle_sigint);
     
-    return (ft_return_status(status)); //esto por defecto siempre success
+    return (ft_return_status(exit_status)); //esto por defecto siempre success
 }
 
 // recursivad, volvemos a llamar a este metodo 
@@ -63,17 +68,17 @@ void ft_executer(t_cmd *cmd, t_data *data)
     int fds[2];
     pid_t pid;
     
-    
-    
     //check si cmd not nul
     if(!cmd)
         return ; //TO-DO: check errores 
     
     if(!cmd->next)
-        data->exit_status = ft_single_cmd(cmd, ,data);
+        data->exit_status = ft_single_cmd(cmd, cmd->fd_in, data);
     else
         ft_multiple_commands(cmd, data);
     
+
+    /*
     // checkeamos pid para child process
     if(pid == 0)
     {
@@ -89,6 +94,7 @@ void ft_executer(t_cmd *cmd, t_data *data)
     ft_executer(cmd, STDIN_FILENO, data->env); //should return ? 
     //hacemos los waits 
     ft_wait(); // ??
+    */
 }
 
 //TO-DO: mejorar este método 

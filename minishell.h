@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 00:43:05 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 03:05:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_cmd
     char			**args; // valores rollo nombre de variables
     char			*flags;
     int				is_built_in;
-	char			**argv; // remove 
+	char			**argv;
 	char			*infile; 
 	char			*outfile; 
 	int				append; 
@@ -124,10 +124,13 @@ typedef struct s_builtin_type
     
 }t_built_in_type;
 
+
+
 /*init functions*/
 void 			ft_init_data(char **env);
 t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
 t_list			*ft_init_env(char *envp[]);
+void			ft_run_shell(t_data *data);
 
 //PARSER
 
@@ -164,11 +167,19 @@ void			print_list(t_token *token_list);
 void			free_matrix(char **matrix);
 
 /*EXECUTER*/
-void ft_prepare_executer(t_cmd *cmd_data);
-void ft_executer(t_cmd *cmd, int fd_input, t_list *env);
+void ft_prepare_executer(t_cmd *cmd_data, t_data *data);
+void ft_executer(t_cmd *cmd, t_data *data);
+int ft_single_cmd(t_cmd *cmd, int fd, t_data *data);
+int ft_multiple_commands(t_list *cmd_list, t_data *data);
 
 /*executer utils*/
-void ft_child_process(t_cmd *cmd, int fd_input, int fd_output);
+void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
+pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data);
+void ft_exec_cmd(t_cmd *cmd, t_data *data);
+int ft_return_status(int status);
+int ft_wait_children_process(t_list *cmd, t_data *data);
+
+
 
 /*BUILT IN functions*/
 int ft_built_ins(t_cmd *cmd, t_env *env);
@@ -181,7 +192,7 @@ int ft_env(t_cmd *cmd, t_data *data);
 int ft_exit(int status);
 
 /*signals*/
-void handle_sigint(int sig);
+void ft_handle_sigint(int sig);
 
 /*pipe functions*/
 void			ft_init_pipe(t_pipe *piped, t_cmd cmd_data, t_data data);
