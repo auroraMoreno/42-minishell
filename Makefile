@@ -6,7 +6,7 @@
 #    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/08/19 16:41:34 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/08/27 17:48:37 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 NAME = minishell
 
 SRCS = main.c utils.c signals.c cmd_utils.c \
-	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/unset.c builtins/env.c builtins/exit.c \
+	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/export_utils.c builtins/unset.c builtins/env.c builtins/exit.c \
 	executer.c executer_utils.c init.c create_pipe.c free_utils.c errors.c 
 # pipex/main_bonus.c pipex/pipex_bonus.c pipex/utils_bonus.c
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 13:11:09 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 19:53:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 
 #define ERROR 0
 #define SUCCESS 1
+
+int g_signal; 
+
 
 typedef struct s_data // usar struct pipex de cesar 
 {
@@ -105,8 +108,9 @@ void			ft_init_data(t_data *data, char **env);
 t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
 t_list			*ft_init_env(char *envp[]);
 void 			ft_init_builtins(t_data *data);
-void			ft_run_shell(t_data *data);
+char 			**ft_cpy_env(char **env);
 int				ft_get_env_size(char **env);
+void			ft_run_shell(t_data *data);
 
 
 //PARSER
@@ -143,8 +147,8 @@ void			print_list(t_token *token_list);
 void			free_matrix(char **matrix);
 
 /*EXECUTER*/
-void ft_prepare_executer(t_cmd *cmd_data, t_data *data);
-void ft_executer(t_cmd *cmd, t_data *data);
+void ft_prepare_executer(t_list *cmd_data, t_data *data);
+void ft_executer(t_list *cmd_list, t_data *data);
 int ft_single_cmd(t_cmd *cmd, int fd, t_data *data);
 int ft_multiple_commands(t_list *cmd_list, t_data *data);
 
@@ -156,17 +160,27 @@ int ft_return_status(t_data *data, int status);
 int ft_wait_children_process(t_list *cmd, t_data *data);
 
 
-
 /*BUILT IN functions*/
 int ft_built_ins(t_cmd *cmd, t_data *data);
+int ft_check_built_in(char *cmd, char built_ins[]);
 int ft_echo(t_cmd *cmd, t_data *data);
 int ft_cd(t_cmd *cmd, t_data *data);
 int ft_pwd(t_cmd *cmd, t_data *data);
-int ft_export(t_cmd *cmd, t_data *data);
 int ft_unset(t_cmd *cmd, t_data *data);
 int ft_env(t_cmd *cmd, t_data *data);
 int ft_exit(t_cmd *cmd, t_data *data);
-int ft_check_built_in(char *cmd, char built_ins[]);
+int ft_export(t_cmd *cmd, t_data *data);
+
+
+/*export utils*/
+int ft_find_in_env_cpy(char **env, char *key);
+int ft_check_variables(char *var);
+char **ft_add_env_cpy(char **env_cpy, char *key, char *value);
+void ft_process_values(char *key_val, char **key,  char **val);
+char *ft_get_key(char *str);
+char **ft_sort_alpha(char **env);
+void ft_print_export(char **env, t_cmd *cmd);
+
 
 /*signals*/
 void ft_handle_sigint(int sig);

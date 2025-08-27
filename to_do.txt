@@ -1,0 +1,10 @@
+acabar el signal handling 
+arreglar fds 
+check return values 
+fix returrn status 
+metodos del executer que no he hecho: close all, funciones de memoria
+heredoc 
+revisar historial 
+.h y makefile 
+expander
+shell level

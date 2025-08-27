@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 16:12:20 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 17:37:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ int ft_built_ins(t_cmd *cmd, t_data *data)
 	else if(!ft_strcmp("export", cmd->cmd_name))
 	{
 		char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
-		exit_code = ft_export(args, g_data);
+		exit_code = ft_export(cmd, data);
 	}
 	else if(!ft_strcmp("unset", cmd->cmd_name))
 	{
 		char *args[] = {"A","B", NULL};
-		exit_code = ft_unset(args, g_data);
+		exit_code = ft_unset(cmd, data);
 	}
 	else if(!ft_strcmp("env", cmd->cmd_name))
 	   exit_code = ft_env(cmd, data);

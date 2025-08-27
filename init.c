@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 13:13:27 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 17:39:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,19 @@ void ft_init_builtins(t_data *data)
     data->built_ins[5] = "env";
     //exit
     data->built_ins[6] = "exit";
+}
+
+int	ft_get_env_size(char **env)
+{
+	int	len;
+
+	len = 0;
+	while (*env)
+	{
+		len++;
+		env++;
+	}
+	return (len);
 }
 
 char **ft_cpy_env(char **env)

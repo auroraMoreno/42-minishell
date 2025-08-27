@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:17:00 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 16:45:42 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 19:52:12 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ void ft_handle_sigint(int sig)
         rl_on_new_line();
         rl_replace_line("", 0);
         rl_redisplay();
-        g_data->exit_status = 1; //To-Do: handle.
+        g_signal = 1; 
     }
 }

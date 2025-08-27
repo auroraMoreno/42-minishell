@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 16:55:28 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 19:14:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     //señales: check creo que esto no es así 
     signal(SIGINT, ft_handle_sigint);
     signal(SIGQUIT, SIG_IGN);
+    
     //executing
     execve(cmd->cmd_path,cmd->argv ,data->env);
 
@@ -65,8 +66,6 @@ pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
     return (process_id);
 }
 
-
-
 int ft_wait_children_process(t_list *cmd_list, t_data *data)
 {
     int i;
@@ -89,19 +88,25 @@ int ft_wait_children_process(t_list *cmd_list, t_data *data)
 // importante current status para cuando haya varios comandos!! para saber si alguno falló anteriormente
 int ft_return_status(t_data *data, int status)
 {
+    int exit_code;
+    
     if(WIFEXITED(status))
-        data->exit_status = WEXITSTATUS(status);
+        return WEXITSTATUS(status);
     else if(WIFSIGNALED(status))
-        data->exit_status = WTERMSIG(status) + 128; //TO-DO: quit core dumped
+    {
+        exit_code = WTERMSIG(status); //TO-DO: quit core dumped
+        if(exit_code == SIGQUIT)
+            ft_error("Quit (core dumped)"); //Quit (core dumped)
+        else if(exit_code = SIGINT)
+            ft_putchar_fd("\n", 1);
+        return (exit_code + 128);
+    }
     else  
-        data->exit_status = 1;
-    if(data != 0)
-        return ERROR; //CHANGE THIS TO RETURN EXIT STATUS? 
-        
-    return SUCCESS;
+        exit_code = -1;
+    return (exit_code);
 }
 
-
+/*
 void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data)
 {
     if(fd_input == -1 && fd_output == -1)
@@ -138,3 +143,4 @@ void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data)
     ft_exec_cmd(cmd, data->env);
     
 }
+*/

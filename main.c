@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 16:50:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 20:05:33 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void ft_run_shell(t_data *data)
         //free 
         if(data->cmd_line)
             free(data->cmd_line);
-            
+        
     }
     
     rl_clear_history();
