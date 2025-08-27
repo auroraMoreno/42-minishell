@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 16:38:56 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 13:06:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,23 @@ int ft_strcmp(const char *s1, const char *s2)
     return (0);
 }
 
-char *ft_find_equal_sign(char *str)
+
+void ft_free_matrix(char **matrix)
 {
-    char *substr;
-    int i = 0;
+    int i;
 
-    substr = (char *)malloc(sizeof(char) * ft_strlen(str));
-
-    if(!substr)
-        ft_error("error in malloc");
-
-    while(str[i] != '=')
+    if (!matrix)
+        return;
+    i = 0;
+    while (matrix[i])
     {
-        substr[i] = str[i];
+        free(matrix[i]);
         i++;
     }
-    substr[i] = '\0';
-
-    return(substr);
+    free(matrix);
 }
+
+
 
 t_list *ft_process_env_values(char *key_val) // tengo que hacer un dup 
 {

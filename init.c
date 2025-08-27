@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 16:45:39 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 13:13:27 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,34 @@ void ft_init_builtins(t_data *data)
     data->built_ins[5] = "env";
     //exit
     data->built_ins[6] = "exit";
+}
+
+char **ft_cpy_env(char **env)
+{
+    int i;
+    int env_size;
+    char **env_cpy;
+
+    if(!env)
+        return;
+    env_size = ft_get_env_size(env);
+    env_cpy = ft_calloc(env_size + 1, sizeof(char *));
+    if(!env_cpy)
+        return (0);
+    i = 0; 
+    while(env[i])
+    {
+        env_cpy[i] = ft_strdup(env[i]); 
+        if(!env_cpy[i])
+        {
+            free_matrix(env_cpy);
+            return (0);
+        }
+        i++;
+    }
+    
+    env_cpy[i] = '\0';
+    return (env_cpy);
 }
 
 void ft_init_data(t_data *data, char **env)

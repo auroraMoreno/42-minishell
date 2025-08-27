@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 18:31:53 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 13:11:09 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
 t_list			*ft_init_env(char *envp[]);
 void 			ft_init_builtins(t_data *data);
 void			ft_run_shell(t_data *data);
+int				ft_get_env_size(char **env);
+
 
 //PARSER
 
@@ -133,13 +135,7 @@ void			check_no_quote(int *i, int *start, char *cmd, int *nbr);
 
 t_token			*tokens_in_list(char	**tokens);
 t_token_type	get_token_type(char	*token);
-t_toke signal(SIGINT, SIG_IGN); // para que sue muera el hijo no la shell
 
-    waitpid(pid, &exit_status, 0);
-
-    signal(SIGINT, ft_handle_sigint);
-    
-    return (ft_return_status(data, exit_status)); //esto por defe			add_token(t_token **head, t_token *new);
 void			print_list(t_token *token_list);
 
 

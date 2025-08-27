@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 20:08:07 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/27 13:07:38 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,90 +69,166 @@ void ft_print_export(char **env, t_cmd *cmd)
     }
 }
 
-void ft_process_values(char *key_val, char **key,  char **val) // tengo que hacer un dup 
-{   
-    //voy hasta el igual 
-    key = ft_find_equal_sign(key_val);
-    // voy hasta despues del igual:
-    val = ft_substr(key_val, ft_strlen(key) + 1 ,ft_strlen(key_val) - ft_strlen(key) + 1);
+char *ft_get_key(char *str)
+{
+    int i = 0;
+
+    while(str[i] && str[i] != '=')
+        i++;
+      
+    return(ft_substr(str, 0, i));
 }
 
-void ft_add_env_cpy(char **env_cpy, char *key, char *value)
+void ft_process_values(char *key_val, char **key,  char **val) // tengo que hacer un dup 
+{   
+  
+    char *equal; 
+  
+    //voy hasta el igual para el key
+    *key = ft_get_key(key_val);
+    
+    //buscar el = 
+    equal = ft_strchr(key_val, '=');
+    
+    if(!equal)
+      *val = NULL;
+    else if(*(equal + 1) == '\0')
+      *val = ft_strdup("");
+    else 
+      *val = ft_strdup(equal + 1);
+
+}
+
+
+char **ft_add_env_cpy(char **env_cpy, char *key, char *value)
 {
-    if(!value)
+	int env_len;
+	char *new_var;
+	char *temp;
+	char *new_env;
+
+	if(value == NULL)
+		return (0);
+	env_len = ft_get_env_size(env_cpy);
+	temp = ft_strjoin(key,"=");
+	new_var = ft_strjoin(temp, value);
+	new_env = ft_calloc(env_len + 2, sizeof(char *));
+
+	int i = 0;
+	while(i < env_len)
+	{
+		new_env[i] = env_cpy[i];
+		i++;
+	}
+	
+	new_env[i] = new_var;
+	new_env[i++] = NULL;
+	  
+
+	free(temp);
+	free(new_var);
+	free_matrix(env_cpy);
+	return new_env;	
+}
+
+/*
+  reglas de bash
+  no puede empezar con numeros
+    -bash: export: `1try=try': not a valid identifier
+  tiene que tener un = (pero si no lo tienen no da error solo no add la variable)
+  empezar por una letra o un _ 
+  case sensitive
+  
+*/
+
+int ft_check_variables(char *var)
+{
+    int i;
+    if(!var || !var[0] || var[0] == '=')
+      return (0);
+    //si no empieza con _ o no es letra
+    if(!(ft_isalpha(var[0]) || var[0] == '_'))
       return (0);
     
+    i = 1;
+    while(var[i] && var[i] != '=')
+    {
+        if(!(ft_isalnum(var[i]) || var[i] == '_'))
+          return(0);
+        i++;
+    }
+    
+    return (1);
+      
+}
+
+
+int ft_find_in_env_cpy(char **env, char *key)
+{
+    int i = 0;
+    char *curr_key;
+    
+    while(env[i])
+    {
+      curr_key = ft_get_env_size(env[i]);
+      
+      if(ft_strcmp(curr_key, key) == 0)
+      {
+        free(curr_key);
+        return (i);
+      }
+      free(curr_key);
+      i++;
+    }
+
+    return (-1);
 }
 
 int ft_export(t_cmd *cmd, t_data *data)
 {
   char *key;
   char *value;
+  int index_key;
   int i;
   
-  if(!cmd->flags)
+  if(!cmd->args)
   {
     ft_print_export(data->env_cpy, cmd); //en orden alfabetico con declare -x ....
     return (0);
   }
 
-  while(cmd->args) // char **args 
+  i = 0;
+  while(cmd->args[i]) // char **args 
   {
-      //validar que sea una variable válida
-      ft_check_var();
-      //buscarla en la env variable 
-      ft_process_values(cmd->args[i], &key, &value);
-      //si existe => actualizar su valor
-      if(getenv(key))
+      //validar que sea un nombre de variable válido
+      if(ft_check_variables(cmd->args[i]))
       {
-          
+        //get key and value if there is 
+        ft_process_values(cmd->args[i], &key, &value);
+        //buscarla en la env variable 
+        index_key = ft_find_in_env(data->env_cpy, key);
+        //si existe => actualizar su valor
+        if(index_key >= 0 && value)
+        {
+            free(data->env_cpy[index_key]);
+            char *tmp = ft_strjoin(key, "=");
+            char result = ft_strjoin(tmp, value);
+            data->env_cpy[index_key] = result;
+            free(result);
+            free(tmp);
+        }
+        else if (index_key == -1) //si no existe => la creo 
+          data->env_cpy = ft_add_env_cpy(data->env_cpy, key, value);
+        
+        free(key);
+        if(value)
+          free(value);
       }
       else
-      {
-        //si no está crearla y add to env: cuando add to env check val, si !val return 0 no hacemos nada 
-        ft_add_to_env_cpy(data->env_cpy, key, value);
-      }
+        ft_formatted_error("not a valid identifier", " -bash: export", data);
 
       i++;
   }
-}
 
-
-
-int ft_export_old(t_cmd *cmd , t_data *data)
-{
-
-    t_list *curr;
-    t_env *env; 
-    t_list *new;
-    int i;
-    
-    // export no args
-    if(!var_name) 
-    {
-        
-      curr = data->env;
-      while(curr)
-      { 
-        env = curr->content; 
-        printf("declare -x %s=\"%s\" \n",env->key, env->value);
-        curr = curr->next;
-      }  
-    }    
-    else
-    {
-        //si export + var_name="value"
-        i = 0;
-        while(var_name[i])
-        {
-            new = ft_process_env_values(var_name[i]); // TO-DO: quitarles las comillas del final 
-            if(!new)
-                ft_error("error en set var");
-            ft_lstadd_back(&data.env, new);
-            i++;
-        }        
-        // si export + var_name
-        //si export + $var_name DUDA
-    }
-    return (0);
+  return (0);
 }
