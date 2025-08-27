@@ -1,12 +1,10 @@
 #include "../minishell.h"
 
-int	*new_cmd(t_cmd **current_cmd)
+int	new_cmd(t_cmd **current_cmd)
 {
-	t_cmd	*current_cmd;
-
 	*current_cmd = NULL;
 	*current_cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!current_cmd)
+	if (!*current_cmd)
 		return (0);
 	(*current_cmd)->argv = NULL;
 	(*current_cmd)->assignments = NULL;
@@ -71,11 +69,14 @@ int	add_ionum(t_cmd *current_cmd, t_token **token_list)
 
 int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 {
-	int	ret;
+	bool	exec_seen;
+	int		pending_fd;
+	int		ret;
 
-	ret = 0;
-	if (!current_cmd || !*token_list)
-		return (ret);
+	if (!current_cmd || !*token_list || !(*token_list)->value)
+		return (0);
+	exec_seen = false;
+	pending_fd = -1;
 	while (*token_list && (*token_list)->type != PIPE)
 	{
 		if ((*token_list)->type == WORD)
@@ -84,15 +85,14 @@ int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 			ret = add_ionum(current_cmd, token_list);
 		else if ((*token_list)->type == ASSIGNMENT_WORD)
 			ret = add_assign(current_cmd, token_list);
-		else if ((*token_list)->type == REDIR_IN
-			|| (*token_list)->type == REDIR_OUT
-			|| (*token_list)->type == REDIR_APPEND
-			|| (*token_list)->type == HEREDOC)
+		else if (is_redir(*token_list))
 			ret = add_redir(current_cmd, token_list);
-		if (ret == 0)
-			return (ret);
+		else
+			return (0);
+		if (!ret)
+			return (0);
 	}
-	return (ret);
+	return (1);
 }
 
 int	content_in_cmd(t_cmd *current_cmd)
