@@ -69,8 +69,8 @@ int	add_ionum(t_cmd *current_cmd, t_token **token_list)
 
 int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 {
-	bool	exec_seen;
-	int		pending_fd;
+	bool	exec_seen; // TO DO: ver por qué usarlo
+	int		pending_fd; // TO DO: ver por qué usarlo
 	int		ret;
 
 	if (!current_cmd || !*token_list || !(*token_list)->value)

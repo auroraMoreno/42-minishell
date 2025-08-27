@@ -4,18 +4,17 @@ void	parse_input(char *cmd)
 {
 	char	**tokens;
 	t_token	*token_list;
-	t_cmd	*cmd_list;
+	///t_cmd	*cmd_list;
 
 	tokens = input_to_tokens(cmd);
 	if (!*tokens)
 		return ;
 	token_list = tokens_in_list(tokens);
 	free_matrix(tokens);
-	cmd_list = tokens_to_cmds(token_list);
+	/*cmd_list = tokens_to_cmds(token_list);
 	free_list(token_list); // TODO: Por hacer función
-	if ("cmd_list")
-		return ;
-	//check_syntax(token_list);
+	if (!cmd_list)
+		return ;*/
 }
 
 int	main(void)
