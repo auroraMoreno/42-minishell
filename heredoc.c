@@ -6,11 +6,13 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 18:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 20:05:38 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 23:39:34 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// << 
 
 ssize_t ft_read_bytes(int fd, char **buffer, char **content, int buffer_size)
 {

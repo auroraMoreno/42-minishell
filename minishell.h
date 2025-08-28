@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 18:59:40 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 23:18:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_cmd
 	int				fd_in;
 	int				fd_out;
 	pid_t			id_process;
+	int				redir_type; //REMOVE POR LA BUENA PROPIEDAD
 	struct s_cmd	*next;
 	
 }	t_cmd;
@@ -146,6 +147,10 @@ void			print_list(t_token *token_list);
 
 
 /*REDIRECTS/HEREDOC*/
+char *ft_heredoc(char *delimitter);
+char *ft_handle_heredoc(char *delimitter);
+char *ft_read_content_heredoc(int fd);
+ssize_t ft_read_bytes(int fd, char **buffer, char **content, int buffer_size);
 
 
 //UTILS
