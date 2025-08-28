@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 22:15:17 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:52:27 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ void ft_prepare_executer(t_list *cmd_data, t_data *data)
 
     ft_expand(); //TO-DO
     
-    ft_handle_redir();
+    ft_handle_redir(); //preguntar a cesar porq necesito saber cómo me va llegar esa redireccion para poder
+    //hacer el switch en handle redir que dependiendo de que redireccion sea llamar a heredoc, append, infile o outfile 
 
     //le llegará los cmd procesados con sus herdocs y expanders 
     //considerar no pasarle el g_data porq es global jeje 
