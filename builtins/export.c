@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 17:46:14 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 00:11:31 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-
 
 void ft_process_values(char *key_val, char **key,  char **val) // tengo que hacer un dup 
 {   

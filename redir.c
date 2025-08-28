@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:01:23 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/21 20:13:20 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:07:43 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*TO DO: ADD ERROR HANDLING TO THIS !!! */
 
 void ft_handle_out_redir(t_cmd *cmd)
 {
@@ -51,7 +53,8 @@ void ft_handle_redir(t_cmd *cmd)
 {
 
     //check heredoc
-
+    
+    
     //infile redir
     if(cmd->infile)
         ft_handle_in_redir(cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 20:04:43 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:15:17 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data)
     while(i < data->cmd_nbr)
     {
         cmd = (t_cmd *)cmd_list->content;
+        // PASAR AQUI EL MÉTODO CREATE FORK !!! 
         cmd->id_process = ft_create_fork(cmd,cmd->fd_in,cmd->fd_out,data); //pasarle los fds? 
+        if(cmd->id_process == FORK_ERROR)
+            ft_error("fork error");
         cmd = cmd_list->next;
         i++;
     }
@@ -38,16 +41,15 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
     int exit_status;
     int exit_code; 
 
+    if(cmd->fd_in == -1 || cmd->fd_out == -1)
+        return (1);
+    
     if(cmd->is_built_in)
     {
-        exit_status = ft_built_ins(cmd, data);
-        if(exit_status != -1)
-            return (exit_status);
+        exit_code = ft_built_ins(cmd, data);
+        if(exit_code != -1)
+            return (exit_code);
     }
-        
-    if(cmd->fd_in == -1 || cmd->fd_out == -1)
-        return (-1);
-    
     pid = fork();
     if(pid == -1)
         return (-1);
@@ -60,18 +62,19 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
         ft_exec_cmd(cmd, data);
     }
     waitpid(pid, &exit_status, 0);
-    return (ft_return_status(data, exit_code)); 
+    return (ft_return_status(data, exit_status)); 
 }
 
 // recursivad, volvemos a llamar a este metodo 
 // return status
 void ft_executer(t_list *cmd_list, t_data *data)
 {
-    int fds[2];
-    pid_t pid;
     t_cmd *cmd;
+    int exit_code;
     
     /*signal handling*/
+    signals(SIGINT, SIG_IGN);
+    signals(SIGQUIT, SIG_IGN);
     
     //check si cmd not nul
     if(!cmd_list)
@@ -81,12 +84,17 @@ void ft_executer(t_list *cmd_list, t_data *data)
     {
         // al ser single command sólo va a tener 1 
         cmd = (t_cmd *)cmd_list->content;
-        data->exit_status = ft_single_cmd(cmd, cmd->fd_in, data); //TO-DO: fix, esto no siempre es el status code
+        exit_code = ft_single_cmd(cmd, cmd->fd_in, data); //TO-DO: fix, esto no siempre es el status code
+        // solo modificamos el exit status si ft_single_cmd ha ejecutado un comando
+        // si hay cualquier otro error no lo cambiamos 
     }
     else
-        data->exit_status = ft_multiple_commands(cmd_list, data);
+        exit_code = ft_multiple_commands(cmd_list, data);
+    //
+    if(exit_code != -1)
+        data->exit_status = exit_code; 
 
-    //liberar la lista de comandos una vez haya acabado 
+    //liberar la lista de comandos una vez haya acabado !! TO-DO: memory managemnte 
     
 }
 
@@ -103,7 +111,7 @@ void ft_prepare_executer(t_list *cmd_data, t_data *data)
 
     ft_expand(); //TO-DO
     
-    ft_heredocs(); //TO-DO
+    ft_handle_redir();
 
     //le llegará los cmd procesados con sus herdocs y expanders 
     //considerar no pasarle el g_data porq es global jeje 

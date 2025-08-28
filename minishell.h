@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 19:53:28 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:59:40 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@
 #include <stdbool.h>
 # include <fcntl.h>
 
-#define ERROR 0
-#define SUCCESS 1
+#define SUCCESS 0
+#define ERROR -1
+#define FORK_ERROR -2
+
 
 int g_signal; 
 
@@ -141,6 +143,9 @@ t_token			*tokens_in_list(char	**tokens);
 t_token_type	get_token_type(char	*token);
 
 void			print_list(t_token *token_list);
+
+
+/*REDIRECTS/HEREDOC*/
 
 
 //UTILS

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 17:37:36 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 01:25:10 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int ft_built_ins(t_cmd *cmd, t_data *data)
 	   exit_code = ft_env(cmd, data);
 	else if(!ft_strcmp("exit", cmd->cmd_name))
 		exit_code = ft_exit(cmd, data);
-	data->exit_status = exit_code; // ?
-	return (data->exit_status); //TO-DO return exit status 
+	return (exit_code); //TO-DO return exit status 
 }
 

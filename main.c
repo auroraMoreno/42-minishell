@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 20:05:33 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:14:52 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,17 @@ void ft_run_shell(t_data *data)
     while(1)
     {
         //TO-DO add signals? 
+        signal(SIGINT, ft_handle_sigint);
+        signal(SIGQUIT, SIG_IGN);
         
         data->cmd_line = readline(data->prompt);
-        if(!data->cmd_line) // EOF ERROR
+        if(g_signal != 0)
         {
+            data->exit_status = g_signal;
+            g_signal = 0;
+        }
+        if(!data->cmd_line) // EOF ERROR
+        { //exit_perror
             //free
             //send error:
             ft_error("Exiting..."); //TO-DO: mensaje error 
@@ -29,9 +36,10 @@ void ft_run_shell(t_data *data)
         add_history(data->cmd_line);
         
         //parser / lexer
-
+        //heredoc ? 
         //cmd init
         cmd = ft_init_cmd(data->cmd_line, data->built_ins); //sustituir por init_cmd_list  
+        
         // executer 
         ft_prepare_executer(cmd, data);
         //free 

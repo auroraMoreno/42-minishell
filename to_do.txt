@@ -8,3 +8,4 @@ revisar historial
 .h y makefile 
 expander
 shell level
+error management & return codes 
