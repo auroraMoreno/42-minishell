@@ -3,15 +3,14 @@
 int	ft_is_assignment(char	*token)
 {
 	int	i;
-
 	if (!token || !*token)
 		return (0);
-	if (!(ft_isalpha(token[0] || token[0] == '_')))
+	if (!(ft_isalpha(token[0]) || token[0] == '_'))
 		return (0);
 	i = 1;
-	while (token[i] && token[i] != '_')
+	while (token[i] && token[i] != '=')
 	{
-		if (!(ft_isalnum(token[i] || token[i] == '_')))
+		if (!(ft_isalnum(token[i]) || token[i] == '_'))
 			return (0);
 		i++;
 	}
@@ -38,14 +37,14 @@ t_token_type	get_token_type(char	*token)
 {
 	if (!token || !*token)
 		return (WORD);
-	if (!ft_strncmp(token, "<<", ft_strlen(token)))
-		return (HEREDOC);
-	else if (!ft_strncmp(token, ">>", ft_strlen(token)))
-		return (REDIR_APPEND);
-	else if (!ft_strncmp(token, "<", ft_strlen(token)))
+	if (!ft_strncmp(token, "<", ft_strlen(token)))
 		return (REDIR_IN);
 	else if (!ft_strncmp(token, ">", ft_strlen(token)))
 		return (REDIR_OUT);
+	else if (!ft_strncmp(token, "<<", ft_strlen(token)))
+		return (HEREDOC);
+	else if (!ft_strncmp(token, ">>", ft_strlen(token)))
+		return (REDIR_APPEND);
 	else if (ft_is_number(token))
 		return (IO_NUMBER);
 	else if (ft_is_assignment(token))
@@ -103,8 +102,14 @@ void	print_list(t_token *token_list)
 			type = "HEREDOC";
 		else if (token_list->type == REDIR_APPEND)
 			type = "REDIR_APPEND";
-		else
+		else if (token_list->type == IO_NUMBER)
+			type = "IO_NUMBER";
+		else if (token_list->type == ASSIGNMENT_WORD)
+			type = "ASSIGNMENT_WORD";
+		else if (token_list->type == WORD)
 			type = "WORD";
+		else
+			type = "UNKNOWN";
 		printf("token %d in list = %s (type = %s)\n", i, token_list->value, type);
 		token_list = token_list->next;
 		i++;

@@ -22,7 +22,7 @@ int	count_tokens(char *cmd)
 		i++;
 	}
 	if (in_quote == true)
-		return (0);
+		return (-1);
 	if (i > start)
 		nbr++;
 	return (nbr);
@@ -94,9 +94,15 @@ char	**input_to_tokens(char *cmd)
 	if (!cmd_trimmed)
 		return (NULL);
 	token_nbr = count_tokens(cmd_trimmed);
-	if (!token_nbr)
+	if (token_nbr < 1)
 	{
 		free (cmd_trimmed);
+		if (token_nbr == -1)
+		{
+			errno = EINVAL;
+			perror("Syntax error");
+			errno = 0;
+		}
 		return (NULL);
 	}
 	if (token_nbr == 1)

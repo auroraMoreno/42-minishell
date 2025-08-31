@@ -24,7 +24,7 @@ OBJS =	$(SRC:.c=.o)
 INCLUDE = libft.h
 
 $(NAME):$(OBJS)	$(INCLUDE)
-	ar -rsc	$(NAME)	$(OBJS)
+	@ar -rsc	$(NAME)	$(OBJS)
 
 # Recompile object files if libft.h changes  
 $(OBJS): libft.h
@@ -38,11 +38,11 @@ all: $(NAME)
 
 # Clean objects
 clean:
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
 
 # Clean objects and executable
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 # Clean objects and executable and then compilation but just OBJS
 re: fclean all

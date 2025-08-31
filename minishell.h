@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 18:33:20 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:58:27 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,32 @@
 #include  <errno.h>
 #include <stdbool.h>
 
-typedef enum e_redir_kind {
-    R_IN,       // <
-    R_OUT,      // >
-    R_APPEND,   // >>
-    R_HEREDOC   // <<
-} t_redir_kind;
+typedef enum e_quote_type {
+	NO_QUOTE,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE
+}	t_quote_type;
+
+typedef enum e_redir_type {
+	REDIR_IN,		// <
+	REDIR_OUT,		// >
+	REDIR_APPEND,	// >>
+	HEREDOC// <<
+}	t_redir_type;
+
+typedef struct s_assign {
+	char			*key;
+	char			*value;
+	struct s_assign	*next;
+}	t_assign;
 
 typedef struct s_redir {
-    int           from_fd;          // fd origen que rediriges (por defecto 0 para < y <<, 1 para > y >>, o el IO_NUMBER si lo hubo)
-    t_redir_kind  kind;             // tipo de redirección
-    char         *target;           // filename (>, >>, <) o delimitador (<<)
-    int           quoted_delim;     // 1 si delimitador estaba entre comillas -> no expandir heredoc
-    char         *heredoc_tmpfile;  // si guardas el heredoc en un tmpfile
-    struct s_redir *next;
+	int				from_fd;          // fd origen que rediriges (por defecto 0 para < y <<, 1 para > y >>, o el IO_NUMBER si lo hubo)
+	t_redir_type	redir_type;             // tipo de redirección
+	char			*target;           // filename (>, >>, <) o delimitador (<<)
+	bool			heredoc_quoted_delim;     // 1 si delimitador estaba entre comillas -> no expandir heredoc
+	char			*heredoc_tmpfile;  // si guardas el heredoc en un tmpfile
+	struct s_redir	*next;
 } t_redir;
 
 typedef struct s_cmd {
