@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 23:18:37 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/30 00:21:27 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ typedef struct s_data // usar struct pipex de cesar
 	int shell_lvl;
 	//TO-DO: add shell-level
 	int cmd_nbr;
+
+	//DE MOMENTO
+	char **heredoc_content;
+	int 	heredoc_fds[2];
 }
 t_data;
 
