@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/31 21:58:27 by cesar            ###   ########.fr       */
+/*   Updated: 2025/09/02 00:34:23 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MINISHELL_H
 
 #include "./libft/libft.h"
+#include <unistd.h>
 #include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -53,7 +54,7 @@ typedef struct s_redir {
 
 typedef struct s_cmd {
     char     **argv;        // argv[0] = ejecutable, resto args (ya con quote removal / expansiones)
-    t_list   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
+    t_assign   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
     t_redir  *redirs;       // lista de redirecciones (0..N)
     bool       is_builtin;   // opcional
     struct s_cmd *next;     // siguiente en el pipeline
@@ -100,42 +101,6 @@ typedef struct s_builtin_type
     int (*foo)(); //considerar un union para distintos prototypes
 
 }t_built_in_type;
-
-
-
-//PARSER
-
-void			parse_input(char *cmd);
-
-char			**input_to_tokens(char *cmd);
-int				count_tokens(char *cmd);
-char			**just_one_token(char *cmd_trimmed);
-char			**tokens_split(char *cmd, int token_nbr, int *delimiters_pos);
-char			*push_token(char *cmd, int start, int end);
-
-int				find_delimiters(char *cmd, int token_nbr, int *delimiters_pos);
-int				get_delimiter(int *i, int *start, char *cmd, int *nbr);
-int				check_delimiter(int *i, int *start, char *cmd, int *nbr);
-int				check_array(int *delimiters_pos, int token_number);
-
-int				is_space(char c);
-int				is_quote(char c);
-int				is_operator(char c);
-
-void			check_quote(bool *in_quote, char *quote_chr, char to_check);
-void			check_space(int *i, int *start, char *cmd, int *nbr);
-void			check_operator(int *i, int *start, char *cmd, int *nbr);
-void			check_no_quote(int *i, int *start, char *cmd, int *nbr);
-
-t_token			*tokens_in_list(char	**tokens);
-t_token_type	get_token_type(char	*token);
-t_token			*new_token(char	*token, t_token_type token_type);
-void			add_token(t_token **head, t_token *new);
-void			print_list(t_token *token_list);
-
-
-//UTILS
-void	free_matrix(char **matrix);
 
 
 

@@ -1,5 +1,68 @@
 #include "../minishell.h"
 
+void	free_assignments(t_assign *assignments)
+{
+	t_assign *tmp;
+
+	while (assignments)
+	{
+		tmp	= assignments;
+		assignments = assignments->next;
+		if (tmp->key)
+			free (tmp->key);
+		if (tmp->value)
+			free (tmp->value);
+		free (tmp);
+	}
+	return ;
+}
+
+void	free_redirs(t_redir *redirs)
+{
+	t_redir	*tmp;
+
+	while (redirs)
+	{
+		tmp = redirs;
+		redirs = redirs->next;
+		if (tmp->target)
+			free (tmp->target);
+		if (tmp->heredoc_tmpfile)
+			free (tmp->heredoc_tmpfile);
+		free (tmp);
+	}
+	return ;
+}
+
+t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd)
+{
+	t_cmd	*tmp;
+
+	while (cmd_list_start)
+	{
+		tmp = cmd_list_start;
+		cmd_list_start = cmd_list_start->next;
+		if (tmp->argv)
+			free_matrix(tmp->argv);
+		if (tmp->assignments)
+			free_assignments(tmp->assignments);
+		if (tmp->redirs)
+			free_redirs(tmp->redirs);
+		free (tmp);
+	}
+	if (current_cmd)
+	{
+		if (current_cmd->argv)
+			free_matrix(current_cmd->argv);
+		if (current_cmd->assignments)
+			free_assignments(current_cmd->assignments);
+		if (current_cmd->redirs)
+			free_redirs(current_cmd->redirs);
+		free (current_cmd);
+	}
+	return (NULL);
+}
+
 int	new_cmd(t_cmd **current_cmd)
 {
 	*current_cmd = NULL;
@@ -26,20 +89,20 @@ bool	token_is_quoted(char *token_value)
 		return (false);
 	while (*token_value)
 	{
-		if (*token_value == '\'' || token_value == '"')
+		if (*token_value == '\'' || *token_value == '"')
 			return (true);
 		token_value++;
 	}
 	return (false);
 }
 
-t_quote_type type_of_quote(char *token_value)
+static t_quote_type type_of_quote(char *token_value)
 {
 	if (!token_value || !*token_value)
 		return (NO_QUOTE);
 	while (*token_value)
 	{
-		if (token_value == '\'')
+		if (*token_value == '\'')
 			return (SINGLE_QUOTE);
 		if (*token_value == '"')
 			return (DOUBLE_QUOTE);
@@ -55,29 +118,41 @@ char	*remove_quotes(char *str)
 	int		new_str_len;
 	char	*new_str;
 
-	if (!str || !*str)
+	if (!str)
 		return (NULL);
-	if (!token_is_quoted(str))
-		return (ft_strdup(str));
-	i = 0;
-	j = 0;
+	if (!*str)
+		return (ft_strdup(""));
 	new_str_len = 0;
-	while (*str)
-	{
-		if (*str != '\'' && *str != '"')
-			new_str_len++;
-		str++;
-	}
-	new_str = (char *)ft_calloc(new_str_len, sizeof(char));
-	if (!new_str)
-		return (NULL);
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		if (str[i] != '\'' && str[i] != '"')
-			new_str[j++] = str[i];
-		i++;
+			new_str_len++;
 	}
+	new_str = (char *)ft_calloc(new_str_len + 1, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (str[++i])
+	{
+		if (str[i] != '\'' && str[i] != '"')
+			new_str[++j] = str[i];
+	}
+	new_str[new_str_len] = '\0';
 	return (new_str);
+}
+
+char	*copy_str(char *str)
+{
+	if (!str)
+		return (NULL);
+	if (!*str)
+		return (ft_strdup(""));
+	if (!token_is_quoted(str))
+		return (ft_strdup(str));
+	else
+		return (remove_quotes(str));
 }
 
 int	argv_len(char **argv)
@@ -92,25 +167,22 @@ int	argv_len(char **argv)
 	return (i);
 }
 
-int	push_to_argv(char **argv, char *arg)
+char	**push_to_argv(char **argv, char *arg)
 {
 	int		len;
 	char	**new_argv;
 	int		i;
 
-	if (!(argv || *argv || arg))
-		return (0);
+	if (!arg)
+		return (NULL);
 	len = argv_len(argv);
 	new_argv = (char **)ft_calloc(len + 2, sizeof(char *));
-	if (!argv)
+	if (!new_argv)
 		return (NULL);
-	i = 0;
-	while (i < len)
-	{
+	i = -1;
+	while (++i < len)
 		new_argv[i] = argv[i];
-		i++;
-	}
-	new_argv[i] = ft_strdup(arg);
+	new_argv[i] = copy_str(arg);
 	if (!new_argv[i])
 	{
 		free(new_argv);
@@ -118,52 +190,86 @@ int	push_to_argv(char **argv, char *arg)
 	}
 	i++;
 	new_argv[i] = NULL;
-	return (1);
+	free (argv);
+	return (new_argv);
 }
 
-int	add_word(t_cmd *current_cmd, t_token **token_list)
+int	add_word(t_cmd *current_cmd, t_token **token_list, bool *exec_seen)
 {
-	if (!(current_cmd || token_list || *token_list))
+	char **tmp;
+	
+	if (!current_cmd || !token_list || !*token_list || !exec_seen)
 		return (0);
-	if (!push_to_argv(current_cmd->argv, (*token_list)->value))
+	tmp = push_to_argv(current_cmd->argv, (*token_list)->value);
+	if (!tmp)
 		return (0);
+	current_cmd->argv = tmp;
+	if (!*exec_seen)
+		*exec_seen = true;
 	*token_list = (*token_list)->next;
 	return (1);
 }
 
 int	set_assign(t_assign *asgn_wrd, char	*wrd)
 {
-	int	equal_pos;
+	int		i;
+	int		equal_pos;
+	char	*unquoted_wrd;
+	int		pos_to_end;
 
-	if (!(asgn_wrd || wrd))
+	if (!asgn_wrd || !wrd)
 		return (0);
+	unquoted_wrd = copy_str(wrd);
+	if (!unquoted_wrd)
+		return (0);
+	i = 0;
 	equal_pos = 0;
-	while (*wrd && *wrd != '=')
+	while (unquoted_wrd[i] && unquoted_wrd[i] != '=')
+	{
 		equal_pos++;
-	asgn_wrd->key = ft_substr(wrd, 0, equal_pos++);
+		i++;
+	}
+	if (equal_pos == ft_strlen(unquoted_wrd))
+	{
+		free (unquoted_wrd);
+		return (0);
+	}
+	asgn_wrd->key = ft_substr(unquoted_wrd, 0, equal_pos++);
 	if (!asgn_wrd->key)
+	{
+		free (unquoted_wrd);
 		return (0);
-	asgn_wrd->value = ft_substr(wrd, equal_pos, (ft_strlen(wrd) - equal_pos));
+	}
+	pos_to_end = ft_strlen(unquoted_wrd) - equal_pos;
+	asgn_wrd->value = ft_substr(unquoted_wrd, equal_pos, pos_to_end);
 	if (!asgn_wrd->value)
+	{
+		free (unquoted_wrd);
+		free (asgn_wrd->key);
 		return (0);
+	}
 	asgn_wrd->next = NULL;
+	free (unquoted_wrd);
 	return (1);
 }
 
-int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool exec_seen)
+int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool *exec_seen)
 {
 	t_assign	*asgn_wrd;
 	t_assign	*tmp;
 
-	if (!(current_cmd || token_list || *token_list))
+	if (!current_cmd || !token_list || !*token_list)
 		return (0);	
-	if (exec_seen)
-		return (add_word(current_cmd, token_list));
+	if (*exec_seen)
+		return (add_word(current_cmd, token_list, exec_seen));
 	asgn_wrd = (t_assign *)ft_calloc(1, sizeof(t_assign));
 	if (!asgn_wrd)
 		return (0);
 	if (!set_assign(asgn_wrd, (*token_list)->value))
+	{
+		free (asgn_wrd);
 		return (0);
+	}
 	if (!current_cmd->assignments)
 		current_cmd->assignments = asgn_wrd;
 	else
@@ -174,18 +280,6 @@ int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool exec_seen)
 		tmp->next = asgn_wrd;
 
 	}
-	*token_list = (*token_list)->next;
-	return (1);
-}
-
-int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd)
-{
-	if (!(current_cmd || token_list || *token_list || pending_fd))
-		return (0);
-	if (!(*token_list)->next || !is_redir((*token_list)->next))
-		add_word(current_cmd, token_list);
-	else
-		*pending_fd = ft_atoi((*token_list)->value);
 	*token_list = (*token_list)->next;
 	return (1);
 }
@@ -202,44 +296,80 @@ int	is_redir(t_token *token_list)
 	return (0);
 }
 
+int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen)
+{
+	long long	val;
+	
+	if (!current_cmd || !token_list || !*token_list || !pending_fd)
+		return (0);
+	if (!(*token_list)->next || !is_redir((*token_list)->next))
+		return (add_word(current_cmd, token_list, exec_seen));
+	else
+		val = ft_atoi((*token_list)->value);
+	if (val < 0 || val > INT_MAX)
+		return (add_word(current_cmd, token_list, exec_seen));
+	*pending_fd = (int)val;
+	*token_list = (*token_list)->next;
+	return (1);
+}
+
+int catalogue_redir(t_redir_type *redir_type, t_token_type token_type)
+{
+	if (token_type == REDIR_IN)
+		*redir_type = REDIR_IN;
+	else if (token_type == REDIR_OUT)
+		*redir_type = REDIR_OUT;
+	else if (token_type == REDIR_APPEND)
+		*redir_type = REDIR_APPEND;
+	else if (token_type == HEREDOC)
+		*redir_type = HEREDOC;
+	else
+		return (0);
+	return (1);
+}
+
 int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd)
 {
-	if (!(*token_list)->next || (*token_list)->next->type != WORD)
+	t_token	*next;
+
+	next = (*token_list)->next;
+	if (!next || next->type == PIPE || is_redir(next))
 		return (0);
-	redir->target = ft_strdup((*token_list)->next->value);
+	redir->target = copy_str(next->value);
 	if (!redir->target)
 		return (0);
-	redir->redir_type = (t_redir_type)(*token_list)->type;
-	if (pending_fd != -1)
-		redir->from_fd = pending_fd;
-	else
-	{
-		if (redir->redir_type == REDIR_IN || redir->redir_type == HEREDOC)
-			redir->from_fd = 0;
-		else // REDIR_OUT || REDIR_APPEND
-			redir->from_fd = 1;
-	}
+	if (!catalogue_redir(&(redir)->redir_type, (*token_list)->type))
+		return (0);
+	if (*pending_fd != -1)
+		redir->from_fd = *pending_fd;
+	else if (redir->redir_type == REDIR_IN || redir->redir_type == HEREDOC)
+		redir->from_fd = 0;
+	else // REDIR_OUT || REDIR_APPEND
+		redir->from_fd = 1;
 	if ((*token_list)->type == HEREDOC)
-		redir->heredoc_quoted_delim = token_is_quoted((*token_list)->value);
+		redir->heredoc_quoted_delim = token_is_quoted(next->value);
 	else
 		redir->heredoc_quoted_delim = false;
 	redir->heredoc_tmpfile = NULL;
 	redir->next = NULL;
+	return (1);
 }
 
 int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd)
 {
 	t_redir	*redir;
 	t_redir	*tmp;
-	
-	if (!(current_cmd || token_list || *token_list || pending_fd))
+
+	if (!current_cmd || !token_list || !*token_list || !pending_fd)
 		return (0);
-	return (1);
 	redir = (t_redir *)ft_calloc(1, sizeof(t_redir));
 	if (!redir)
 		return (0);
 	if (!set_redir(redir, token_list, pending_fd))
+	{
+		free (redir);
 		return (0);
+	}
 	if (!current_cmd->redirs)
 		current_cmd->redirs = redir;
 	else
@@ -249,7 +379,8 @@ int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd)
 			tmp = tmp->next;
 		tmp->next = redir;
 	}
-	*token_list = (*token_list)->next;
+	*token_list = (*token_list)->next->next; // Avanzo 2 (redir + target)
+	*pending_fd = -1;
 	return (1);
 }
 
@@ -272,20 +403,19 @@ int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 	while (*token_list && (*token_list)->type != PIPE)
 	{
 		if ((*token_list)->type == WORD)
-		{
-			exec_seen = true;
-			ret = add_word(current_cmd, token_list);
-		}
+			ret = add_word(current_cmd, token_list, &exec_seen);
 		else if ((*token_list)->type == ASSIGNMENT_WORD)
-			ret = add_asgn_wrd(current_cmd, token_list, exec_seen);
+			ret = add_asgn_wrd(current_cmd, token_list, &exec_seen);
 		else if ((*token_list)->type == IO_NUMBER)
-			ret = add_io_num(current_cmd, token_list, &pending_fd);
+			ret = add_io_num(current_cmd, token_list, &pending_fd, &exec_seen);
 		else if (is_redir(*token_list))
 			ret = add_redir(current_cmd, token_list, &pending_fd);
 		else
 			return (0);
+		if (!ret)
+			return (0);
 	}
-	return (ret);
+	return (1);
 }
 
 int	content_in_cmd(t_cmd *current_cmd)
@@ -336,10 +466,119 @@ t_cmd	*tokens_to_cmds(t_token *token_list)
 		if (token_list && token_list->type == PIPE)
 		{
 			if (!token_list->next || token_list->next->type == PIPE)
-				return (free_cmds(cmd_list_start, current_cmd));
+				return (free_cmds(cmd_list_start, NULL));
 			token_list = token_list->next;
 		}
 	}
 	return (cmd_list_start);
 }
 
+void	print_argv(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (i)
+			printf(" ");
+		printf ("%s", argv[i]);
+		i++;
+	}
+	return ;
+}
+
+void	print_assgn(t_assign *assign)
+{
+	t_assign	*tmp;
+	int			i;
+
+	tmp = assign;
+	i = 0;
+	while (tmp)
+	{
+		if (i)
+			printf("\n");
+		printf("	assignment %d\n", i);
+		printf("		key		= %s\n", tmp->key);
+		printf("		value	= %s\n", tmp->value);
+		i++;
+	}
+	return ;
+}
+
+void	print_redir_type(t_redir_type redir_type)
+{
+	char	type_redir;
+
+	if (redir_type == REDIR_IN)
+		type_redir = "REDIR_IN";
+	else if (redir_type == REDIR_OUT)
+		type_redir = "REDIR_OUT";
+	else if (redir_type == REDIR_APPEND)
+		type_redir = "REDIR_APPEND";
+	else if (redir_type == HEREDOC)
+		type_redir = "HEREDOC";
+	else
+		type_redir = "UNKNOWN";
+	printf("		redir type = %s\n", type_redir);
+	return ;
+}
+
+
+void	print_redir(t_redir *redirs)
+{
+	t_redir	*tmp;
+	int		i;
+	char	*redir_type;
+	char	*bool_hd_quotes;
+
+	tmp = redirs;
+	i = 0;
+	while (tmp)
+	{
+		if (i)
+			printf("\n");
+		printf("	redir %d\n", i);
+		printf("		from_fd		= %d\n", tmp->from_fd);
+		print_redir_type(redir_type);
+		printf("		target		= %s\n", tmp->target);
+		if (tmp->heredoc_quoted_delim)
+			bool_hd_quotes = "true";
+		else
+			bool_hd_quotes = "false";
+		printf("		hd_quoted	= %s\n", bool_hd_quotes);
+		printf("		hd_tmpfile	= %s\n", tmp->heredoc_tmpfile);
+		i++;
+	}
+	return ;
+}
+
+void	print_cmds(t_cmd *cmds)
+{
+	t_cmd	*tmp;
+	int		i;
+	char	*is_builtin;
+
+	tmp = cmds;
+	i = 0;
+	while (tmp)
+	{
+		printf("CMD %d = \n", i);
+		print_argv(tmp->argv);
+		print_assgn(tmp->assignments);
+		print_redir(tmp->redirs);
+		if (tmp->is_builtin)
+			is_builtin = "true";
+		else
+			is_builtin = "false";
+		printf("	is builtin = %s\n", is_builtin);
+		tmp = tmp->next;
+	}
+	return ;
+}
+
+// TODO
+	// synatx error
+	// heredoc tmpfile
+	// expansions
