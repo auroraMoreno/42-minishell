@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 22:52:27 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:42:12 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
         ft_exec_cmd(cmd, data);
     }
     waitpid(pid, &exit_status, 0);
-    return (ft_return_status(data, exit_status)); 
+    return (ft_return_status(exit_status)); 
 }
 
 // recursivad, volvemos a llamar a este metodo 

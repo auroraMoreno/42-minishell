@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/01 10:17:42 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:21:07 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,16 @@ void ft_run_shell(t_data *data)
             if(pipe(data->heredoc_fds) == -1)
                 ft_exit(); //TO-DO
             ft_heredoc(from_token + 1, delimitter,data); //return flag 
-            
-            
         }
-        
         //lexer
-        
-
-
-
         //parser
-        
         //cmd init
         cmd = ft_init_cmd(data->cmd_line, data->built_ins); //sustituir por init_cmd_list  
-        
         // executer 
         ft_prepare_executer(cmd, data);
         //free 
         if(data->cmd_line)
             free(data->cmd_line);
-        
     }
     
     rl_clear_history();

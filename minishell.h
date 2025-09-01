@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/30 00:21:27 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/01 17:09:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,7 @@ typedef struct s_data // usar struct pipex de cesar
     char **env_cpy;
 	t_list *cmds;
 	int shell_lvl;
-	//TO-DO: add shell-level
 	int cmd_nbr;
-
 	//DE MOMENTO
 	char **heredoc_content;
 	int 	heredoc_fds[2];
@@ -102,13 +100,6 @@ typedef struct s_env
 
 }t_env;
 
-// to remove 
-typedef struct s_builtin_type
-{
-    char *built_in_name;
-    int (*foo)(); //considerar un union para distintos prototypes 
-    
-}t_built_in_type;
 
 /*init functions*/
 void			ft_init_data(t_data *data, char **env);
@@ -150,59 +141,58 @@ t_token_type	get_token_type(char	*token);
 void			print_list(t_token *token_list);
 
 
-/*REDIRECTS/HEREDOC*/
-char *ft_heredoc(char *delimitter);
-char *ft_handle_heredoc(char *delimitter);
-char *ft_read_content_heredoc(int fd);
-ssize_t ft_read_bytes(int fd, char **buffer, char **content, int buffer_size);
-
-
-//UTILS
-void			free_matrix(char **matrix);
-
 /*EXECUTER*/
-void ft_prepare_executer(t_list *cmd_data, t_data *data);
-void ft_executer(t_list *cmd_list, t_data *data);
-int ft_single_cmd(t_cmd *cmd, int fd, t_data *data);
-int ft_multiple_commands(t_list *cmd_list, t_data *data);
+void			ft_prepare_executer(t_list *cmd_data, t_data *data);
+void			ft_executer(t_list *cmd_list, t_data *data);
+int				ft_single_cmd(t_cmd *cmd, int fd, t_data *data);
+int				ft_multiple_commands(t_list *cmd_list, t_data *data);
 
 /*executer utils*/
-void ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
-pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data);
-void ft_exec_cmd(t_cmd *cmd, t_data *data);
-int ft_return_status(t_data *data, int status);
-int ft_wait_children_process(t_list *cmd, t_data *data);
+void			ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
+pid_t			ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data);
+void			ft_exec_cmd(t_cmd *cmd, t_data *data);
+int				ft_return_status(int status);
+int				ft_wait_children_process(t_list *cmd, t_data *data);
 
 
 /*BUILT IN functions*/
-int ft_built_ins(t_cmd *cmd, t_data *data);
-int ft_check_built_in(char *cmd, char built_ins[]);
-int ft_echo(t_cmd *cmd, t_data *data);
-int ft_cd(t_cmd *cmd, t_data *data);
-int ft_pwd(t_cmd *cmd, t_data *data);
-int ft_unset(t_cmd *cmd, t_data *data);
-int ft_env(t_cmd *cmd, t_data *data);
-int ft_exit(t_cmd *cmd, t_data *data);
-int ft_export(t_cmd *cmd, t_data *data);
+int				ft_built_ins(t_cmd *cmd, t_data *data);
+int				ft_check_built_in(char *cmd, char built_ins[]);
+int				ft_echo(t_cmd *cmd, t_data *data);
+int				ft_cd(t_cmd *cmd, t_data *data);
+int				ft_pwd(t_cmd *cmd, t_data *data);
+int				ft_unset(t_cmd *cmd, t_data *data);
+int 			ft_env(t_cmd *cmd, t_data *data);
+int 			ft_exit(t_cmd *cmd, t_data *data);
+int				ft_export(t_cmd *cmd, t_data *data);
 
-
-/*export utils*/
-int ft_find_in_env_cpy(char **env, char *key);
-int ft_check_variables(char *var);
-char **ft_add_env_cpy(char **env_cpy, char *key, char *value);
-void ft_process_values(char *key_val, char **key,  char **val);
-char *ft_get_key(char *str);
-char **ft_sort_alpha(char **env);
-void ft_print_export(char **env, t_cmd *cmd);
-
+/*export & other built ins' utils*/
+int				ft_find_in_env_cpy(char **env, char *key);
+int				ft_check_variables(char *var);
+char			**ft_add_env_cpy(char **env_cpy, char *key, char *value);
+void			ft_process_values(char *key_val, char **key,  char **val);
+char			*ft_get_key(char *str);
+char			**ft_sort_alpha(char **env);
+void			ft_print_export(char **env, t_cmd *cmd);
+char			*ft_cd_go_home(t_list *curr, t_env *env, char *path);
+int				ft_cd_errors(int err_number, char *path, t_data *data);
+int				ft_check_n_flag(char *flags);
+long			ft_atoi_exit_code(char *str_code);
+int				ft_remove_element(t_list **env_list, char *var_name);
 
 /*signals*/
-void ft_handle_sigint(int sig);
+void			ft_handle_sigint(int sig);
 
+/*REDIRECTS/HEREDOC*/
+int				ft_heredoc(int from_token, char *delimitter, t_data *data);
+int				ft_heredoc_write_content(int from_token, char *delimitter, t_data *data);
+int				ft_heredoc_read_more_content(t_data *data);
 
-/*redirection functions*/
-void ft_handle_redir(t_cmd *cmd);
-
+/*heredoc utils*/
+char			*ft_read_content_heredoc(int fd);
+ssize_t			ft_read_bytes(int fd, char **buffer, char **content, int buffer_size);
+int				ft_update_content(char *content, t_data *data);
+void			ft_remove_heredoc_lines(int from, t_data *data);
 
 /*utils*/
 t_list 			*ft_process_env_values(char *key_val);
@@ -211,7 +201,6 @@ int 			ft_strcmp(const char *s1, const char *s2);
 char			*find_route(char *instruction, char *path);
 char			*get_route(char *cmd, char **envp);
 void			free_matrix(char **matrix);
-
 
 /*freeing memory methods*/
 void 			ft_free_env(t_list **env_list);
