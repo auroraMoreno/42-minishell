@@ -1,17 +1,17 @@
 #include "../minishell.h"
 
-int	check_delimiter(int *i, int *start, char *cmd, int *nbr)
+int	check_delimiter(int i, int start, char * cmd, int nbr)
 {
 	int	j;
 	int	fake_start;
 	int	aux;
 	// uso copias para no alterar los valores de "i", "start" y "nbr"
-	j = *i;
-	fake_start = *start;
-	aux = *nbr;
+	j = i;
+	fake_start = start;
+	aux = nbr;
 	check_no_quote(&j, &fake_start, cmd, &aux);
-	if (aux > *nbr)
-		return (*i);
+	if (aux > nbr)
+		return (i);
 	return (-1);
 }
 
@@ -30,6 +30,8 @@ int	get_delimiter(int *i, int *start, char *cmd, int *nbr)
 	{
 		*i = j;
 		*start = fake_start;
+		//if (is_space(cmd[*i]))
+		//(*i)++;
 	}
 	else if ((aux > (*nbr + 1)) && (*i > *start || *i == j))
 	{
@@ -79,13 +81,19 @@ int	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
 	{
 		if (is_quote(cmd[i]))
 			check_quote(&in_quote, &quote_chr, cmd[i]);
-		if (!in_quote && (check_delimiter(&i, &start, cmd, &nbr) != -1)) // porque al llamar dos veces a get_delimiters(), la primera modificaría "i" y "start" antes de la segunda
+		if (!in_quote && (check_delimiter(i, start, cmd, nbr) != -1)) // porque al llamar dos veces a get_delimiters(), la primera modificaría "i" y "start" antes de la segunda
 		{
-			if (check_delimiter(&i, &start, cmd, &nbr) >= delimiters_pos[nbr - 1])
+			if (check_delimiter(i, start, cmd, nbr) >= delimiters_pos[nbr - 1])
 				delimiters_pos[nbr++] = get_delimiter(&i, &start, cmd, &nbr);
 		}	
 		i++;
 	}
 	delimiters_pos[token_nbr] = ft_strlen(cmd);
+	i = 0;
+	while (i <= token_nbr)
+	{
+		printf("delimiter pos %d = %d\n", i, delimiters_pos[i]);
+		i++;
+	}
 	return (check_array(delimiters_pos, token_nbr));
 }

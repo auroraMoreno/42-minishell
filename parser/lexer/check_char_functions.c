@@ -59,8 +59,15 @@ void	check_operator(int *i, int *start, char *cmd, int *nbr)
 
 void	check_no_quote(int *i, int *start, char *cmd, int *nbr)
 {
+	//printf("NBR = %d\n", *nbr);
+	//printf("	before cmd[i]=%c and cmd[start]=%c\n", cmd[*i], cmd[*start]);
 	if (is_space(cmd[*i]))
 		check_space(i, start, cmd, nbr);
 	else if (is_operator(cmd[*i]))
+	{
+		if ((i > 0 && is_space(cmd[*i - 1])) && (cmd[*i + 1] && is_space(cmd[*i + 1])))
+			return ;
 		check_operator(i, start, cmd, nbr);
+	}
+	//printf("	after cmd[i]=%c and cmd[start]=%c\n", cmd[*i], cmd[*start]);
 }

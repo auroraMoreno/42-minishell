@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/02 00:34:23 by cesar            ###   ########.fr       */
+/*   Updated: 2025/09/02 21:39:15 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ typedef enum e_quote_type {
 }	t_quote_type;
 
 typedef enum e_redir_type {
-	REDIR_IN,		// <
-	REDIR_OUT,		// >
-	REDIR_APPEND,	// >>
-	HEREDOC// <<
+	R_IN,		// <
+	R_OUT,		// >
+	R_APPEND,	// >>
+	R_HEREDOC// <<
 }	t_redir_type;
 
 typedef struct s_assign {
@@ -104,9 +104,10 @@ typedef struct s_builtin_type
 
 
 
-//PARSER
+//LEXER
 
 void			parse_input(char *cmd);
+void			print_tokens(t_token *token_list);
 
 char			**input_to_tokens(char *cmd);
 int				count_tokens(char *cmd);
@@ -116,7 +117,7 @@ char			*push_token(char *cmd, int start, int end);
 
 int				find_delimiters(char *cmd, int token_nbr, int *delimiters_pos);
 int				get_delimiter(int *i, int *start, char *cmd, int *nbr);
-int				check_delimiter(int *i, int *start, char *cmd, int *nbr);
+int				check_delimiter(int i, int start, char *cmd, int nbr);
 int				check_array(int *delimiters_pos, int token_number);
 
 int				is_space(char c);
@@ -132,11 +133,46 @@ t_token			*tokens_in_list(char	**tokens);
 t_token_type	get_token_type(char	*token);
 t_token			*new_token(char	*token, t_token_type token_type);
 void			add_token(t_token **head, t_token *new);
-void			print_list(t_token *token_list);
+
+//GRAMMAR
+
+int	new_cmd(t_cmd **current_cmd);
+int	craft_cmd(t_cmd *current_cmd, t_token **token_list);
+int	content_in_cmd(t_cmd *current_cmd);
+void	add_cmd(t_cmd **cmd_lst_start, t_cmd **cmd_lst_end, t_cmd *current_cmd);
+t_cmd	*tokens_to_cmds(t_token *token_list);
+
+int	argv_len(char **argv);
+char	**push_to_argv(char **argv, char *arg);
+int	add_word(t_cmd *current_cmd, t_token **token_list, bool *exec_seen);
+int	set_assign(t_assign *asgn_wrd, char	*wrd);
+int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool *exec_seen);
+
+int	is_redir(t_token *token_list);
+int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen);
+int catalogue_redir(t_redir_type *redir_type, t_token_type token_type);
+int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd);
+int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd);
+
+bool	token_is_quoted(char *token_value);
+// t_quote_type type_of_quote(char *token_value);
+char	*remove_quotes(char *str);
+char	*copy_str(char *str);
+
+void	print_argv(char **argv);
+void	print_assgn(t_assign *assign);
+void	print_redir_type(t_redir_type redir_type);
+void	print_redir(t_redir *redirs);
+void	print_cmds(t_cmd *cmds);
 
 
 //UTILS
 void	free_matrix(char **matrix);
+void	free_token_list(t_token *token_list);
+t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
+void	free_redirs(t_redir *redirs);
+void	free_assignments(t_assign *assignments);
+
 
 typedef struct s_env
 {
@@ -188,4 +224,3 @@ void    ft_free_env_node(void *content);
 void ft_error(char *str);
 
 #endif
-

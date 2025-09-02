@@ -6,7 +6,7 @@
 #    By: cesar <cesar@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/19 18:40:03 by ccarro-d          #+#    #+#              #
-#    Updated: 2025/08/28 19:43:23 by cesar            ###   ########.fr        #
+#    Updated: 2025/09/02 20:02:34 by cesar            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,17 @@ OBJ_DIR = obj
 LIBFT = $(LIBFT_DIR)/libft.a
 
 # Sources
-SRC = 	parser.c					\
-		input_to_tokens.c 			\
-		char_is_functions.c 		\
-		check_char_functions.c		\
-		find_tokens_delimiters.c	\
-		tokens_in_list.c			\
+SRC = 	parser.c						\
+		lexer/input_to_tokens.c 		\
+		lexer/char_is_functions.c 		\
+		lexer/check_char_functions.c	\
+		lexer/find_tokens_delimiters.c	\
+		lexer/tokens_in_list.c			\
+		grammar/tokens_to_cmds.c		\
+		grammar/words.c					\
+		grammar/redirs.c				\
+		grammar/quotes.c				\
+		grammar/print_cmds.c			\
 		utils.c
 
 # Objects and dependencies in OBJ_DIR
@@ -81,7 +86,8 @@ $(OBJ): $(CORE_DIR)/minishell.h
 all: $(NAME)
 
 # Compilation for every .c to .o in /obj
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Create  /obj folder if it doesn't exist

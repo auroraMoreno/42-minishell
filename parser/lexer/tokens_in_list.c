@@ -37,19 +37,19 @@ t_token_type	get_token_type(char	*token)
 {
 	if (!token || !*token)
 		return (WORD);
-	if (!ft_strncmp(token, "<", ft_strlen(token)))
-		return (REDIR_IN);
-	else if (!ft_strncmp(token, ">", ft_strlen(token)))
-		return (REDIR_OUT);
-	else if (!ft_strncmp(token, "<<", ft_strlen(token)))
+	if (!ft_strncmp(token, "<<", ft_strlen("<<") + 1))
 		return (HEREDOC);
-	else if (!ft_strncmp(token, ">>", ft_strlen(token)))
+	else if (!ft_strncmp(token, ">>", ft_strlen(">>") + 1))
 		return (REDIR_APPEND);
+	else if (!ft_strncmp(token, "<", ft_strlen("<") + 1))
+		return (REDIR_IN);
+	else if (!ft_strncmp(token, ">", ft_strlen(">") + 1))
+		return (REDIR_OUT);
 	else if (ft_is_number(token))
 		return (IO_NUMBER);
 	else if (ft_is_assignment(token))
 		return (ASSIGNMENT_WORD);
-	else if (!ft_strncmp(token, "|", ft_strlen(token)))
+	else if (!ft_strncmp(token, "|", ft_strlen("|") + 1))
 		return (PIPE);
 	else
 		return (WORD);
@@ -84,7 +84,7 @@ void	add_token(t_token **head, t_token *new)
 	return ;
 }
 
-void	print_list(t_token *token_list)
+void	print_tokens(t_token *token_list)
 {
 	int		i;
 	char	*type;
@@ -131,6 +131,5 @@ t_token	*tokens_in_list(char	**tokens)
 		add_token(&token_list, token_node);
 		i++;
 	}
-	print_list(token_list);
 	return (token_list);
 }
