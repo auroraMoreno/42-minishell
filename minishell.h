@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 10:56:13 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:27:05 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,14 +200,15 @@ char 			*ft_find_equal_sign(char *str);
 int 			ft_strcmp(const char *s1, const char *s2);
 char			*find_route(char *instruction, char *path);
 char			*get_route(char *cmd, char **envp);
-void			free_matrix(char **matrix);
 
 /*freeing memory methods*/
 void 			ft_free_env(t_list **env_list);
 void			ft_free_env_node(void *content);
+void 			ft_free_all(t_data *data);
+void			ft_free_matrix(char **matrix);
 
 /*error methods*/
-void 			ft_error(char *str);
+void			ft_error_and_free(int error_code ,t_data *data);
 int				ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif

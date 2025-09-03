@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 11:20:22 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:14:18 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void ft_init_data(t_data *data, char **env)
     g_signal = 0;
     data->env = ft_init_env(env); //TO-DO: check para mem leaks 
     if(!data->env)
-    return (0);
+        return (0);
     data->env_cpy = ft_cpy_env(env); //TO-DO: free memory
     // considerar poner aquí los built_ins 
     ft_init_builtins(data);

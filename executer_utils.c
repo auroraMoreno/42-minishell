@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 11:51:48 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:01:35 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,36 +31,34 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1) //a lo mejor que no devuelva siempre -1 si no mejor ERROR (Ver macros .h)
-            ft_exit(); //TO-DO free memory
+            ft_exit(); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
     }
     //check path 
     if(!cmd->cmd_path)
     {
         // TO-DO free mem y lanzar 127
-        ft_error("command not found");
+        ft_error_and_free(1, data);
         
     }
     //cerrar fds 
     ft_close_fds(data); // HEREDOC???
     // TO-DO: free cmd_list!! ???
 
-    
-    //señales: check creo que esto no es así 
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_IGN);
     
-    //TO DO: ver que devuelve exec
 
     //executing
+    //execve errors: efault, enametoolong
     if(execve(cmd->cmd_path, cmd->argv, data->env_cpy) == -1)
     {
         //TO-DO: error & free 
-        if(errno == EACCES) //error 126
-            ft_exit(126);
-        else if(errno == ENOENT) //error 127
-            ft_exit(127);
+        if(errno == EACCES) //error 126 no tiene permisos
+            ft_error_and_free(126, data);  
+        else if(errno == ENOENT) //error 127 no encuentra
+            ft_error_and_free(127, data); 
         else 
-            ft_exit(1);
+            ft_error_and_free(1, data);
     }
 
 }
@@ -78,9 +76,10 @@ pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
     else if(process_id == 0)
     {
         if(dup2(cmd->fd_in, STDIN_FILENO) == -1)
-            return (-1);
+            ft_error_and_free(1, data);       //return (-1);
+
         if(dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-            return (-1);
+            ft_error_and_free(1, data);   //return (-1);
         ft_exec_cmd(cmd, data);
     }
     return (process_id);
@@ -121,10 +120,10 @@ int ft_return_status(int status)
         if(exit_code = SIGINT)
             ft_putchar_fd("\n", 1);
         else if(exit_code == SIGQUIT)
-            ft_error("Quit (core dumped)"); //Quit (core dumped)
+            ft_putendl_fd("Quit (core dumped)", STDERR_FILENO); //Quit (core dumped)
         exit_code = exit_code + 128;
     }
     else  
-        exit_code = -1;
+        exit_code = -1; // confirmar pq -1 
     return (exit_code);
 }

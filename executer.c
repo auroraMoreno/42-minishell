@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 12:46:34 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:42:31 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data)
         cmd = (t_cmd *)cmd_list->content;
         // PASAR AQUI EL MÉTODO CREATE FORK !!! 
         cmd->id_process = ft_create_fork(cmd,cmd->fd_in,cmd->fd_out,data); //pasarle los fds? 
-        if(cmd->id_process == FORK_ERROR)
-            ft_error("fork error");
+        if(cmd->id_process == FORK_ERROR) //revisar
+            ft_error_and_free(1, data);
         cmd = cmd_list->next;
         i++;
     }
@@ -56,13 +56,14 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
     }
     pid = fork();
     if(pid == -1)
-        return (FORK_ERROR);
+        return (FORK_ERROR); //confirmar si aqui corto ejecución o no
     else if(pid == 0)
     {
         if(dup2(cmd->fd_in, STDIN_FILENO) == -1)
-            return (-1); // TO-DO: fix this para que devueva el valor adecuado
+            //return (-1); // TO-DO: fix this para que devueva el valor adecuado
+            ft_error_and_free(1, data);
         if(dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-            return (-1);
+            ft_error_and_free(1, data);
         ft_exec_cmd(cmd, data);
     }
     waitpid(pid, &exit_status, 0);

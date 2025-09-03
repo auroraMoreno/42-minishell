@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:26:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/25 23:59:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:30:53 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// modificar este método para q le llegue un numero de error 
-
+//for builtins 
 int ft_formatted_error(char *msg, char *cmd, t_data *data)
 {
     if(cmd)
@@ -29,9 +28,11 @@ int ft_formatted_error(char *msg, char *cmd, t_data *data)
     return (1);
 }
 
-
-void ft_error(char *str)
+// TO-DO: add mensaje de error?
+void ft_error_and_free(int error_code ,t_data *data)
 {
-    ft_putendl_fd(str,2);
-    exit(EXIT_FAILURE);
+    ft_free_all(data);
+    exit(error_code);
 }
+
+// modificar este método para q le llegue un numero de error 

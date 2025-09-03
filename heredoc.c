@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 12:39:39 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:22:32 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,15 @@ int ft_heredoc_write_content(int from_token, char *delimitter, t_data *data)
             //pero tengo que gestionar que despues del delimitter no haya algo 
             ft_remove_heredoc_lines(from_token + 1, data);
             if(data->heredoc_fds[1] == -1) //cerramos extremo escritura it's a check para por is ha habido problemas con el fd 
-                return ; //TO-DO 
+                return ; //TO-DO modificar 
             if(close(data->heredoc_fds[1] == -1))
                 ft_error(); //TO-DO
             return (1)
 ;        }
         else
         {
+            //expand values!! 
+            
             ft_putendl_fd(heredoc_content[from_token], data->heredoc_content[1]); //si no tenemos que escribirlo todo (TO-DO EXPAND VAR VALUES ???)
             //TO-DO: error check!! 
         }

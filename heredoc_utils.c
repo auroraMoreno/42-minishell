@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 00:25:23 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/01 10:47:21 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:30:44 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int ft_update_content(char *content, t_data *data)
 {
-    
+    // TO-DO
 }
 
 ssize_t ft_read_bytes(int fd, char **buffer, char **content, int buffer_size)
@@ -39,7 +39,7 @@ ssize_t ft_read_bytes(int fd, char **buffer, char **content, int buffer_size)
 	return (bytes);
 }
 
-char *ft_read_content_heredoc(int fd)
+char *ft_read_content_heredoc(int fd) //considerar pasar aqui t_data y asignar el valor directamente de cara al free 
 {
 	char *content; 
 	char *buff;

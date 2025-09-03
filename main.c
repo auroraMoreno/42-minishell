@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 11:32:30 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:10:02 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,26 +80,16 @@ int main(int argc, char **argv, char **env)
     if(!data)
         return (1);
     //hacemos init necesarios:
-        //init env
-
+            //init env
         //init de los built in
         //init data shell: prompt, 
     ft_init_data(data, env);
-
     //signals: not sure if they belong here 
     signal(SIGINT, ft_handle_sigint);
     signal(SIGQUIT, SIG_IGN);
-    
     // run shell 
     ft_run_shell(data);
-        // check for EOF error
-
     //free mem
-    ft_free_env(data->env);
-    ft_free_all(); // TO-DO 
-
-    
+    ft_free_all(data); // TO-DO 
     return (data->exit_status); //QUITAR VARIABLE GLOBAL!!
-    
-
 }
