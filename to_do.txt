@@ -1,5 +1,7 @@
 heredoc (falta update content + expander del heredoc + return statuss heredoc ? )
 arreglar fds/redirecciones
+    *mirar donde init cmd->fd_in y cmd->fd_out / usoo de open() ? 
+revisar g_signal
 error methods
 free mem
 check return values 
@@ -33,6 +35,8 @@ error methods:
         ft_multiple_commands
         ft_create_fork
         ft_return_status
+    *errors en built in: check si el export hace falta algun error más 
     *en fallos criticos exit code 1 
+
 
 

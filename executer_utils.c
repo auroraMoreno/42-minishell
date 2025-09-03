@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:01:35 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:51:40 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1) //a lo mejor que no devuelva siempre -1 si no mejor ERROR (Ver macros .h)
-            ft_exit(); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
+            ft_error_and_free(,data); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
     }
     //check path 
     if(!cmd->cmd_path)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 01:38:05 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:16:09 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int ft_cd(t_cmd *cmd, t_data *data)
     while(curr)
     {
         env_node = curr->content;
-        if (!ft_strncmp(env_node->key, "OLDPWD", ft_strlen("OLDPWD"))) // review this
+        if (!ft_strncmp(env_node->key, "OLDPWD", ft_strlen("OLDPWD"))) //TO-DO review this
         {
             free(env_node->value);
             env_node->value = ft_strdup(old_path);

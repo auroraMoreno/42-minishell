@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:48 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 03:04:37 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:31:56 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int ft_exit(t_cmd *cmd, t_data *data)
     if(cmd->args == NULL)
     {
         exit_code = data->exit_status;
-        ft_free_data(); //TO-DO
+        ft_free_all(data); //TO-DO
         exit(exit_code);
     }
     //si viene un argumento entonces hacemos el parseo 
@@ -66,11 +66,11 @@ int ft_exit(t_cmd *cmd, t_data *data)
     if(exit_code == -1)
     {
         ft_formatted_error("invalid argument", "-bash: exit", data);
-        ft_free_data(); //TO-DO
+        ft_free_all(data); //TO-DO
     }
     // y si no, todo bien hacemos exit normal 
+    ft_free_all(data); //TO-DO
     exit(exit_code);
-    ft_free_data(); //TO-DO
     
-    return (0); // TO-DO: quitar eso, exit does not return, considerar union
+    return (0);
 }

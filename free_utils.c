@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:21:47 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 17:22:18 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:38:29 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	ft_free_env_node(void *content)
 		free(env->value);
 	free(env);
 }
+
+
 void ft_free_env(t_list **env_list)
 {
    	if (env_list && *env_list)
