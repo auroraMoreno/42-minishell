@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:16:13 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:22:05 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 	
 }	t_cmd;
+
 typedef enum e_quote_type {
 	NO_QUOTE,
 	SINGLE_QUOTE,
@@ -151,6 +152,13 @@ typedef struct s_builtin_type
 }t_built_in_type;
 
 
+typedef struct s_env
+{
+    char *key;
+    char *value;
+
+}t_env;
+
 
 //LEXER
 
@@ -220,29 +228,6 @@ void	free_token_list(t_token *token_list);
 t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
 void	free_redirs(t_redir *redirs);
 void	free_assignments(t_assign *assignments);
-
-
-typedef struct s_env
-{
-    char *key;
-    char *value;
-
-}t_env;
-
-typedef struct s_data // usar struct pipex de cesar
-{
-    t_list *env;
-    char **env_parsed;
-}
-t_data;
-
-/*typedef struct s_cmd
-{
-    char *cmd_name; // el nombre del comando
-    char **args; // valores rollo nombre de variables
-    char **flags; //aqui serian rollo -n para echo y demas +
-    int is_built_in;
-}t_cmd;*/
 
 
 /*executer*/
