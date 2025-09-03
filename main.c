@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 17:10:02 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:31:49 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void ft_run_shell(t_data *data)
         //cmd init
         cmd = ft_init_cmd(data->cmd_line, data->built_ins); //sustituir por init_cmd_list  
         //heredoc ? depende de como me llegue será un int from_token o un token o algo así 
-        if(cmd->heredoc) //TO-DO FLAG HEREDOC
+        if(cmd->heredoc) //TO-DO FLAG HEREDOC hay dos cmd structs 
         {
             //from token es temporal, luego habrá que sustituirlo por el token actual o por lo que sea 
             //pero la logica es que si hay heredoc entonces le pasamos a partir de la siguiente linea 
