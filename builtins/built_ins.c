@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 01:25:10 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:54:44 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,25 +72,25 @@ int ft_check_built_in(char *cmd, char built_ins[])
 int ft_built_ins(t_cmd *cmd, t_data *data)
 {
 	int exit_code;
-	if(!ft_strcmp("echo", cmd->cmd_name))
+	if(!ft_strcmp("echo", cmd->argv[0]))
 		exit_code = ft_echo(cmd, data);
-	else if(!ft_strcmp("cd", cmd->cmd_name))
+	else if(!ft_strcmp("cd", cmd->argv[0]))
 		exit_code = ft_cd(cmd, data);
-	else if(!ft_strcmp("pwd", cmd->cmd_name))
+	else if(!ft_strcmp("pwd", cmd->argv[0]))
 		exit_code = ft_pwd(cmd, data);
-	else if(!ft_strcmp("export", cmd->cmd_name))
+	else if(!ft_strcmp("export", cmd->argv[0]))
 	{
 		char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
 		exit_code = ft_export(cmd, data);
 	}
-	else if(!ft_strcmp("unset", cmd->cmd_name))
+	else if(!ft_strcmp("unset", cmd->argv[0]))
 	{
 		char *args[] = {"A","B", NULL};
 		exit_code = ft_unset(cmd, data);
 	}
-	else if(!ft_strcmp("env", cmd->cmd_name))
+	else if(!ft_strcmp("env", cmd->argv[0]))
 	   exit_code = ft_env(cmd, data);
-	else if(!ft_strcmp("exit", cmd->cmd_name))
+	else if(!ft_strcmp("exit", cmd->argv[0]))
 		exit_code = ft_exit(cmd, data);
 	return (exit_code); //TO-DO return exit status 
 }

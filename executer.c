@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 17:42:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:13:25 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data)
     t_cmd *cmd;
 
     i = 0;
-    while(i < data->cmd_nbr)
+    while(i < data->cmd_nbr) //TO-DO: sustituir por cmd->next != null o algo asi 
     {
         cmd = (t_cmd *)cmd_list->content;
         // PASAR AQUI EL MÉTODO CREATE FORK !!! 
@@ -48,7 +48,7 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
     if(cmd->fd_in == -1 || cmd->fd_out == -1)
         return (1);
     
-    if(cmd->is_built_in)
+    if(cmd->is_builtin)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1)

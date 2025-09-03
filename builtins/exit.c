@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:48 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:31:56 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:06:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,17 @@ int ft_exit(t_cmd *cmd, t_data *data)
     int exit_code;
     
     //si viene más de un argumento entonces too many arguments
-    if(cmd->args[1])
+    if(cmd->argv[2])
         return(ft_formatted_error("too many arguments", "-bash: exit", data));
     //si solo viene exit entonces exit normal
-    if(cmd->args == NULL)
+    if(cmd->argv[1] == NULL)
     {
         exit_code = data->exit_status;
         ft_free_all(data); //TO-DO
         exit(exit_code);
     }
     //si viene un argumento entonces hacemos el parseo 
-    exit_code = ft_atoi_exit_code(cmd->args[0]);
+    exit_code = ft_atoi_exit_code(cmd->argv[1]);
     // not sure
     if(exit_code == -1)
     {

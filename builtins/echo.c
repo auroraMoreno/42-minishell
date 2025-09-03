@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:01:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 12:10:10 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:56:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ int ft_echo(t_cmd *cmd, t_data *data)
     int newline;
 
     newline = 1;
-     if(cmd->flags && ft_check_n_flag(cmd->flags))
+     if(cmd->argv[1] && ft_check_n_flag(cmd->argv[1]))
         newline = 0; 
     
+    //TO-DO modificar esto porq no hay pprop args, está todo en argv
     i = 0;
     while(cmd->args[i])
     {

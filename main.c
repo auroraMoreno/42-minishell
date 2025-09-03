@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 11:57:36 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:31:49 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:50:59 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,11 @@ void ft_run_shell(t_data *data)
             ft_error("Exiting..."); //TO-DO: mensaje error 
         }
         add_history(data->cmd_line);
-        //PARSER/LEXER  
-        
-        //cmd init
-        cmd = ft_init_cmd(data->cmd_line, data->built_ins); //sustituir por init_cmd_list  
+        //LEXER  
+        parse_input(data->cmd_line);
+
         //heredoc ? depende de como me llegue será un int from_token o un token o algo así 
-        if(cmd->heredoc) //TO-DO FLAG HEREDOC hay dos cmd structs 
+        if(cmd->redirs) //TO-DO FLAG HEREDOC / va a ser una lista de redirecciones 
         {
             //from token es temporal, luego habrá que sustituirlo por el token actual o por lo que sea 
             //pero la logica es que si hay heredoc entonces le pasamos a partir de la siguiente linea 
@@ -55,9 +54,21 @@ void ft_run_shell(t_data *data)
             EOF
             ls -l
             */
-            if(pipe(data->heredoc_fds) == -1)
-                ft_exit(); //TO-DO
-            ft_heredoc(from_token + 1, delimitter, data); //return flag 
+
+            //recorremos la lista
+            while(cmd->redirs->next)
+            {
+                //si es heredoc entonces => 
+                if(cmd->redirs->redir_type == HEREDOC)
+                {
+                    //TO-DO: add aqui método handle_redir
+                    if(pipe(data->heredoc_fds) == -1)
+                        ft_error_and_free(1, data); //TO-DO
+                    ft_heredoc(from_token + 1, cmd->redirs->target, data); //return flag 
+                    
+                }
+            }
+           
         }
         // executer 
         ft_prepare_executer(cmd, data); //TO-DO: a lo mejor pongo aqui el heredoc 

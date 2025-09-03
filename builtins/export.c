@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/28 00:11:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:05:06 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,15 @@ int ft_export(t_cmd *cmd, t_data *data)
   int index_key;
   int i;
   
-  if(!cmd->args)
+  if(!cmd->argv[1]) //1 es args, si no hay esq tenemos que printarlo todo
   {
-    ft_print_export(data->env_cpy, cmd); //en orden alfabetico con declare -x ....
+    ft_print_export(data->env_cpy, cmd); //en orden alfabetico con declare -x
     return (0);
   }
 
+  // TO-DO: fix esto para nueva struct 
   i = 0;
-  while(cmd->args[i]) // char **args 
+  while(cmd->argv[1]) // char **args 
   {
       //validar que sea un nombre de variable válido
       if(ft_check_variables(cmd->args[i]))

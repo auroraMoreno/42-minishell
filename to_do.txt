@@ -40,3 +40,7 @@ error methods:
 
 
 
+*****************EXECUTER JOIN*********************
+modificar métodos ppara adaptaros a struct nueva cmd
+
+

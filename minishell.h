@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:28:32 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:43:11 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,48 +29,7 @@
 #define ERROR -1
 #define FORK_ERROR -2
 
-
 int g_signal; 
-
-
-typedef struct s_data
-{
-	char *prompt;
-	char *cmd_line;
-	int exit_status; 
-	char *pwd;
-	t_list *env; // deberia ser ** ? 
-	char built_ins[7];
-    char **env_cpy;
-	t_list *cmds;
-	int shell_lvl;
-	int cmd_nbr;
-	//DE MOMENTO
-	char **heredoc_content;
-	int 	heredoc_fds[2];
-}
-t_data;
-
-//add propiedad para redirecciones 
-typedef struct s_cmd
-{
-	char			*cmd_name; // el nombre del comando 
-    char			*cmd_path; //método build path 
-    char			**args; // valores rollo nombre de variables
-    char			*flags;
-    int				is_built_in;
-	char			**argv;
-	char			*infile; 
-	char			*outfile; 
-	int				append; 
-	int				heredoc;
-	int				fd_in;
-	int				fd_out;
-	pid_t			id_process;
-	int				redir_type; //REMOVE POR LA BUENA PROPIEDAD
-	struct s_cmd	*next;
-	
-}	t_cmd;
 
 typedef enum e_quote_type {
 	NO_QUOTE,
@@ -105,8 +64,30 @@ typedef struct s_cmd {
     t_assign   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
     t_redir  *redirs;       // lista de redirecciones (0..N)
     bool       is_builtin;   // opcional
+	char			*infile; 
+	char			*outfile; 
+	int				fd_in;
+	int				fd_out;
+	pid_t			id_process;
     struct s_cmd *next;     // siguiente en el pipeline
 } t_cmd;
+
+typedef struct s_data
+{
+	char *prompt;
+	char *cmd_line;
+	int exit_status; 
+	char *pwd;
+	t_list *env; // TO-DO deberia ser ** ? 
+	char built_ins[7];
+    char **env_cpy;
+	t_list *cmds;
+	int shell_lvl;
+	int cmd_nbr;
+	char **heredoc_content; //TO-DO: moverlo a la struct redir 
+	int 	heredoc_fds[2];
+}
+t_data;
 
 typedef enum e_token_type
 {

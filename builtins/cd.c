@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:16:09 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:02:48 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,21 @@ int ft_cd(t_cmd *cmd, t_data *data)
     
     //si no tiene argumentos rollo no tiene cd /home
     //cd sin argumentos => home
-    if(!cmd->args[0]) //ponerse de acuerdo
+    /*
+        0 es el exe
+        1 argumentos
+        2 debe dar error 
+    */
+    if(!cmd->argv[1]) //ponerse de acuerdo
     {
         path = ft_cd_go_home(curr, data->env, path);
         if(!path)
             return (ft_formatted_error("HOME not set", "-bash: cd",data));
     }
-    else if(cmd->args[1]) //too many arguments
+    else if(cmd->argv[2]) //too many arguments
         return (ft_formatted_error("too many arguments", "-bash: cd", data));
     else 
-        path = cmd->args[0];
+        path = cmd->argv[1];
         
     if(chdir(path) == -1)
         return(ft_cd_errors(errno, path, data));

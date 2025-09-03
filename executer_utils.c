@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:51:40 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:16:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void ft_close_fds(t_data *data)
 {
     if(data->heredoc_fds[0] == -1 || data->heredoc_fds[1] == -1)
-        return;
+        return; //TO-DO: review este return 
     if(close(data->heredoc_fds[0]) == -1)
         perror("error");
     data->heredoc_fds[0] == -1;
@@ -27,14 +27,15 @@ void ft_close_fds(t_data *data)
 void ft_exec_cmd(t_cmd *cmd, t_data *data)
 {
     int exit_code; 
-    if(cmd->is_built_in)
+    char *path; 
+    if(cmd->is_builtin)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1) //a lo mejor que no devuelva siempre -1 si no mejor ERROR (Ver macros .h)
             ft_error_and_free(,data); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
     }
     //check path 
-    if(!cmd->cmd_path)
+    if(!cmd->argv[0])
     {
         // TO-DO free mem y lanzar 127
         ft_error_and_free(1, data);
@@ -49,8 +50,9 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     
 
     //executing
+    path = get_route(cmd->argv[0], data->env_cpy);
     //execve errors: efault, enametoolong
-    if(execve(cmd->cmd_path, cmd->argv, data->env_cpy) == -1)
+    if(execve(path,cmd->argv, data->env_cpy) == -1)
     {
         //TO-DO: error & free 
         if(errno == EACCES) //error 126 no tiene permisos
@@ -92,7 +94,7 @@ int ft_wait_children_process(t_list *cmd_list, t_data *data)
     t_cmd *cmd; 
 
     i = 0; 
-    while(i < data->cmd_nbr)
+    while(i < data->cmd_nbr) //TO-DO: sustituir por ->next 
     {
         cmd = (t_cmd *)cmd_list->content;
         if(cmd->id_process != -1)
