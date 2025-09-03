@@ -34,10 +34,17 @@ char	**just_one_token(char *cmd_trimmed)
 
 	tokens = (char **)malloc(2 * sizeof(char *));
 	if (!tokens)
+	{
+		free (cmd_trimmed);
 		return (NULL);
+	}
 	tokens[0] = ft_strdup(cmd_trimmed);
 	if (!tokens[0])
+	{
+		free (cmd_trimmed);
+		free (tokens);
 		return (NULL);
+	}
 	free(cmd_trimmed);
 	tokens[1] = NULL;
 	return (tokens);
@@ -63,23 +70,38 @@ char	*push_token(char *cmd, int start, int end)
 char	**tokens_split(char *cmd, int token_nbr, int *delimiters_pos)
 {
 	int		i;
+	int		j;
 	char	**tokens;
 
 	tokens = (char **)malloc((token_nbr + 1) * sizeof(char *));
 	if (!tokens)
 		return (NULL);
 	i = 0;
+	j = 0;
 	while (i < token_nbr)
 	{
-		tokens[i] = push_token(cmd, delimiters_pos[i], delimiters_pos[i + 1]);
+		tokens[i] = push_token(cmd, delimiters_pos[j], delimiters_pos[j + 1]);
 		if (!tokens[i])
 		{
 			free_matrix(tokens);
 			return (NULL);
 		}
-		i++;
+		if (!*tokens) //entramos acaso aqu´??
+		{
+			free (tokens[i]);
+			tokens[i] = NULL;
+			delimiters_pos[j] += 1;
+			printf("delimiter_pos[%d] = %d\n", j, delimiters_pos[j]);
+			delimiters_pos[j + 1] += 1;
+			printf("delimiter_pos[%d] = %d\n", j + 1, delimiters_pos[j + 1]);
+		}
+		else
+		{
+			i++;
+			j++;
+		}
 	}
-	tokens[token_nbr] = NULL;
+	tokens[i] = NULL;
 	return (tokens);
 }
 
