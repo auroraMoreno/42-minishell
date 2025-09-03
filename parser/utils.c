@@ -11,7 +11,7 @@ void	free_matrix(char **matrix)
 		i++;
 	}
 	free(matrix);
-	return;
+	return ;
 }
 
 void	free_token_list(t_token *token_list)
