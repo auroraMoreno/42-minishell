@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 19:22:48 by cesar            ###   ########.fr       */
+/*   Updated: 2025/09/03 20:16:13 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,54 @@
 #include <signal.h>
 #include  <errno.h>
 #include <stdbool.h>
+# include <fcntl.h>
 
+#define SUCCESS 0
+#define ERROR -1
+#define FORK_ERROR -2
+
+
+int g_signal; 
+
+
+typedef struct s_data // usar struct pipex de cesar 
+{
+	char *prompt;
+	char *cmd_line;
+	int exit_status; 
+	char *pwd;
+	t_list *env; // deberia ser ** ? 
+	char built_ins[7];
+    char **env_cpy;
+	t_list *cmds;
+	int shell_lvl;
+	int cmd_nbr;
+	//DE MOMENTO
+	char **heredoc_content;
+	int 	heredoc_fds[2];
+}
+t_data;
+
+//add propiedad para redirecciones 
+typedef struct s_cmd
+{
+	char			*cmd_name; // el nombre del comando 
+    char			*cmd_path; //método build path 
+    char			**args; // valores rollo nombre de variables
+    char			*flags;
+    int				is_built_in;
+	char			**argv;
+	char			*infile; 
+	char			*outfile; 
+	int				append; 
+	int				heredoc;
+	int				fd_in;
+	int				fd_out;
+	pid_t			id_process;
+	int				redir_type; //REMOVE POR LA BUENA PROPIEDAD
+	struct s_cmd	*next;
+	
+}	t_cmd;
 typedef enum e_quote_type {
 	NO_QUOTE,
 	SINGLE_QUOTE,
@@ -71,6 +118,7 @@ typedef enum e_token_type
 	IO_NUMBER,
 	ASSIGNMENT_WORD,
 }	t_token_type;
+
 
 typedef struct s_token
 {
@@ -211,16 +259,20 @@ int ft_env();
 int ft_exit();
 
 /*utils*/
-t_list *ft_init_env(char *envp[]);
-t_list *ft_process_env_values(char *key_val);
-char *ft_find_equal_sign(char *str);
-
+t_list 			*ft_process_env_values(char *key_val);
+char 			*ft_find_equal_sign(char *str);
+int 			ft_strcmp(const char *s1, const char *s2);
+char			*find_route(char *instruction, char *path);
+char			*get_route(char *cmd, char **envp);
 
 /*freeing memory methods*/
-void ft_free_env(t_list **env_list);
-void    ft_free_env_node(void *content);
+void 			ft_free_env(t_list **env_list);
+void			ft_free_env_node(void *content);
+void 			ft_free_all(t_data *data);
+void			ft_free_matrix(char **matrix);
 
 /*error methods*/
-void ft_error(char *str);
+void			ft_error_and_free(int error_code ,t_data *data);
+int				ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif

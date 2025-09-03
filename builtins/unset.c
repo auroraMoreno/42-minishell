@@ -6,14 +6,13 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:04:00 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/06 15:42:05 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/08/26 01:44:26 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-t_list *ft_find_element(t_list **env_list, char *var_name)
+int ft_remove_element(t_list **env_list, char *var_name)
 {
     t_list *curr;
     t_list *prev;
@@ -23,7 +22,7 @@ t_list *ft_find_element(t_list **env_list, char *var_name)
     prev = NULL;
     while(curr)
     {
-        env = curr->content;
+        env = (t_env *)curr->content;
         if(!ft_strncmp(env->key, var_name, ft_strlen(var_name) + 1))
         {
              //todo esto es para unlink el estupido nodo 
@@ -32,40 +31,25 @@ t_list *ft_find_element(t_list **env_list, char *var_name)
             else 
                 *env_list = curr->next;
             curr->next = NULL;
-            return (curr);
+            ft_lstdelone(curr, ft_free_env_node);
+            return (1);
         }
         prev = curr;
         curr = curr->next;
     }
-    return (NULL);
+    return (0);
 }
 
 
-int ft_unset(char *var_names[], t_data data)
+int ft_unset(t_cmd *cmd, t_data *data)
 {
-    t_list *to_del;
-
-    int i;
+    int i; 
     // si var name vacio no pasa nada
-    if(var_names)
+    i = 0;
+    while(cmd->args[i]) // aqui me llega nada mas que un string
     {
-        i = 0;
-        while(var_names[i]) // aqui me llega nada mas que un string
-        {
-            //encontrar en la lista data.env el var_name[i]
-            // apartir de aqui todo va a ir dentro de una funcion a parte: 
-            
-            to_del = ft_find_element(&(data.env), var_names[i]); //TO_DO: gestion errores si no existe bla bla, hacer same en export
-            if(to_del)
-            {
-                ft_lstdelone(to_del, ft_free_env_node);
-                printf("var unset\n");
-            }
-            else
-                ft_error("bash unset: Variable not found.");
-            i++;
-        }
+        ft_remove_element(&data->env, cmd->args[i]);
+        i++;
     }
-    
     return (0);
 }

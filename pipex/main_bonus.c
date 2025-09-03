@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 14:30:31 by ccarro-d          #+#    #+#             */
-/*   Updated: 2025/05/13 20:23:53 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/08/21 19:20:27 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	get_cmds_and_routes(char **argv, t_pipe *piped)
 	int	first_cmd_pos;
 	int	i;
 
-	piped->cmds = (char **)ft_calloc(piped->cmd_nbr + 1, sizeof(char *));
+	piped->cmds = (char **)ft_calloc(piped->cmd_nbr + 1, sizeof(char *)); 
 	if (!piped->cmds)
 		print_error(NULL, "Error reservando memoria\n", -1, 1);
 	piped->cmd_routes = (char **)ft_calloc(piped->cmd_nbr + 1, sizeof(char *));

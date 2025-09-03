@@ -3,62 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/06 15:44:09 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:16:09 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void ft_cd_errors(int err_number, char *path)
+int ft_cd_errors(int err_number, char *path, t_data *data)
 {
-    char *err;
-    char *aux;
-    err = ft_strjoin("-bash: cd: ", path);
-    if(!err)
-        ft_error("Error allocating");
-    if(err_number == EACCES)
-        aux = ft_strjoin(err, ": Permission denied");
-    else if(err_number == ENOENT)
-        aux = ft_strjoin(err, ": No such file or directory");
+    if (err_number == EACCES)
+        return ft_formatted_error("Permission denied", "-bash: cd", data);
+    else if (err_number == ENOENT)
+        return ft_formatted_error("No such file or directory", "-bash: cd", data);
     else if (err_number == ENOTDIR)
-        aux = ft_strjoin(err, ": Not a directory");
-    else 
-        aux = NULL;
-    free(err);
-    if(aux)
-    {
-        ft_putendl_fd(aux, 2);
-        free(aux);
-    }
+        return ft_formatted_error("Not a directory", "-bash: cd", data);
+    //else 
+    return (ft_formatted_error(strerror(err_number), "-bash: cd", data)); //mejorar esto
 }
 
-int ft_cd(char *path, t_list *env)
+char *ft_cd_go_home(t_list *curr, t_env *env, char *path)
 {
-    t_list *curr;
     t_env *env_node;
-    char new_path[PATH_MAX];
-    path = "../only_sudo"; //TO-DO: CAMBIAR
-    if(chdir(path) == -1)
-    {
-        ft_cd_errors(errno, path);
-        return (errno);
-    }
-    //cambiar el oldpwd y pwd de env    
-    getcwd(new_path, sizeof(new_path));                 
-    curr = env;
+    curr = env; 
+    path = NULL;
     while(curr)
     {
-        env_node = curr->content; 
-        if(!ft_strncmp(env_node->key, "PWD", ft_strlen("PWD"))) // TO-DO: cambiar el OLD_PWD tmnb? 
+        env_node = (t_env *) curr->content;
+        if (!ft_strncmp(env_node->key, "HOME", 5))
         {
-            free(env_node->value);
-            env_node->value = new_path;
+            path = env_node->value;
             break;
         }
         curr = curr->next;
     }
+    return (path);
+}
+
+int ft_cd(t_cmd *cmd, t_data *data)
+{
+    char *path;
+    char *old_path;
+    char *new_path;
+    t_list *curr;
+    t_env *env_node;
+    
+    //guardamos pwd para OLD_PWD
+    old_path = getcwd(NULL,0); //FREE THIS
+    if(!old_path)
+       return(ft_formatted_error("path not found", "pwd", data));
+    
+    //si no tiene argumentos rollo no tiene cd /home
+    //cd sin argumentos => home
+    if(!cmd->args[0]) //ponerse de acuerdo
+    {
+        path = ft_cd_go_home(curr, data->env, path);
+        if(!path)
+            return (ft_formatted_error("HOME not set", "-bash: cd",data));
+    }
+    else if(cmd->args[1]) //too many arguments
+        return (ft_formatted_error("too many arguments", "-bash: cd", data));
+    else 
+        path = cmd->args[0];
+        
+    if(chdir(path) == -1)
+        return(ft_cd_errors(errno, path, data));
+        
+    //cambiar el oldpwd y pwd de env    
+    new_path = getcwd(NULL,0);
+    if(!new_path)
+        return(ft_formatted_error("path not found", "pwd", data));
+                 
+    curr = data->env;
+    while(curr)
+    {
+        env_node = curr->content;
+        if (!ft_strncmp(env_node->key, "OLDPWD", ft_strlen("OLDPWD"))) //TO-DO review this
+        {
+            free(env_node->value);
+            env_node->value = ft_strdup(old_path);
+        }
+        if(!ft_strncmp(env_node->key, "PWD", ft_strlen("PWD"))) 
+        {
+            free(env_node->value);
+            env_node->value = ft_strdup(new_path);
+        }
+        curr = curr->next;
+    }
+    free(new_path);
+    free(old_path);
     return (0);
 }

@@ -3,17 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:26:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/05 12:31:30 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:30:53 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_error(char *str)
+//for builtins 
+int ft_formatted_error(char *msg, char *cmd, t_data *data)
 {
-    ft_putendl_fd(str,2);
-    exit(EXIT_FAILURE);
+    if(cmd)
+    {
+        ft_putstr_fd(cmd, STDERR_FILENO);
+        ft_putstr_fd(":", STDERR_FILENO);
+    }
+
+    if(msg)
+        ft_putstr_fd(msg, STDERR_FILENO);
+    ft_putstr_fd("\n",STDERR_FILENO);
+    data->exit_status = 1;
+    return (1);
 }
+
+// TO-DO: add mensaje de error?
+void ft_error_and_free(int error_code ,t_data *data)
+{
+    ft_free_all(data);
+    exit(error_code);
+}
+
+// modificar este método para q le llegue un numero de error 

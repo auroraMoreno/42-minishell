@@ -3,19 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
+#    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/06/19 09:17:23 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/08/27 17:48:37 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # === Project Config ===
 NAME = minishell
 
-SRCS = main.c utils.c \
-	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/unset.c builtins/env.c builtins/exit.c \
-	executer.c free_utils.c errors.c
+SRCS = main.c utils.c signals.c cmd_utils.c \
+	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/export_utils.c builtins/unset.c builtins/env.c builtins/exit.c \
+	executer.c executer_utils.c init.c create_pipe.c free_utils.c errors.c 
+# pipex/main_bonus.c pipex/pipex_bonus.c pipex/utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -24,7 +25,7 @@ LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 # === Compiler/Flags ===
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft
 INCLUDES = -I$(LIBFT_DIR)

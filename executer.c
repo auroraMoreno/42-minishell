@@ -3,63 +3,122 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/06/18 13:22:20 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:42:31 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_execute_cmd(char *cmd_path, char **flag, t_data data)
+int ft_multiple_commands(t_list *cmd_list, t_data *data)
 {
-    if(fork() == 0) // TO-DO: check de errores 
+    //rotando por la lista de cmds 
+    int i;
+    int exit_status;
+    t_cmd *cmd;
+
+    i = 0;
+    while(i < data->cmd_nbr)
     {
-        if(execve(cmd_path, flag, data.env_parsed) < 0)
-            ft_error("error en execve");
+        cmd = (t_cmd *)cmd_list->content;
+        // PASAR AQUI EL MÉTODO CREATE FORK !!! 
+        cmd->id_process = ft_create_fork(cmd,cmd->fd_in,cmd->fd_out,data); //pasarle los fds? 
+        if(cmd->id_process == FORK_ERROR) //revisar
+            ft_error_and_free(1, data);
+        cmd = cmd_list->next;
+        i++;
     }
+
+    //to-do lstclear
+    
+    //wait pids for child process and return status code
+    exit_status = ft_wait_children_process(cmd, data);
+    return (exit_status);
+}
+
+//TO-DO: fix
+int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
+{
+    pid_t pid;
+    int exit_status;
+    int exit_code; 
+
+    if(cmd->fd_in == -1 || cmd->fd_out == -1)
+        return (1);
+    
+    if(cmd->is_built_in)
+    {
+        exit_code = ft_built_ins(cmd, data);
+        if(exit_code != -1)
+            return (exit_code);
+    }
+    pid = fork();
+    if(pid == -1)
+        return (FORK_ERROR); //confirmar si aqui corto ejecución o no
+    else if(pid == 0)
+    {
+        if(dup2(cmd->fd_in, STDIN_FILENO) == -1)
+            //return (-1); // TO-DO: fix this para que devueva el valor adecuado
+            ft_error_and_free(1, data);
+        if(dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+            ft_error_and_free(1, data);
+        ft_exec_cmd(cmd, data);
+    }
+    waitpid(pid, &exit_status, 0);
+    return (ft_return_status(exit_status)); 
+}
+
+// recursivad, volvemos a llamar a este metodo 
+// return status
+void ft_executer(t_list *cmd_list, t_data *data)
+{
+    t_cmd *cmd; //esto va a ir recorriendo cmd_list
+    int exit_code;
+    
+    /*signal handling*/
+    signals(SIGINT, SIG_IGN);
+    signals(SIGQUIT, SIG_IGN);
+    
+    //check si cmd not nul
+    if(!cmd_list)
+        return ; //TO-DO: check errores 
+    
+    if(!cmd_list->next)
+    {
+        // al ser single command sólo va a tener 1 
+        cmd = (t_cmd *)cmd_list->content;
+        exit_code = ft_single_cmd(cmd, cmd->fd_in, data); //TO-DO: fix, esto no siempre es el status code
+        // solo modificamos el exit status si ft_single_cmd ha ejecutado un comando
+        // si hay cualquier otro error no lo cambiamos 
+    }
+    else
+        exit_code = ft_multiple_commands(cmd_list, data);
+    //
+    if(exit_code != -1)
+        data->exit_status = exit_code; 
+
+    //liberar la lista de comandos una vez haya acabado !! TO-DO: free memory of cmd_list
+    
 }
 
 //TO-DO: mejorar este método 
-void ft_handle_exe(char *cmd, char *flags, t_built_in_type builtins[], t_data data)
+// el primer param de aqui va a ser una lista de cmd 
+// TO-DO: expander, add heredocs, process comands 
+void ft_prepare_executer(t_list *cmd_data, t_data *data)
 {
 
-    (void)flags;
     // hacer comprobación de si es built_in
     //TO-DO: Hacer comprobacion de nulls y demas y lanzar errors, dentro del bucle tmb 
-    int is_built_in = 0;
-    int i = 0;
-    while(i < 7)
-    {
-        if(!ft_strncmp(builtins[i].built_in_name, cmd, ft_strlen(cmd)))
-        {
-            if(!ft_strncmp("env", cmd, ft_strlen(cmd)))
-                builtins[i].foo(data.env);      
-            else if(!ft_strncmp("export", cmd, ft_strlen(cmd)))
-            {
-                char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
-                builtins[i].foo(args , data.env);
-            }
-            else if(!ft_strncmp("unset", cmd, ft_strlen(cmd)))
-            {
-                char *args[] = {"A","B", NULL};
-                builtins[i].foo(args , data.env);
-            }
-            else if(!ft_strncmp("cd", cmd, ft_strlen(cmd)))
-                builtins[i].foo(NULL, data.env);      
-            else   
-                builtins[i].foo("hola que tal", NULL); 
-            is_built_in = 1;
-            break;  
-        }
-        i++;
-    }
+    //rodear esto con un bucle porq no va llegar solo un cmd_data \
+    // si rodeo todo con un bucle hasta que ya no haya comandos 
     
-    if(is_built_in == 0)
-    {
-        char *cmd1[] = {"ls", NULL};
-        ft_execute_cmd("/usr/bin/ls", cmd1, data);
-        wait(NULL);
-    }
+    ft_handle_redir(); //preguntar a cesar porq necesito saber cómo me va llegar esa redireccion para poder
+    //hacer el switch en handle redir que dependiendo de que redireccion sea llamar a heredoc, append, infile o outfile 
+
+    //le llegará los cmd procesados con sus herdocs y expanders 
+    //considerar no pasarle el g_data porq es global jeje 
+    ft_executer(cmd_data, data); // de momento solo uno; habrá pasarle lista
+    
 }

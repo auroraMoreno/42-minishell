@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	free_matrix(char **matrix)
+void	ft_free_matrix(char **matrix)
 {
 	int	i;
 

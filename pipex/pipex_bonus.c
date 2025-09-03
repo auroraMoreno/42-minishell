@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:10:13 by ccarro-d          #+#    #+#             */
-/*   Updated: 2025/05/13 20:00:12 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:11:21 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	exec_cmd(t_pipe *piped, int cmd_pos)
 		exec_intermediate_cmd(piped, cmd_pos);
 }
 
-void	pipex(t_pipe *piped)
+void	pipex(t_pipe *piped) // cambiar el struct o usar el struct  
 {
 	//int		current_pipe_fds[2];
 	//int		previous_pipe_fd;
