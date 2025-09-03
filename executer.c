@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/01 16:42:12 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 12:46:34 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data)
 {
     //rotando por la lista de cmds 
     int i;
+    int exit_status;
     t_cmd *cmd;
 
     i = 0;
@@ -29,9 +30,12 @@ int ft_multiple_commands(t_list *cmd_list, t_data *data)
         cmd = cmd_list->next;
         i++;
     }
+
+    //to-do lstclear
+    
     //wait pids for child process and return status code
-    data->exit_status = ft_wait_children_process(cmd, data);
-    return (data->exit_status);
+    exit_status = ft_wait_children_process(cmd, data);
+    return (exit_status);
 }
 
 //TO-DO: fix
@@ -52,7 +56,7 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
     }
     pid = fork();
     if(pid == -1)
-        return (-1);
+        return (FORK_ERROR);
     else if(pid == 0)
     {
         if(dup2(cmd->fd_in, STDIN_FILENO) == -1)
@@ -69,7 +73,7 @@ int ft_single_cmd(t_cmd *cmd, int fd, t_data *data)
 // return status
 void ft_executer(t_list *cmd_list, t_data *data)
 {
-    t_cmd *cmd;
+    t_cmd *cmd; //esto va a ir recorriendo cmd_list
     int exit_code;
     
     /*signal handling*/
@@ -80,7 +84,7 @@ void ft_executer(t_list *cmd_list, t_data *data)
     if(!cmd_list)
         return ; //TO-DO: check errores 
     
-    if(!cmd->next)
+    if(!cmd_list->next)
     {
         // al ser single command sólo va a tener 1 
         cmd = (t_cmd *)cmd_list->content;
@@ -94,7 +98,7 @@ void ft_executer(t_list *cmd_list, t_data *data)
     if(exit_code != -1)
         data->exit_status = exit_code; 
 
-    //liberar la lista de comandos una vez haya acabado !! TO-DO: memory managemnte 
+    //liberar la lista de comandos una vez haya acabado !! TO-DO: free memory of cmd_list
     
 }
 
@@ -108,8 +112,6 @@ void ft_prepare_executer(t_list *cmd_data, t_data *data)
     //TO-DO: Hacer comprobacion de nulls y demas y lanzar errors, dentro del bucle tmb 
     //rodear esto con un bucle porq no va llegar solo un cmd_data \
     // si rodeo todo con un bucle hasta que ya no haya comandos 
-
-    ft_expand(); //TO-DO
     
     ft_handle_redir(); //preguntar a cesar porq necesito saber cómo me va llegar esa redireccion para poder
     //hacer el switch en handle redir que dependiendo de que redireccion sea llamar a heredoc, append, infile o outfile 

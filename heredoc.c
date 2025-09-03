@@ -6,11 +6,13 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/01 10:45:47 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 12:39:39 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//  to-do exit code 
 
 int ft_heredoc_read_more_content(t_data *data)
 {

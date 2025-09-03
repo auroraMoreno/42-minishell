@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/01 16:40:54 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 11:51:48 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void ft_close_fds(t_data *data)
+{
+    if(data->heredoc_fds[0] == -1 || data->heredoc_fds[1] == -1)
+        return;
+    if(close(data->heredoc_fds[0]) == -1)
+        perror("error");
+    data->heredoc_fds[0] == -1;
+    if(close(data->heredoc_fds[1]) == -1)
+        perror("error");
+    data->heredoc_fds[1] = -1;
+}
 
 void ft_exec_cmd(t_cmd *cmd, t_data *data)
 {
@@ -19,32 +31,39 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1) //a lo mejor que no devuelva siempre -1 si no mejor ERROR (Ver macros .h)
-            ft_exit(); //TO-DO
+            ft_exit(); //TO-DO free memory
     }
     //check path 
     if(!cmd->cmd_path)
+    {
+        // TO-DO free mem y lanzar 127
         ft_error("command not found");
-
+        
+    }
     //cerrar fds 
-    ft_close_fds(); // HEREDOC???
+    ft_close_fds(data); // HEREDOC???
+    // TO-DO: free cmd_list!! ???
+
+    
     //señales: check creo que esto no es así 
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_IGN);
     
+    //TO DO: ver que devuelve exec
+
     //executing
-    execve(cmd->cmd_path,cmd->argv ,data->env); // juntar este execve con los ifs de abajo when error management TO-DO
+    if(execve(cmd->cmd_path, cmd->argv, data->env_cpy) == -1)
+    {
+        //TO-DO: error & free 
+        if(errno == EACCES) //error 126
+            ft_exit(126);
+        else if(errno == ENOENT) //error 127
+            ft_exit(127);
+        else 
+            ft_exit(1);
+    }
 
-    //errors from execve 
-    //TO-DO: return errosrs accordingly !!!
-    if(errno == EACCES) //error 126
-        return (-1);
-    else if(errno == ENOENT) //error 127
-        return (-1); 
-    else 
-        return(-1);
-    //return status code 
 }
-
 
 pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 13:06:37 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/03 11:14:01 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,25 @@ t_list *ft_process_env_values(char *key_val) // tengo que hacer un dup
 {
     t_env *env;
     t_list *new;
-    
+
     env = (t_env *)malloc(sizeof(t_env));
-    
     if(!env)
         return (0);
-    
-    //voy hasta el igual 
-    env->key = ft_find_equal_sign(key_val);
+    ft_process_values(key_val, &env->key, env->value);
     if(!env->key)
-        ft_error("Error setting env key");
-    // voy hasta despues del igual:
-    env->value = ft_substr(key_val, ft_strlen(env->key) + 1 ,ft_strlen(key_val) - ft_strlen(env->key) + 1);
-    if(!env->key)
-        ft_error("Error setting env value");
+    {
+        //TO-DO: free memory
+        return (0);
+    }
     // creo nuevo nodo de la lista
     new = ft_lstnew(env);
+    
+    if(!new)
+    {
+        //TO-DO: free
+
+        return (0);
+    }
     //devuelvo ese nuevo nodo 
     return (new);
 }
