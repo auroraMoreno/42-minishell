@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:26:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 17:30:53 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:36:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ int ft_formatted_error(char *msg, char *cmd, t_data *data)
 }
 
 // TO-DO: add mensaje de error?
-void ft_error_and_free(int error_code ,t_data *data)
+void ft_error_and_free(char *msg, int error_code, t_data *data)
 {
+    ft_putendl_fd(msg, STDERR_FILENO);
     ft_free_all(data);
     exit(error_code);
 }

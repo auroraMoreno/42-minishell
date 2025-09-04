@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 16:22:32 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:50:11 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ int ft_heredoc_write_content(int from_token, char *delimitter, t_data *data)
                 return ; //TO-DO modificar 
             if(close(data->heredoc_fds[1] == -1))
                 ft_error(); //TO-DO
-            return (1)
-;        }
+            return (1);
+        }
         else
         {
             //expand values!! 

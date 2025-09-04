@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 15:57:49 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 17:56:02 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,6 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
-char	*find_route(char *instruction, char *path)
-{
-	char	**routes;
-	char	*route;
-	char	*cmd_route;
-	int		i;
-
-	routes = ft_split(path, ':');
-	if (!routes)
-		return (0);
-	i = 0;
-	while (routes[i])
-	{
-		route = ft_strjoin(routes[i], "/");
-		cmd_route = ft_strjoin(route, instruction);
-		free(route);
-		if (access(cmd_route, F_OK) == 0)
-		{
-			free_matrix(routes);
-			return (cmd_route);
-		}
-		free(cmd_route);
-		i++;
-	}
-	free_matrix(routes);
-	return (NULL);
-}
-
 int ft_check_built_in(char *cmd, char *built_ins[])
 {
     int i = 0;
@@ -67,11 +39,12 @@ int ft_check_built_in(char *cmd, char *built_ins[])
     return (0);
 }
 
-
 // TO-DO: refact funciones built ins
 int ft_built_ins(t_cmd *cmd, t_data *data)
 {
 	int exit_code;
+
+	exit_code = 0;
 	if(!ft_strcmp("echo", cmd->argv[0]))
 		exit_code = ft_echo(cmd);
 	else if(!ft_strcmp("cd", cmd->argv[0]))

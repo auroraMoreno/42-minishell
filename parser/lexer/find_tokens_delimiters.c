@@ -92,7 +92,7 @@ int	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
 	i = 0;
 	while (i <= token_nbr)
 	{
-		printf("delimiter pos %d = %d\n", i, delimiters_pos[i]);
+		//cprintf("delimiter pos %d = %d\n", i, delimiters_pos[i]);
 		i++;
 	}
 	return (check_array(delimiters_pos, token_nbr));

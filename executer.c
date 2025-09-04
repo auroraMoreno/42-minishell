@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:09:14 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:26:03 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,17 @@
 int ft_multiple_commands(t_cmd *cmd_list, t_data *data)
 {
     //rotando por la lista de cmds 
-    //int i;
     int exit_status;
     t_cmd *cmd;
 
-    //i = 0;
     cmd = cmd_list;
     while(cmd) //TO-DO: sustituir por cmd->next != null o algo asi 
     {
-    
         // PASAR AQUI EL MÉTODO CREATE FORK !!! 
         cmd->id_process = ft_create_fork(cmd,cmd->fd_in,cmd->fd_out,data); //pasarle los fds? 
         if(cmd->id_process == FORK_ERROR) //revisar
-            ft_error_and_free(1, data);
+            ft_error_and_free("fork error", 1, data);
         cmd = cmd->next;
-        //i++;
     }
 
     //to-do lstclear
@@ -57,14 +53,13 @@ int ft_single_cmd(t_cmd *cmd, t_data *data)
     }
     pid = fork();
     if(pid == -1)
-        return (FORK_ERROR); //confirmar si aqui corto ejecución o no
+        return (FORK_ERROR); //to do:  cortar exe
     else if(pid == 0)
     {
         if(dup2(cmd->fd_in, STDIN_FILENO) == -1)
-            //return (-1); // TO-DO: fix this para que devueva el valor adecuado
-            ft_error_and_free(1, data);
+            ft_error_and_free("dup error", 1, data);
         if(dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-            ft_error_and_free(1, data);
+            ft_error_and_free("dup error", 1, data);
         ft_exec_cmd(cmd, data);
     }
     waitpid(pid, &exit_status, 0);
@@ -90,7 +85,7 @@ void ft_executer(t_cmd *cmd_list, t_data *data)
     {
         // al ser single command sólo va a tener 1 
         cmd = cmd_list;
-        exit_code = ft_single_cmd(cmd, data); //TO-DO: fix, esto no siempre es el status code
+        exit_code = ft_single_cmd(cmd, data);
         // solo modificamos el exit status si ft_single_cmd ha ejecutado un comando
         // si hay cualquier otro error no lo cambiamos 
     }

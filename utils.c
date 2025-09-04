@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:25:02 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:42:26 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*get_route(char *cmd, char **envp, t_data *data)
 		i++;
 	}
 	if (in_line == -1)
-		ft_error_and_free(127, data);
+		ft_error_and_free("command not found", 127, data);
 	instructions = ft_split(cmd, ' ');
 	if (!instructions)
 		return (NULL);

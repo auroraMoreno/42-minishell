@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 13:42:07 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:21:44 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char *ft_cd_go_home(char **env_cpy, char *path)
     i = 0;
     while(env_cpy[i])
     {
-        if (!ft_strncmp(env_cpy[i], "HOME", 5))
+        if (!ft_strncmp(env_cpy[i], "HOME", 4))
         {
             path = env_cpy[i] + 5;
             return (path);
@@ -100,13 +100,13 @@ int ft_cd(t_cmd *cmd, t_data *data)
         if(!path)
         {
             free(old_path);
-            return (ft_formatted_error("HOME not set", "-bash: cd",data));
+            return (ft_formatted_error("HOME not set", "-bash: cd ",data));
         }
     }
     else if(cmd->argv[2]) //too many arguments
     {
         free(old_path);
-        return (ft_formatted_error("too many arguments", "-bash: cd", data));
+        return (ft_formatted_error("too many arguments", "-bash: cd ", data));
     }
     else 
         path = cmd->argv[1];

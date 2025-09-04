@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:17:00 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:22:04 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:44:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_signal = 0;
+int g_signal = 0; //TO DO: cambiar l
 
 void ft_handle_sigint(int sig)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:25:28 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:37:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,7 @@ void			ft_free_all(t_data *data);
 void			ft_free_matrix(char **matrix);
 
 /*error methods*/
-void			ft_error_and_free(int error_code ,t_data *data);
+void 			ft_error_and_free(char *msg, int error_code, t_data *data);
 int				ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif

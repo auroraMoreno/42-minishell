@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:15:20 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 17:56:42 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void ft_init_data(t_data *data, char **env)
        
     // considerar poner aquí los built_ins 
     ft_init_builtins(data);
-    data->prompt = "shellprompt"; //TO-DO: formatear esto
+    data->prompt = "minishell>"; //TO-DO: formatear esto
     data->cmd_line = NULL;
     data->pwd = getcwd(NULL, 0); //TO-DO: FREE MEMORY
     data->exit_status = 0;

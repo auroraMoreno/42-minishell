@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:15:30 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:29:11 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void ft_run_shell(t_data *data)
         if(!data->cmd_line) // EOF ERROR
         { 
             //TO-DO: cambiar esto a funcion de error
-            ft_putendl_fd("exit", STDERR_FILENO); //TO-DO: mensaje error 
-            ft_free_all(data);
+            //ft_putendl_fd("exit", STDERR_FILENO); //TO-DO: mensaje error 
+            ft_error_and_free("exit", EOF, data);
         }
         add_history(data->cmd_line);
         //LEXER  
