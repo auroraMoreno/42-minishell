@@ -20,7 +20,7 @@ void	check_quote(bool *in_quote, char *quote_chr, char to_check)
 
 void	check_space(int *i, int *start, char *cmd, int *nbr)
 {
-	if (*i > *start && !is_operator(cmd[*i - 1]))
+	if (*i > *start)
 		(*nbr)++;
 	while (is_space(cmd[*i + 1]))
 		(*i)++;
@@ -44,17 +44,17 @@ void	check_operator(int *i, int *start, char *cmd, int *nbr)
 			op_count++;
 			(*i)++;
 		}
-		// Agrupa de dos en dos
-		*nbr += op_count / 2;
-		*nbr += op_count % 2;
-		*start = *i;
-		(*i)--; // porque el while principal hará i++
+		*nbr += op_count / 2 + op_count % 2; // Agrupa de dos en dos
 	}
 	else // solo para '|'
 	{
 		(*nbr)++;
-		*start = *i + 1;
+		(*i)++;
 	}
+	while (is_space(cmd[*i]))
+		(*i)++;
+	*start = *i;
+	(*i)--; // porque el while principal hará i++
 }
 
 void	check_no_quote(int *i, int *start, char *cmd, int *nbr)

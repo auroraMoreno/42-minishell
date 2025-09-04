@@ -19,6 +19,8 @@ void	parse_input(char *cmd)
 	if (!token_list)
 		return;
 	print_tokens(token_list);
+	if (!check_syntax(token_list))
+		return ;
 	cmd_list = tokens_to_cmds(token_list);
 	free_token_list(token_list);
 	if (!cmd_list)
