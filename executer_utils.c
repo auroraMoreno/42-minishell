@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 21:16:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:08:30 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 void ft_close_fds(t_data *data)
 {
     if(data->heredoc_fds[0] == -1 || data->heredoc_fds[1] == -1)
@@ -23,6 +24,7 @@ void ft_close_fds(t_data *data)
         perror("error");
     data->heredoc_fds[1] = -1;
 }
+*/
 
 void ft_exec_cmd(t_cmd *cmd, t_data *data)
 {
@@ -32,7 +34,7 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1) //a lo mejor que no devuelva siempre -1 si no mejor ERROR (Ver macros .h)
-            ft_error_and_free(,data); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
+            ft_error_and_free(exit_code,data); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
     }
     //check path 
     if(!cmd->argv[0])
@@ -41,8 +43,8 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
         ft_error_and_free(1, data);
         
     }
-    //cerrar fds 
-    ft_close_fds(data); // HEREDOC???
+    //TO-DO REVIEW !!!! 
+    //ft_close_fds(data); // HEREDOC???
     // TO-DO: free cmd_list!! ???
 
     signal(SIGINT, SIG_DFL);
@@ -87,22 +89,34 @@ pid_t ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data)
     return (process_id);
 }
 
-int ft_wait_children_process(t_list *cmd_list, t_data *data)
+
+t_cmd *ft_cmd_last(t_cmd *cmd_list)
 {
-    int i;
+    if (!cmd_list)
+        return (NULL);
+    while (cmd_list->next)
+        cmd_list = cmd_list->next;
+    return (cmd_list);
+}
+
+int ft_wait_children_process(t_cmd *cmd_list)
+{
+    // int i;
     int exit_status;
     t_cmd *cmd; 
 
-    i = 0; 
-    while(i < data->cmd_nbr) //TO-DO: sustituir por ->next 
+    cmd = cmd_list;
+    // i = 0;
+    while(cmd) //TO-DO: sustituir por ->next 
     {
-        cmd = (t_cmd *)cmd_list->content;
         if(cmd->id_process != -1)
             waitpid(cmd->id_process, &exit_status, 0);
-        i++;
+        cmd = cmd->next;
+        // i++;
     }
 
-    cmd = (t_cmd *)ft_lstlast(data->cmds)->content; //duda sobre si este comprueba el cmd_nbr - 1 
+    //cmd = (t_cmd *)ft_lstlast(data->cmds)->content; //duda sobre si este comprueba el cmd_nbr - 1 
+    cmd = ft_cmd_last(cmd_list);
     if(cmd->id_process == -1)
         return (1);
     return(ft_return_status(exit_status));
@@ -119,8 +133,8 @@ int ft_return_status(int status)
     if(WIFSIGNALED(status))
     {
         exit_code = WTERMSIG(status); //TO-DO: quit core dumped
-        if(exit_code = SIGINT)
-            ft_putchar_fd("\n", 1);
+        if(exit_code == SIGINT)
+            ft_putchar_fd('\n', 1);
         else if(exit_code == SIGQUIT)
             ft_putendl_fd("Quit (core dumped)", STDERR_FILENO); //Quit (core dumped)
         exit_code = exit_code + 128;

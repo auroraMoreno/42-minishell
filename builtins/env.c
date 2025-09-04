@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:54 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/26 00:14:09 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:23:31 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,15 @@
 
 int ft_env(t_cmd *cmd, t_data *data)
 {
-    t_list *curr;
-    t_env *env; 
-      
-    curr = data->env;
-    while(curr)
-    { 
-        env = (t_env *)curr->content; 
-        if(env->key && env->value)
-        {
-            ft_putstr_fd(env->key, cmd->fd_out);
-            ft_putchar_fd('=', cmd->fd_out);
-            ft_putstr_fd(env->value, cmd->fd_out);
-        }
-        curr = curr->next;
-    }  
+    int i = 0;
+
+    if (!data->env_cpy)
+        return 0;
+
+    while (data->env_cpy[i])
+    {
+        ft_putendl_fd(data->env_cpy[i], cmd->fd_out);
+        i++;
+    }
     return (0);
 }

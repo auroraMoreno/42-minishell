@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:43:11 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:25:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #define ERROR -1
 #define FORK_ERROR -2
 
-int g_signal; 
+extern int g_signal; 
 
 typedef enum e_quote_type {
 	NO_QUOTE,
@@ -78,10 +78,10 @@ typedef struct s_data
 	char *cmd_line;
 	int exit_status; 
 	char *pwd;
-	t_list *env; // TO-DO deberia ser ** ? 
-	char built_ins[7];
+	t_list **env; // TO-DO deberia ser ** ? 
+	char *built_ins[7];
     char **env_cpy;
-	t_list *cmds;
+	t_cmd *cmd_list;
 	int shell_lvl;
 	int cmd_nbr;
 	char **heredoc_content; //TO-DO: moverlo a la struct redir 
@@ -153,7 +153,7 @@ void			ft_run_shell(t_data *data);
 
 //LEXER
 
-void			parse_input(char *cmd);
+t_cmd			*parse_input(char *cmd);
 void			print_tokens(t_token *token_list);
 
 char			**input_to_tokens(char *cmd);
@@ -223,23 +223,23 @@ void	free_assignments(t_assign *assignments);
 
 
 /*EXECUTER*/
-void			ft_prepare_executer(t_list *cmd_data, t_data *data);
-void			ft_executer(t_list *cmd_list, t_data *data);
-int				ft_single_cmd(t_cmd *cmd, int fd, t_data *data);
-int				ft_multiple_commands(t_list *cmd_list, t_data *data);
+void			ft_prepare_executer(t_cmd *cmd_list, t_data *data);
+void			ft_executer(t_cmd *cmd_list, t_data *data);
+int				ft_single_cmd(t_cmd *cmd, t_data *data);
+int				ft_multiple_commands(t_cmd *cmd_list, t_data *data);
 
 /*executer utils*/
 void			ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
 pid_t			ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data);
 void			ft_exec_cmd(t_cmd *cmd, t_data *data);
 int				ft_return_status(int status);
-int				ft_wait_children_process(t_list *cmd, t_data *data);
+int				ft_wait_children_process(t_cmd *cmd_list);
 
 
 /*BUILT IN functions*/
 int				ft_built_ins(t_cmd *cmd, t_data *data);
-int				ft_check_built_in(char *cmd, char built_ins[]);
-int				ft_echo(t_cmd *cmd, t_data *data);
+int				ft_check_built_in(char *cmd, char *built_ins[]);
+int				ft_echo(t_cmd *cmd);
 int				ft_cd(t_cmd *cmd, t_data *data);
 int				ft_pwd(t_cmd *cmd, t_data *data);
 int				ft_unset(t_cmd *cmd, t_data *data);
@@ -255,11 +255,11 @@ void			ft_process_values(char *key_val, char **key,  char **val);
 char			*ft_get_key(char *str);
 char			**ft_sort_alpha(char **env);
 void			ft_print_export(char **env, t_cmd *cmd);
-char			*ft_cd_go_home(t_list *curr, t_env *env, char *path);
-int				ft_cd_errors(int err_number, char *path, t_data *data);
+char			*ft_cd_go_home(char **env_cpy, char *path);
+int				ft_cd_errors(int err_number, t_data *data); //TO-DO formatear el mensaje de error que sea mas parecido a bash
 int				ft_check_n_flag(char *flags);
 long			ft_atoi_exit_code(char *str_code);
-int				ft_remove_element(t_list **env_list, char *var_name);
+int				ft_remove_element(char **env_cpy, char *var_name);
 
 /*signals*/
 void			ft_handle_sigint(int sig);
@@ -280,12 +280,14 @@ t_list 			*ft_process_env_values(char *key_val);
 char 			*ft_find_equal_sign(char *str);
 int 			ft_strcmp(const char *s1, const char *s2);
 char			*find_route(char *instruction, char *path);
-char			*get_route(char *cmd, char **envp);
+char			*get_route(char *cmd, char **envp, t_data *data);
+
+
 
 /*freeing memory methods*/
 void 			ft_free_env(t_list **env_list);
 void			ft_free_env_node(void *content);
-void 			ft_free_all(t_data *data);
+void			ft_free_all(t_data *data);
 void			ft_free_matrix(char **matrix);
 
 /*error methods*/

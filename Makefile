@@ -3,20 +3,48 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
+#    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/08/27 17:48:37 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/09/04 13:02:06 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # === Project Config ===
 NAME = minishell
 
-SRCS = main.c utils.c signals.c cmd_utils.c \
-	builtins/built_ins.c builtins/echo.c builtins/cd.c builtins/pwd.c builtins/export.c builtins/export_utils.c builtins/unset.c builtins/env.c builtins/exit.c \
-	executer.c executer_utils.c init.c create_pipe.c free_utils.c errors.c 
-# pipex/main_bonus.c pipex/pipex_bonus.c pipex/utils_bonus.c
+SRCS = 	init.c \
+		main.c \
+		parser/parser.c \
+		parser/lexer/input_to_tokens.c \
+		parser/lexer/char_is_functions.c \
+		parser/lexer/check_char_functions.c \
+		parser/lexer/find_tokens_delimiters.c \
+		parser/lexer/tokens_in_list.c \
+		parser/grammar/tokens_to_cmds.c	\
+		parser/grammar/words.c \
+		parser/grammar/redirs.c \
+		parser/grammar/quotes.c \
+		parser/grammar/print_cmds.c	\
+		parser/utils.c	\
+		executer.c \
+		executer_utils.c \
+		builtins/built_ins.c \
+		builtins/cd.c \
+		builtins/echo.c \
+		builtins/env.c  \
+		builtins/exit.c \
+		builtins/export.c \
+		builtins/export_utils.c \
+		builtins/pwd.c \
+		builtins/unset.c \
+		signals.c \
+		free_utils.c \
+		errors.c \
+		utils.c \
+# 		heredoc.c \
+# 		heredoc_utils.c \
+# 		redir.c 
 
 OBJS = $(SRCS:.c=.o)
 

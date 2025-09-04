@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 21:02:48 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:42:07 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_cd_errors(int err_number, char *path, t_data *data)
+int ft_cd_errors(int err_number, t_data *data)
 {
     if (err_number == EACCES)
         return ft_formatted_error("Permission denied", "-bash: cd", data);
@@ -24,32 +24,64 @@ int ft_cd_errors(int err_number, char *path, t_data *data)
     return (ft_formatted_error(strerror(err_number), "-bash: cd", data)); //mejorar esto
 }
 
-char *ft_cd_go_home(t_list *curr, t_env *env, char *path)
+char *ft_cd_go_home(char **env_cpy, char *path)
 {
-    t_env *env_node;
-    curr = env; 
+    int i;
     path = NULL;
-    while(curr)
+
+    i = 0;
+    while(env_cpy[i])
     {
-        env_node = (t_env *) curr->content;
-        if (!ft_strncmp(env_node->key, "HOME", 5))
+        if (!ft_strncmp(env_cpy[i], "HOME", 5))
         {
-            path = env_node->value;
-            break;
+            path = env_cpy[i] + 5;
+            return (path);
         }
-        curr = curr->next;
+        i++;
     }
-    return (path);
+    return (NULL);
+}
+
+/* Buscar el índice de una variable en env_cpy */
+int ft_find_env_index(char **env_cpy, const char *key)
+{
+    int i = 0;
+    size_t key_len = ft_strlen(key);
+    while (env_cpy[i])
+    {
+        if (!ft_strncmp(env_cpy[i], key, key_len) && env_cpy[i][key_len] == '=')
+            return i;
+        i++;
+    }
+    return -1;
+}
+
+/* Cambiar PWD o OLDPWD en env_cpy */
+void ft_update_env(char **env_cpy, char *key, char *value)
+{
+    int idx = ft_find_env_index(env_cpy, key);
+    char *new_entry = ft_strjoin(key, "=");
+    char *tmp = ft_strjoin(new_entry, value);
+    free(new_entry);
+
+    if (idx >= 0)
+    {
+        free(env_cpy[idx]);
+        env_cpy[idx] = tmp;
+    }
+    else
+    {
+        // Si no existe, agregarla
+        env_cpy = ft_add_env_cpy(env_cpy, key, value); // tu función para añadir
+    }
 }
 
 int ft_cd(t_cmd *cmd, t_data *data)
 {
-    char *path;
+    char *path = NULL;
     char *old_path;
     char *new_path;
-    t_list *curr;
-    t_env *env_node;
-    
+
     //guardamos pwd para OLD_PWD
     old_path = getcwd(NULL,0); //FREE THIS
     if(!old_path)
@@ -64,39 +96,38 @@ int ft_cd(t_cmd *cmd, t_data *data)
     */
     if(!cmd->argv[1]) //ponerse de acuerdo
     {
-        path = ft_cd_go_home(curr, data->env, path);
+        path = ft_cd_go_home(data->env_cpy, path);
         if(!path)
+        {
+            free(old_path);
             return (ft_formatted_error("HOME not set", "-bash: cd",data));
+        }
     }
     else if(cmd->argv[2]) //too many arguments
+    {
+        free(old_path);
         return (ft_formatted_error("too many arguments", "-bash: cd", data));
+    }
     else 
         path = cmd->argv[1];
         
     if(chdir(path) == -1)
-        return(ft_cd_errors(errno, path, data));
+    {
+        free(old_path);
+        return(ft_cd_errors(errno, data));
+    }
         
     //cambiar el oldpwd y pwd de env    
     new_path = getcwd(NULL,0);
     if(!new_path)
-        return(ft_formatted_error("path not found", "pwd", data));
-                 
-    curr = data->env;
-    while(curr)
     {
-        env_node = curr->content;
-        if (!ft_strncmp(env_node->key, "OLDPWD", ft_strlen("OLDPWD"))) //TO-DO review this
-        {
-            free(env_node->value);
-            env_node->value = ft_strdup(old_path);
-        }
-        if(!ft_strncmp(env_node->key, "PWD", ft_strlen("PWD"))) 
-        {
-            free(env_node->value);
-            env_node->value = ft_strdup(new_path);
-        }
-        curr = curr->next;
+        free(old_path);
+        return(ft_formatted_error("path not found", "pwd", data));
     }
+                 
+    ft_update_env(data->env_cpy, "OLDPWD", old_path);
+    ft_update_env(data->env_cpy, "PWD", new_path);
+    
     free(new_path);
     free(old_path);
     return (0);

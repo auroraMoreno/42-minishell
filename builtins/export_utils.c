@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 17:44:45 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/27 17:47:50 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:56:32 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char **ft_add_env_cpy(char **env_cpy, char *key, char *value)
 	int env_len;
 	char *new_var;
 	char *temp;
-	char *new_env;
+	char **new_env;
 
 	if(value == NULL)
 		return (0);
@@ -60,7 +60,7 @@ int ft_find_in_env_cpy(char **env, char *key)
     
     while(env[i])
     {
-      curr_key = ft_get_env_size(env[i]);
+      curr_key = ft_get_key(env[i]);
       
       if(ft_strcmp(curr_key, key) == 0)
       {

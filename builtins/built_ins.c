@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:54:44 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:57:49 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*find_route(char *instruction, char *path)
 	return (NULL);
 }
 
-int ft_check_built_in(char *cmd, char built_ins[])
+int ft_check_built_in(char *cmd, char *built_ins[])
 {
     int i = 0;
     while(i < 7) 
@@ -73,19 +73,19 @@ int ft_built_ins(t_cmd *cmd, t_data *data)
 {
 	int exit_code;
 	if(!ft_strcmp("echo", cmd->argv[0]))
-		exit_code = ft_echo(cmd, data);
+		exit_code = ft_echo(cmd);
 	else if(!ft_strcmp("cd", cmd->argv[0]))
 		exit_code = ft_cd(cmd, data);
 	else if(!ft_strcmp("pwd", cmd->argv[0]))
 		exit_code = ft_pwd(cmd, data);
 	else if(!ft_strcmp("export", cmd->argv[0]))
 	{
-		char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
+		//char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
 		exit_code = ft_export(cmd, data);
 	}
 	else if(!ft_strcmp("unset", cmd->argv[0]))
 	{
-		char *args[] = {"A","B", NULL};
+		//char *args[] = {"A","B", NULL};
 		exit_code = ft_unset(cmd, data);
 	}
 	else if(!ft_strcmp("env", cmd->argv[0]))

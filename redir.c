@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:01:23 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/08/29 00:10:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 10:57:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,26 @@ void ft_handle_in_redir(t_cmd *cmd)
 }
 
 
-void ft_handle_redir(t_cmd *cmd)
+void ft_handle_redir(t_cmd *cmd_list, t_data *data)
 {
+    //recorrer la lista de cmd_list 
+    // ir mirando que tipo de redir tiene cada cmd si esq hay redir
+    //llamar a los métodos adecuados           
+    t_cmd *cmd;
+    t_redir *redirs;
+    
+    cmd = cmd_list;
+    
+    while(cmd)
+    {
+        cmd->fd_in = STDIN_FILENO;
+        cmd->fd_out = STDOUT_FILENO;
 
-    /** CAMBIAR TODO ESTO CUANDO ACALAREMOS COMO LLEGAN REDIRS 
-     *  DE MOMENTO AHORA SOLO UN POCO PSEUDOCODIGO
-     * tengo que hacer bucle para que vaya rotando por las redirecciones ??
-    */
-
-    //check heredoc
-    if(cmd->redir_type == REDIR_IN)
-    else if(cmd->redir_type == REDIR_OUT)
-    else if(cmd->redir_type == HEREDOC)
-        ft_heredoc(); //TO-DO: pasarle el delimitter (no sé cómo me va a llegar aún)
-    else if(cmd->redir_type == REDIR_APPEND)
-    
-    
-    //infile redir
-    if(cmd->infile)
-        ft_handle_in_redir(cmd);
-    
-    //outfile redir
-    if(cmd->outfile)
-        ft_handle_out_redir(cmd);
+        redirs = cmd->redirs;
+        
+        while(redirs)
+        {
             
+        }
+    }
 }

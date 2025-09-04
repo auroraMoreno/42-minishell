@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 16:14:18 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:15:20 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char **ft_cpy_env(char **env)
     char **env_cpy;
 
     if(!env)
-        return;
+        return (0);
     env_size = ft_get_env_size(env);
     env_cpy = ft_calloc(env_size + 1, sizeof(char *));
     if(!env_cpy)
@@ -95,26 +95,38 @@ char **ft_cpy_env(char **env)
         i++;
     }
     
-    env_cpy[i] = '\0';
+    env_cpy[i] = NULL;
     return (env_cpy);
 }
 
 void ft_init_data(t_data *data, char **env)
 {
     signal(SIGINT, SIG_IGN);
-    signals(SIGQUIT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
     g_signal = 0;
+    /*
     data->env = ft_init_env(env); //TO-DO: check para mem leaks 
     if(!data->env)
-        return (0);
+    {
+        ft_putendl_fd("exit", STDERR_FILENO);
+        exit(EXIT_FAILURE);
+    }
+        */
     data->env_cpy = ft_cpy_env(env); //TO-DO: free memory
+    if(!data->env_cpy)
+    {
+        //ft_free_env(env); //to-do: check
+        ft_putendl_fd("exit", STDERR_FILENO);
+        exit(EXIT_FAILURE); 
+    }
+       
     // considerar poner aquí los built_ins 
     ft_init_builtins(data);
     data->prompt = "shellprompt"; //TO-DO: formatear esto
     data->cmd_line = NULL;
     data->pwd = getcwd(NULL, 0); //TO-DO: FREE MEMORY
     data->exit_status = 0;
-    data->cmds = NULL;
+    data->cmd_list = NULL;
     data->cmd_nbr = 0;
     data->heredoc_content = NULL;
     //TO-DO: review

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 21:05:06 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:50:09 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,22 @@ int ft_export(t_cmd *cmd, t_data *data)
   }
 
   // TO-DO: fix esto para nueva struct 
-  i = 0;
-  while(cmd->argv[1]) // char **args 
+  i = 1;
+  while(cmd->argv[i]) // char **args 
   {
       //validar que sea un nombre de variable válido
-      if(ft_check_variables(cmd->args[i]))
+      if(ft_check_variables(cmd->argv[i]))
       {
         //get key and value if there is 
-        ft_process_values(cmd->args[i], &key, &value);
+        ft_process_values(cmd->argv[i], &key, &value);
         //buscarla en la env variable 
-        index_key = ft_find_in_env(data->env_cpy, key);
+        index_key = ft_find_in_env_cpy(data->env_cpy, key);
         //si existe => actualizar su valor
         if(index_key >= 0 && value)
         {
             free(data->env_cpy[index_key]);
             char *tmp = ft_strjoin(key, "=");
-            char result = ft_strjoin(tmp, value);
+            char *result = ft_strjoin(tmp, value);
             data->env_cpy[index_key] = result;
             free(result);
             free(tmp);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:23 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:57:47 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:58:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_pwd(t_data *data, t_cmd *cmd)
+int ft_pwd(t_cmd *cmd, t_data *data)
 {
     char *cwd;
     

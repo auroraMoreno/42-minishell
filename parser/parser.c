@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	parse_input(char *cmd)
+t_cmd	*parse_input(char *cmd)
 {
 	char	**tokens;
 	t_token	*token_list;
@@ -8,26 +8,27 @@ void	parse_input(char *cmd)
 
 	tokens = input_to_tokens(cmd);
 	if (!tokens)
-		return ;
+		return (NULL);
 	if (!*tokens)
 	{
 		free_matrix(tokens);
-		return ;
+		return (NULL);
 	}
 	token_list = tokens_in_list(tokens);
 	free_matrix(tokens);
 	if (!token_list)
-		return;
-	print_tokens(token_list);
+		return (NULL);
+	//print_tokens(token_list);
 	cmd_list = tokens_to_cmds(token_list);
 	free_token_list(token_list);
 	if (!cmd_list)
-		return ;
-	print_cmds(cmd_list);
-	cmd_list = free_cmds(cmd_list, NULL);
-	return ;
+		return (NULL);
+	//print_cmds(cmd_list);
+	//cmd_list = free_cmds(cmd_list, NULL);
+	return (cmd_list);
 }
 
+/*
 int	main(void)
 {
 	char	*cmd;
@@ -43,7 +44,7 @@ int	main(void)
 	}
 	return (0);
 }
-
+*/
 // TODO
 	// synatx error
 	// heredoc tmpfile

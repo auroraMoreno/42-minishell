@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:01:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 20:56:51 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:48:25 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int ft_check_n_flag(char *flags)
 {
     int i;
     
-    if(!flags)
-        reutrn (0);
+    if(!flags || flags[0] != '-')
+        return (0);
 
-    i = 0;
+    i = 1;
     while(flags[i])
     {
         if(ft_strncmp(&flags[i], "n", 1) != 0)
@@ -29,23 +29,26 @@ int ft_check_n_flag(char *flags)
     return (1);
 }
 
-int ft_echo(t_cmd *cmd, t_data *data)
+int ft_echo(t_cmd *cmd)
 {
-    char **argv;
+    //char **argv;
     int i;
     int newline;
 
+    i = 1;
     newline = 1;
-     if(cmd->argv[1] && ft_check_n_flag(cmd->argv[1]))
+     if(cmd->argv[i] && ft_check_n_flag(cmd->argv[i]))
+     {
         newline = 0; 
+        i++;
+     }
     
     //TO-DO modificar esto porq no hay pprop args, está todo en argv
-    i = 0;
-    while(cmd->args[i])
+    while(cmd->argv[i])
     {
-        ft_putstr_fd(cmd->args[i], cmd->fd_out);
-        if(cmd->args[i + 1])
-            ft_putchar_fd(' ', cmd->outfile);
+        ft_putstr_fd(cmd->argv[i], cmd->fd_out);
+        if(cmd->argv[i + 1])
+            ft_putchar_fd(' ', cmd->fd_out);
         i++;
     }
 
