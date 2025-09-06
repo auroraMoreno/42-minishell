@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 17:44:45 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 18:54:56 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 20:32:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char **ft_add_env_cpy(char **env_cpy, char *key, char *value)
 	char **new_env;
 
 	if(value == NULL)
-		return (0);
+		return (env_cpy);
 	env_len = ft_get_env_size(env_cpy);
 	temp = ft_strjoin(key,"=");
 	new_var = ft_strjoin(temp, value);
@@ -46,7 +46,6 @@ char **ft_add_env_cpy(char **env_cpy, char *key, char *value)
 	}
 	
 	new_env[env_len] = new_var;
-	printf("NUEVA VARIABLE: %s\n", new_env[i]);
 	new_env[env_len + 1] = NULL;
 	
 

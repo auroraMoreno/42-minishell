@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 10:49:46 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 20:59:46 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,31 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     //ft_close_fds(data); // HEREDOC???
     // TO-DO: free cmd_list!! ???
     
-
-    //executing
-    path = get_route(cmd->argv[0], data->env_cpy, data);
+    if (cmd->argv[0][0] == '/')
+    {
+        path = cmd->argv[0]; 
+    }
+    else if (cmd->argv[0][0] == '.')
+    {
+        char *cwd = getcwd(NULL, 0);
+        if (cwd == NULL)
+        {
+            ft_error_and_free("getcwd error", 1, data);
+            return;
+        }
+        path = ft_strjoin(cwd, "/");
+        if (!path)
+        {
+            ft_error_and_free("malloc error", 1, data);
+            return;
+        }
+        char *temp = ft_strjoin(path, cmd->argv[0]);  
+        free(path);
+        path = temp;
+        free(cwd);
+    }
+    else
+        path = get_route(cmd->argv[0], data->env_cpy, data);
     //execve errors: efault, enametoolong
     execve(path,cmd->argv, data->env_cpy);
     //TO-DO: error & free 
