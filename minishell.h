@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 10:27:03 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:01:53 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ char			*ft_cd_go_home(char **env_cpy, char *path);
 int				ft_cd_errors(int err_number, t_data *data); //TO-DO formatear el mensaje de error que sea mas parecido a bash
 int				ft_check_n_flag(char *flags);
 long			ft_atoi_exit_code(char *str_code);
-int				ft_remove_element(char **env_cpy, char *var_name);
+int				ft_remove_element(char ***env_cpy, char *var_name);
 
 /*signals*/
 void			ft_handle_sigint(int sig);
