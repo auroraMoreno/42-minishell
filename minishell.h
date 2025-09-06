@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 18:55:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 21:56:01 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MINISHELL_H
 
 #include "./libft/libft.h"
+#include "./gnl/get_next_line.h"
 #include <unistd.h>
 #include <limits.h>
 #include <readline/readline.h>
@@ -274,6 +275,7 @@ char			*ft_read_content_heredoc(int fd);
 ssize_t			ft_read_bytes(int fd, char **buffer, char **content, int buffer_size);
 int				ft_update_content(char *content, t_data *data);
 void			ft_remove_heredoc_lines(int from, t_data *data);
+char			*heredoc(char *key_word);
 
 /*utils*/
 t_list 			*ft_process_env_values(char *key_val);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
+#    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/09/04 13:02:06 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/09/06 22:00:42 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,8 +42,10 @@ SRCS = 	init.c \
 		free_utils.c \
 		errors.c \
 		utils.c \
-# 		heredoc.c \
-# 		heredoc_utils.c \
+ 		heredoc.c \
+		gnl/get_next_line.c \
+		gnl/get_next_line_utils.c \
+# 		heredoc_utils.c 
 # 		redir.c 
 
 OBJS = $(SRCS:.c=.o)

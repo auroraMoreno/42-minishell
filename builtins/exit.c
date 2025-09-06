@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:48 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 21:17:46 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 21:19:04 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int ft_exit(t_cmd *cmd, t_data *data)
 { 
     int exit_code;
     
-    
     //si viene más de un argumento entonces too many arguments
     if(cmd->argv[2])
     {
@@ -73,9 +72,7 @@ int ft_exit(t_cmd *cmd, t_data *data)
         ft_free_all(data); //TO-DO
     }
     // y si no, todo bien hacemos exit normal 
-    ft_free_all(data); //TO-DO
-   // printf("%d\n",exit_code);
-    
+    ft_free_all(data);    
     exit(exit_code);
     
     return (0);
