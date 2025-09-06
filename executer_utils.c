@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 19:15:34 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 10:49:46 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,16 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
 {
     int exit_code; 
     char *path; 
+
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+    
     if(cmd->is_builtin)
     {
         exit_code = ft_built_ins(cmd, data);
         if(exit_code != -1) //a lo mejor que no devuelva siempre -1 si no mejor ERROR (Ver macros .h)
-            ft_error_and_free("",exit_code,data); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
+            exit(exit_code);    
+        //ft_error_and_free("",exit_code,data); //TO-DO free memory, no es error critico asi que no puedo usar ft_error_and_free 
     }
     //check path 
     if(!cmd->argv[0])
@@ -47,24 +52,19 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     //TO-DO REVIEW !!!! 
     //ft_close_fds(data); // HEREDOC???
     // TO-DO: free cmd_list!! ???
-
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_IGN);
     
 
     //executing
     path = get_route(cmd->argv[0], data->env_cpy, data);
     //execve errors: efault, enametoolong
-    if(execve(path,cmd->argv, data->env_cpy) == -1)
-    {
-        //TO-DO: error & free 
-        if(errno == EACCES) //error 126 no tiene permisos
-            ft_error_and_free("permission denied", 126, data);  
-        else if(errno == ENOENT) //error 127 no encuentra
-            ft_error_and_free("command not found" ,127, data); 
-        else 
-            ft_error_and_free("error", 1, data);
-    }
+    execve(path,cmd->argv, data->env_cpy);
+    //TO-DO: error & free 
+    if(errno == EACCES) //error 126 no tiene permisos
+        ft_error_and_free("permission denied", 126, data);  
+    else if(errno == ENOENT) //error 127 no encuentra
+        ft_error_and_free("command not found" ,127, data); 
+    else 
+        ft_error_and_free("error", 1, data);
 
 }
 
@@ -95,7 +95,7 @@ t_cmd *ft_cmd_last(t_cmd *cmd_list)
 {
     if (!cmd_list)
         return (NULL);
-    while (cmd_list->next)
+    while (cmd_list)
         cmd_list = cmd_list->next;
     return (cmd_list);
 }
@@ -104,7 +104,11 @@ int ft_wait_children_process(t_cmd *cmd_list)
 {
     // int i;
     int exit_status;
-    t_cmd *cmd; 
+    t_cmd *cmd = cmd_list;
+    t_cmd *last;
+
+    if(!cmd_list)
+        return (1);
 
     cmd = cmd_list;
     // i = 0;
@@ -117,8 +121,8 @@ int ft_wait_children_process(t_cmd *cmd_list)
     }
 
     //cmd = (t_cmd *)ft_lstlast(data->cmds)->content; //duda sobre si este comprueba el cmd_nbr - 1 
-    cmd = ft_cmd_last(cmd_list);
-    if(cmd->id_process == -1)
+    last = ft_cmd_last(cmd_list);
+    if(!last || cmd->id_process == -1)
         return (1);
     return(ft_return_status(exit_status));
 }

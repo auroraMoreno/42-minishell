@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 19:26:03 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 10:49:33 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,45 @@ int ft_multiple_commands(t_cmd *cmd_list, t_data *data)
 {
     //rotando por la lista de cmds 
     int exit_status;
+    int fds[2];
     t_cmd *cmd;
+   // int prev_fd = STDIN_FILENO;
 
     cmd = cmd_list;
     while(cmd) //TO-DO: sustituir por cmd->next != null o algo asi 
     {
-        // PASAR AQUI EL MÉTODO CREATE FORK !!! 
+        if(cmd->next)
+        {
+            if(pipe(fds) == -1)
+                ft_error_and_free("pipe error", 1, data);
+            if(cmd->fd_out == STDOUT_FILENO) // si no hay redireccion previa
+                cmd->fd_out = fds[1];
+            else 
+                close(fds[1]);
+
+            if(cmd->next->fd_in == STDIN_FILENO)
+                cmd->next->fd_in = fds[0];
+            else 
+                close(fds[0]);
+        }
+
         cmd->id_process = ft_create_fork(cmd,cmd->fd_in,cmd->fd_out,data); //pasarle los fds? 
+        
         if(cmd->id_process == FORK_ERROR) //revisar
             ft_error_and_free("fork error", 1, data);
+        
+        //Cerramos fds
+        if (cmd->fd_in != STDIN_FILENO)
+            close(cmd->fd_in);
+        if (cmd->fd_out != STDOUT_FILENO)
+            close(cmd->fd_out);
+        
         cmd = cmd->next;
     }
-
     //to-do lstclear
     
     //wait pids for child process and return status code
-    exit_status = ft_wait_children_process(cmd);
+    exit_status = ft_wait_children_process(cmd_list);
     return (exit_status);
 }
 

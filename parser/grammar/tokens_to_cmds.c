@@ -10,6 +10,8 @@ int	new_cmd(t_cmd **current_cmd)
 	(*current_cmd)->assignments = NULL;
 	(*current_cmd)->redirs = NULL;
 	(*current_cmd)->is_builtin = false;
+	(*current_cmd)->fd_in = STDIN_FILENO;
+	(*current_cmd)->fd_out = STDOUT_FILENO;
 	(*current_cmd)->next = NULL;
 	return (1);
 }

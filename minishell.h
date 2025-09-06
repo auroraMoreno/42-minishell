@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 18:37:28 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 10:27:03 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ void	free_token_list(t_token *token_list);
 t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
 void	free_redirs(t_redir *redirs);
 void	free_assignments(t_assign *assignments);
-
+void	ft_handle_redirections(t_redir *redir, t_cmd *cmd);
 
 
 /*EXECUTER*/
