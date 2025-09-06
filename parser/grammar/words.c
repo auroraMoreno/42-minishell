@@ -86,7 +86,7 @@ int	set_assign(t_assign *asgn_wrd, char	*wrd)
 	int		i;
 	size_t	equal_pos;
 	char	*unquoted_wrd;
-	int		pos_to_end;
+	size_t		pos_to_end;
 
 	if (!asgn_wrd || !wrd)
 		return (0);

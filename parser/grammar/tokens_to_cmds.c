@@ -74,8 +74,6 @@ t_cmd	*tokens_to_cmds(t_token *token_list)
 	t_cmd	*cmd_list_end;
 	t_cmd	*current_cmd;
 
-	if (!token_list || token_list->type == PIPE)
-		return (NULL);
 	cmd_list_start = NULL;
 	cmd_list_end = NULL;
 	while (token_list)
@@ -88,11 +86,7 @@ t_cmd	*tokens_to_cmds(t_token *token_list)
 			return (free_cmds(cmd_list_start, current_cmd));
 		add_cmd(&cmd_list_start, &cmd_list_end, current_cmd);
 		if (token_list && token_list->type == PIPE)
-		{
-			if (!token_list->next || token_list->next->type == PIPE)
-				return (free_cmds(cmd_list_start, NULL));
 			token_list = token_list->next;
-		}
 	}
 	return (cmd_list_start);
 }

@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/03 19:22:48 by cesar            ###   ########.fr       */
+/*   Updated: 2025/09/06 17:32:25 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ typedef enum e_redir_type {
 	R_APPEND,	// >>
 	R_HEREDOC// <<
 }	t_redir_type;
+
+typedef struct s_env {
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_assign {
 	char			*key;
@@ -106,7 +112,7 @@ typedef struct s_builtin_type
 
 //LEXER
 
-void			parse_input(char *cmd);
+t_cmd			*parse_input(char *cmd, int *last_status);
 void			print_tokens(t_token *token_list);
 
 char			**input_to_tokens(char *cmd);
@@ -128,6 +134,12 @@ void			check_quote(bool *in_quote, char *quote_chr, char to_check);
 void			check_space(int *i, int *start, char *cmd, int *nbr);
 void			check_operator(int *i, int *start, char *cmd, int *nbr);
 void			check_no_quote(int *i, int *start, char *cmd, int *nbr);
+
+int				check_syntax(t_token *token_list, int *last_status);
+int				syntax_error(t_token	*token_list, int *last_status);
+int				check_pipe(t_token *token_list, int count, int *last_status);
+int				check_redir(t_token *token_list, int *last_status);
+int				check_io_num(t_token *token_list);
 
 t_token			*tokens_in_list(char	**tokens);
 t_token_type	get_token_type(char	*token);

@@ -6,7 +6,7 @@
 #    By: cesar <cesar@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/19 18:40:03 by ccarro-d          #+#    #+#              #
-#    Updated: 2025/09/02 20:02:34 by cesar            ###   ########.fr        #
+#    Updated: 2025/09/06 01:01:59 by cesar            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRC = 	parser.c						\
 		lexer/check_char_functions.c	\
 		lexer/find_tokens_delimiters.c	\
 		lexer/tokens_in_list.c			\
+		lexer/check_syntax.c			\
 		grammar/tokens_to_cmds.c		\
 		grammar/words.c					\
 		grammar/redirs.c				\
