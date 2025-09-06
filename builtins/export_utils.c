@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 17:44:45 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 12:37:06 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:54:56 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,24 @@ int ft_check_variables(char *var)
       
 }
 
-char	**ft_sort_alpha(char **env)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	*aux;
+// Función para ordenar el array env alfabéticamente por la clave
+char **ft_sort_alpha(char **env) {
+    int i = 0, j;
+    int len = ft_get_env_size(env);
+    char *aux;
+	
+    while (i < len - 1) {
+        j = 0;
+        while (j < len - i - 1) {
 
-	i = 0;
-	len = ft_get_env_size(env);
-	while (i < len)
-	{
-		j = -1;
-		while (++j < (len - i - 1))
-		{
-			aux = env[j];
-			if (ft_strcmp(env[j], env[j + 1]) > 0)
-			{
-				aux = env[j];
-				env[j] = env[j + 1];
-				env[j + 1] = aux;
-			}
-		}
-		i++;
-	}
-	return (env);
+            if (strcmp(ft_get_key(env[j]), ft_get_key(env[j + 1])) > 0) {
+                aux = env[j];
+                env[j] = env[j + 1];
+                env[j + 1] = aux;
+            }
+            j++;
+        }
+        i++;
+    }
+    return (env);
 }

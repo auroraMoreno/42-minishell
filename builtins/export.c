@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 12:34:06 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:55:17 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void ft_print_export(char **env, t_cmd *cmd)
     
     i = 0;
     sorted_env = ft_sort_alpha(env);
+  
     while(sorted_env[i])
     {
       ft_putstr_fd("declare -x ", cmd->fd_out);
@@ -46,6 +47,7 @@ void ft_print_export(char **env, t_cmd *cmd)
       ft_putstr_fd("\n", cmd->fd_out);
       i++;
     }
+
 }
 
 int ft_export(t_cmd *cmd, t_data *data)
