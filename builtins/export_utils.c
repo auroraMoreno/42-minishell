@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 17:44:45 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 15:56:32 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 12:37:06 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,19 @@ char **ft_add_env_cpy(char **env_cpy, char *key, char *value)
 	while(i < env_len)
 	{
 		new_env[i] = env_cpy[i];
+		// printf("old_env: %s\n", env_cpy[i]);
+		// printf("new_env: %s\n", new_env[i]);
 		i++;
 	}
 	
-	new_env[i] = new_var;
-	new_env[i++] = NULL;
-	  
+	new_env[env_len] = new_var;
+	printf("NUEVA VARIABLE: %s\n", new_env[i]);
+	new_env[env_len + 1] = NULL;
+	
 
 	free(temp);
-	free(new_var);
-	free_matrix(env_cpy);
+	//free(new_var);
+	free(env_cpy);
 	return new_env;	
 }
 

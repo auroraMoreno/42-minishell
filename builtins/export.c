@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 13:50:09 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/06 12:34:06 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int ft_export(t_cmd *cmd, t_data *data)
         }
         else if (index_key == -1) //si no existe => la creo 
           data->env_cpy = ft_add_env_cpy(data->env_cpy, key, value);
-        
+          
         free(key);
         if(value)
           free(value);
