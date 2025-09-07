@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:48 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 17:08:24 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 20:02:24 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ int ft_exit(t_cmd *cmd, t_data *data)
 { 
     int exit_code;
     
+    int len = argv_len(cmd->argv);
+
     //si viene más de un argumento entonces too many arguments
-    if(cmd->argv[2])
-    {
-        return(ft_formatted_error("too many arguments", "-bash: exit ", data));
-    }
+    if(len > 2)
+        return (ft_formatted_error("too many arguments", "-bash: exit ", data));
     //si solo viene exit entonces exit normal
-    if(cmd->argv[1] == NULL)
+    if(len == 1)
     {
         exit_code = data->exit_status;
         ft_free_all(data, data->cmd_list); //TO-DO
@@ -67,10 +67,10 @@ int ft_exit(t_cmd *cmd, t_data *data)
     // not sure
     if(exit_code == -1)
     {
-        //printf("%d\n", exit_code);
         ft_formatted_error("invalid argument", "-bash: exit", data);
         ft_free_all(data, data->cmd_list); //TO-DO
     }
+
     // y si no, todo bien hacemos exit normal 
     ft_free_all(data, data->cmd_list);    
     exit(exit_code);

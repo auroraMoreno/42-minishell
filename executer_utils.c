@@ -6,25 +6,11 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 19:30:34 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:35:27 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-void ft_close_fds(t_data *data)
-{
-    if(data->heredoc_fds[0] == -1 || data->heredoc_fds[1] == -1)
-        return; //TO-DO: review este return 
-    if(close(data->heredoc_fds[0]) == -1)
-        perror("error");
-    data->heredoc_fds[0] == -1;
-    if(close(data->heredoc_fds[1]) == -1)
-        perror("error");
-    data->heredoc_fds[1] = -1;
-}
-*/
 
 void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 {
