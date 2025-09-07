@@ -6,11 +6,13 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 20:55:29 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 14:55:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
 
 char	*find_route(char *instruction, char *path)
 {
