@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 20:26:05 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 14:21:33 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int ft_export(t_cmd *cmd, t_data *data)
             char *tmp = ft_strjoin(key, "=");
             char *result = ft_strjoin(tmp, value);
             data->env_cpy[index_key] = result;
-            free(result);
+            //free(result);
             free(tmp);
         }
         else if (index_key == -1) //si no existe => la creo 

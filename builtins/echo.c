@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:01:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 13:48:25 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 14:27:16 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int ft_check_n_flag(char *flags)
     if(!flags || flags[0] != '-')
         return (0);
 
+    if (flags[1] == '\0') 
+        return (0);
+        
     i = 1;
     while(flags[i])
     {

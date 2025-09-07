@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 19:29:11 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 14:16:04 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,19 @@ void ft_run_shell(t_data *data)
 
 int main(int argc, char **argv, char **env)
 {
-    //void argc y argv de momento no me hacen falta
+    t_data *data;
     (void)argc;
     (void)argv;
 
-    t_data *data; // TO-DO: malloc 
     data = malloc(sizeof(t_data));
     if(!data)
         return (1);
-    //hacemos init necesarios
     ft_init_data(data, env);
-    //signals: not sure if they belong here 
     signal(SIGINT, ft_handle_sigint);
     signal(SIGQUIT, SIG_IGN);
     // run shell 
     ft_run_shell(data);
     //free mem
-    ft_free_all(data); // TO-DO 
+    ft_free_all(data); 
     return (data->exit_status);
 }
