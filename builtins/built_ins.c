@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:09:08 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 17:56:02 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 20:18:14 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int ft_check_built_in(char *cmd, char *built_ins[])
     return (0);
 }
 
-// TO-DO: refact funciones built ins
 int ft_built_ins(t_cmd *cmd, t_data *data)
 {
 	int exit_code;
@@ -52,19 +51,13 @@ int ft_built_ins(t_cmd *cmd, t_data *data)
 	else if(!ft_strcmp("pwd", cmd->argv[0]))
 		exit_code = ft_pwd(cmd, data);
 	else if(!ft_strcmp("export", cmd->argv[0]))
-	{
-		//char *args[] = {"A=\"Valor1\"","B=\"Valor2\"", NULL};
 		exit_code = ft_export(cmd, data);
-	}
 	else if(!ft_strcmp("unset", cmd->argv[0]))
-	{
-		//char *args[] = {"A","B", NULL};
 		exit_code = ft_unset(cmd, data);
-	}
 	else if(!ft_strcmp("env", cmd->argv[0]))
 	   exit_code = ft_env(cmd, data);
 	else if(!ft_strcmp("exit", cmd->argv[0]))
 		exit_code = ft_exit(cmd, data);
-	return (exit_code); //TO-DO return exit status 
+	return (exit_code);
 }
 

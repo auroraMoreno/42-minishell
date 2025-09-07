@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 19:35:27 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 20:49:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 	}
 	if(!cmd->argv[0])
 		ft_error_and_free("command not found", 127, data, cmd_list);
-	//TO-DO REVIEW !!!! 
-	//ft_close_fds(data); // HEREDOC???
 	if(!ft_get_key("PATH"))
 		ft_formatted_error("command not found", "bash: ", data);
 	else
@@ -76,7 +74,6 @@ void	ft_close_unused_fds(t_cmd *cmd_list, t_cmd *current)
 	{
 		if (cmd != current)
 		{
-			// Cierra todos los fd_in/fd_out que no estés usando
 			if (cmd->fd_in != STDIN_FILENO)
 				close(cmd->fd_in);
 			if (cmd->fd_out != STDOUT_FILENO)
@@ -113,7 +110,7 @@ t_cmd	*ft_cmd_last(t_cmd *cmd_list)
 {
 	if (!cmd_list)
 		return (NULL);
-	while (cmd_list)
+	while (cmd_list->next)
 		cmd_list = cmd_list->next;
 	return (cmd_list);
 }
@@ -134,15 +131,17 @@ int	ft_wait_children_process(t_cmd *cmd_list)
 		cmd = cmd->next;
 	}
 	last = ft_cmd_last(cmd_list);
-	if (!last || cmd->id_process == -1)
+
+	if (!last || last->id_process == -1)
 		return (1);
+
 	return (ft_return_status(exit_status));
 }
 
 int	ft_return_status(int status)
 {
 	int	exit_code;
-
+	
 	if (WIFEXITED(status))
 		return WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
