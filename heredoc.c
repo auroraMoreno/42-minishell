@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 00:06:04 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 00:10:55 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,20 @@ static char	*exec_heredoc(char *key_word)
 		input = readline(prompt);
 		if (input == NULL || ft_strcmp(input, key_word) == 0)
 			break ;
-		aux = ft_strjoin(str, input);
-		free(str);
-		str = ft_strjoin(aux, "\n");
-		free(aux);
-		free(input);
+        
+        aux = ft_strjoin(str, input);
+        free(str);
+        str = aux;
+        
+        aux = ft_strjoin(str, "\n");
+        free(str);
+        str = aux;
+        
+        free(input);
 	}
 	aux = str;
 	str = create_file(str);
-	//free(prompt);
-	//printf("CREATE FILE:%s\n", str);
-	//if(input)
-		//free(input);
-	//if(aux)
-	//	free(aux);
-	
+	free(aux);
 	return (str);
 }
 

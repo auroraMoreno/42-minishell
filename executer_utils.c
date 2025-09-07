@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 23:19:22 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 23:46:36 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,12 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 			exit(exit_code);
 		}
 	}
-	key = ft_get_key("PATH");
 	if(!cmd->argv[0])
-	{
-		free(key);
 		ft_error_and_free("command not found", 127, data, cmd_list);
-	}
+	key = ft_get_key("PATH");
 	if(!key)
 	{
+
 		free(key);
 		ft_formatted_error("command not found", "bash: ", data);
 	}
@@ -66,12 +64,11 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
             ft_error_and_free("command not found", 127, data, cmd_list);
         }
 
-		
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 			
 		free(key);
-		execve(path,cmd->argv, data->env_cpy);
+		execve(path, cmd->argv, data->env_cpy);
 		free(path);
 		if(errno == EACCES)
 			ft_error_and_free("permission denied", 126, data, cmd_list);  

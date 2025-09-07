@@ -1,1 +1,8 @@
-Please ask your administrator.
+OLDPWD=/home/aumoreno/Desktop/minishell/42-minishell
+PWD=/home/aumoreno/Desktop/minishell/42-minishell
+OLDPWD=/home/aumoreno/Desktop/minishell/42-minishell
+PWD=/home/aumoreno/Desktop/minishell/42-minishell
+OLDPWD=/home/aumoreno/Desktop/minishell/42-minishell
+PWD=/home/aumoreno/Desktop/minishell/42-minishell
+OLDPWD=/home/aumoreno/Desktop/minishell/42-minishell
+PWD=/home/aumoreno/Desktop/minishell/42-minishell

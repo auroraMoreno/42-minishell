@@ -138,7 +138,6 @@ void ft_handle_redirections(t_redir *redir, t_cmd *cmd)
 
 		char *tmp_file = heredoc(redir->target);
 		redir->heredoc_tmpfile = tmp_file;
-		
 		fd = open(redir->heredoc_tmpfile, O_RDONLY);
 		
 		if (fd == -1)
@@ -148,6 +147,7 @@ void ft_handle_redirections(t_redir *redir, t_cmd *cmd)
         }
 		
         cmd->fd_in = fd;
+		//free(tmp_file);
 		//printf("hola\n");
 
 	}
