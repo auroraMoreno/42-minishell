@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 14:55:23 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 17:08:50 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*get_route(char *cmd, char **envp, t_data *data)
 		i++;
 	}
 	if (in_line == -1)
-		ft_error_and_free("command not found", 127, data);
+		ft_error_and_free("command not found", 127, data, data->cmd_list);
 	instructions = ft_split(cmd, ' ');
 	if (!instructions)
 		return (NULL);

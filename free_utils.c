@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:21:47 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:14:21 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:09:15 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,17 @@ void ft_free_cmd_list(t_cmd *cmd_list)
 }
 
 
-void ft_free_all(t_data *data)
+void ft_free_all(t_data *data, t_cmd *cmd_list)
 {
-	//free pwd
 	if(data->pwd)
 		free(data->pwd);
-	//free cmd_list
-	if(data->cmd_list)
-		ft_free_cmd_list(data->cmd_list);
-	//free env_cpy
-	if(data->env_cpy)
-		ft_free_matrix(data->env_cpy);
-	//free env
-	if(data->env)
-		ft_free_env(data->env);
-		
+    if(data->cmd_line)
+        free(data->cmd_line);
+    if(data->cmd_list)
+        free_cmds(cmd_list, NULL);
+    if(data->env_cpy)
+        ft_free_matrix(data->env_cpy);
+    free(data);
 }
 
 void	ft_free_env_node(void *content)
@@ -77,7 +73,6 @@ void	ft_free_env_node(void *content)
 
 	if (!env)
 		return;
-	
 	if(env->key)
 		free(env->key);
 	if(env->value)

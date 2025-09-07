@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:03:48 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 21:19:04 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 17:08:24 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int ft_exit(t_cmd *cmd, t_data *data)
     if(cmd->argv[1] == NULL)
     {
         exit_code = data->exit_status;
-        ft_free_all(data); //TO-DO
+        ft_free_all(data, data->cmd_list); //TO-DO
         exit(exit_code);
     }
     //si viene un argumento entonces hacemos el parseo 
@@ -69,10 +69,10 @@ int ft_exit(t_cmd *cmd, t_data *data)
     {
         //printf("%d\n", exit_code);
         ft_formatted_error("invalid argument", "-bash: exit", data);
-        ft_free_all(data); //TO-DO
+        ft_free_all(data, data->cmd_list); //TO-DO
     }
     // y si no, todo bien hacemos exit normal 
-    ft_free_all(data);    
+    ft_free_all(data, data->cmd_list);    
     exit(exit_code);
     
     return (0);

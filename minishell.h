@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 21:56:01 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 17:05:32 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,8 +231,8 @@ int				ft_multiple_commands(t_cmd *cmd_list, t_data *data);
 
 /*executer utils*/
 void			ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
-pid_t			ft_create_fork(t_cmd *cmd, int fd_in, int fd_out, t_data *data);
-void			ft_exec_cmd(t_cmd *cmd, t_data *data);
+pid_t			ft_create_fork(t_cmd *cmd, t_data *data, t_cmd *cmd_list);
+void			ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list);
 int				ft_return_status(int status);
 int				ft_wait_children_process(t_cmd *cmd_list);
 
@@ -289,11 +289,11 @@ char			*get_route(char *cmd, char **envp, t_data *data);
 /*freeing memory methods*/
 void 			ft_free_env(t_list **env_list);
 void			ft_free_env_node(void *content);
-void			ft_free_all(t_data *data);
+void			ft_free_all(t_data *data, t_cmd *cmd_list);
 void			ft_free_matrix(char **matrix);
 
 /*error methods*/
-void 			ft_error_and_free(char *msg, int error_code, t_data *data);
+void			ft_error_and_free(char *msg, int error_code, t_data *data, t_cmd  *cmd_list);
 int				ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif

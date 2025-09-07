@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 14:59:58 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:00:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void ft_run_shell(t_data *data)
 {
+    int exit_status;
     while(1)
     {
         signal(SIGINT, ft_handle_sigint);
@@ -26,16 +27,17 @@ void ft_run_shell(t_data *data)
             g_signal = 0;
         }
         if(!data->cmd_line)
-            ft_error_and_free("exit", data->exit_status, data);
+        {
+            exit_status = data->exit_status;
+            ft_free_all(data, data->cmd_list);
+            exit(exit_status);
+        }
         add_history(data->cmd_line);
         //LEXER  
         data->cmd_list = parse_input(data->cmd_line);
 
         if(!data->cmd_list)
-        {
-            free(data->cmd_line);
-            continue;
-        }
+            ft_error_and_free("exit", 1, data, data->cmd_list);
         // executer 
         ft_executer(data->cmd_list, data); 
 
@@ -62,6 +64,6 @@ int main(int argc, char **argv, char **env)
     signal(SIGINT, ft_handle_sigint);
     signal(SIGQUIT, SIG_IGN);
     ft_run_shell(data);
-    ft_free_all(data); 
+    ft_free_all(data, data->cmd_list); 
     return (data->exit_status);
 }
