@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 16:59:44 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:30:34 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 	char 	*cwd;
 	char	*temp;
 	
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	if(cmd->is_builtin)
 	{
 		exit_code = ft_built_ins(cmd, data);
@@ -69,6 +67,10 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 		}
 		else
 			path = get_route(cmd->argv[0], data->env_cpy, data);
+		
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+			
 		execve(path,cmd->argv, data->env_cpy);
 		if(errno == EACCES)
 			ft_error_and_free("permission denied", 126, data, cmd_list);  
@@ -78,6 +80,24 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 			ft_error_and_free("command not found", 1, data, cmd_list);
 	}
 
+}
+
+void	ft_close_unused_fds(t_cmd *cmd_list, t_cmd *current)
+{
+	t_cmd *cmd = cmd_list;
+
+	while (cmd)
+	{
+		if (cmd != current)
+		{
+			// Cierra todos los fd_in/fd_out que no estés usando
+			if (cmd->fd_in != STDIN_FILENO)
+				close(cmd->fd_in);
+			if (cmd->fd_out != STDOUT_FILENO)
+				close(cmd->fd_out);
+		}
+		cmd = cmd->next;
+	}
 }
 
 pid_t	ft_create_fork(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
@@ -95,6 +115,9 @@ pid_t	ft_create_fork(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 			return(FORK_ERROR);
 		if(dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 			return(FORK_ERROR);
+		
+		ft_close_unused_fds(cmd_list, cmd);
+			
 		ft_exec_cmd(cmd, data, cmd_list);
 	}
 	return (process_id);

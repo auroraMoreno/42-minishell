@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 17:40:47 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:24:29 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,4 @@ void ft_executer(t_cmd *cmd_list, t_data *data)
     if(exit_code != -1)
         data->exit_status = exit_code; 
 
-    //free_cmds(cmd_list, NULL);
 }

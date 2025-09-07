@@ -6,56 +6,21 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/04 17:56:42 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:28:16 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list *ft_init_env(char **envp) // El problema está aquí 
+void	ft_init_builtins(t_data *data)
 {
-    int i;
-    t_list *first;
-    t_list *new;
-    char **env_cpy;
-
-    env_cpy = ft_cpy_env(envp);
-
-    i = 0;
-    while(env_cpy[i])
-    {
-        new = ft_process_env_values(env_cpy[i]);
-        if(!new)
-            return (0);
-        // add  la lista
-        ft_lstadd_back(&first, new);
-        i++;
-    }
-    
-    //free envp_cpy: TO-DO (reusar para env_cpy)
-    free(env_cpy); //TO-DO
-
-    //cuando hago aqui return new 
-    return (first);
-}
-
-//TO-DO: review mejor forma de hacer init de built ins ?
-void ft_init_builtins(t_data *data)
-{
-    //echo
-    data->built_ins[0] = "echo";
-    //cd
-    data->built_ins[1]= "cd";
-    //pwd
-    data->built_ins[2] = "pwd";
-    //export
-    data->built_ins[3] = "export";
-    //unset
-    data->built_ins[4] = "unset";
-    //env
-    data->built_ins[5] = "env";
-    //exit
-    data->built_ins[6] = "exit";
+	data->built_ins[0] = "echo";
+	data->built_ins[1] = "cd";
+	data->built_ins[2] = "pwd";
+	data->built_ins[3] = "export";
+	data->built_ins[4] = "unset";
+	data->built_ins[5] = "env";
+	data->built_ins[6] = "exit";
 }
 
 int	ft_get_env_size(char **env)
@@ -71,65 +36,48 @@ int	ft_get_env_size(char **env)
 	return (len);
 }
 
-char **ft_cpy_env(char **env)
+char	**ft_cpy_env(char **env)
 {
-    int i;
-    int env_size;
-    char **env_cpy;
+	int		i;
+	int		env_size;
+	char	**env_cpy;
 
-    if(!env)
-        return (0);
-    env_size = ft_get_env_size(env);
-    env_cpy = ft_calloc(env_size + 1, sizeof(char *));
-    if(!env_cpy)
-        return (0);
-    i = 0; 
-    while(env[i])
-    {
-        env_cpy[i] = ft_strdup(env[i]); 
-        if(!env_cpy[i])
-        {
-            free_matrix(env_cpy);
-            return (0);
-        }
-        i++;
-    }
-    
-    env_cpy[i] = NULL;
-    return (env_cpy);
+	if (!env)
+		return (0);
+	env_size = ft_get_env_size(env);
+	env_cpy = ft_calloc(env_size + 1, sizeof(char *));
+	if (!env_cpy)
+		return (0);
+	i = 0;
+	while (env[i])
+	{
+		env_cpy[i] = ft_strdup(env[i]);
+		if (!env_cpy[i])
+		{
+			free_matrix(env_cpy);
+			return (0);
+		}
+		i++;
+	}
+	env_cpy[i] = NULL;
+	return (env_cpy);
 }
 
-void ft_init_data(t_data *data, char **env)
+void	ft_init_data(t_data *data, char **env)
 {
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    g_signal = 0;
-    /*
-    data->env = ft_init_env(env); //TO-DO: check para mem leaks 
-    if(!data->env)
-    {
-        ft_putendl_fd("exit", STDERR_FILENO);
-        exit(EXIT_FAILURE);
-    }
-        */
-    data->env_cpy = ft_cpy_env(env); //TO-DO: free memory
-    if(!data->env_cpy)
-    {
-        //ft_free_env(env); //to-do: check
-        ft_putendl_fd("exit", STDERR_FILENO);
-        exit(EXIT_FAILURE); 
-    }
-       
-    // considerar poner aquí los built_ins 
-    ft_init_builtins(data);
-    data->prompt = "minishell>"; //TO-DO: formatear esto
-    data->cmd_line = NULL;
-    data->pwd = getcwd(NULL, 0); //TO-DO: FREE MEMORY
-    data->exit_status = 0;
-    data->cmd_list = NULL;
-    data->cmd_nbr = 0;
-    data->heredoc_content = NULL;
-    //TO-DO: review
-    data->heredoc_fds[0] = -1;
-    data->heredoc_fds[1] = -1; 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	g_signal = 0;
+	data->env_cpy = ft_cpy_env(env);
+	if (!data->env_cpy)
+	{
+		ft_putendl_fd("exit", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	ft_init_builtins(data);
+	data->prompt = "minishell>";
+	data->cmd_line = NULL;
+	data->pwd = getcwd(NULL, 0);
+	data->exit_status = 0;
+	data->cmd_list = NULL;
 }
