@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 20:37:50 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 22:14:57 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int ft_multiple_commands(t_cmd *cmd_list, t_data *data)
         cmd = cmd->next;
     }
     exit_status = ft_wait_children_process(cmd_list);
-
     return (exit_status);
 }
 
@@ -97,5 +96,5 @@ void ft_executer(t_cmd *cmd_list, t_data *data)
         exit_code = ft_multiple_commands(cmd_list, data); //viene de este exit code 
     if(exit_code != -1)
         data->exit_status = exit_code; 
-
+    
 }

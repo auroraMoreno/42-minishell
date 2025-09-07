@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 18:00:23 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 22:23:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,22 @@ void ft_run_shell(t_data *data)
         {
             exit_status = data->exit_status;
             ft_free_all(data, data->cmd_list);
+            ft_putendl_fd("exit", STDERR_FILENO);
             exit(exit_status);
         }
         add_history(data->cmd_line);
         //LEXER  
         data->cmd_list = parse_input(data->cmd_line);
 
-        if(!data->cmd_list)
-            ft_error_and_free("exit", 1, data, data->cmd_list);
         // executer 
         ft_executer(data->cmd_list, data); 
 
-        //TO-DO: free memory
-        //ft_free_cmds();
-        //free TO-DO
+        if (data->cmd_list)
+        {
+            free_cmds(data->cmd_list, NULL);
+            data->cmd_list = NULL;    
+        }
+
         if(data->cmd_line)
             free(data->cmd_line);
     }
