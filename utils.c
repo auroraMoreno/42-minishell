@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:08:59 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 17:08:50 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 22:53:30 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int ft_strcmp(const char *s1, const char *s2)
         if(s1[i] == s2[i])
             i++;
         else if(s1[i] != s2[i])
-		    return (1);
+		    return ((unsigned char)s1[i] - (unsigned char)s2[i]);
     }
     return (0);
 }

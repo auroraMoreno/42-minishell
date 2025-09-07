@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 20:49:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 23:18:00 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 	char	*path;
 	char 	*cwd;
 	char	*temp;
+	char	*key;
 	
 	if(cmd->is_builtin)
 	{
@@ -28,10 +29,17 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 			exit(exit_code);
 		}
 	}
+	key = ft_get_key("PATH");
 	if(!cmd->argv[0])
+	{
+		free(key);
 		ft_error_and_free("command not found", 127, data, cmd_list);
-	if(!ft_get_key("PATH"))
+	}
+	if(!key)
+	{
+		free(key);
 		ft_formatted_error("command not found", "bash: ", data);
+	}
 	else
 	{
 		if (cmd->argv[0][0] == '/')
@@ -55,13 +63,16 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 			
+		free(key);
 		execve(path,cmd->argv, data->env_cpy);
+		free(path);
 		if(errno == EACCES)
 			ft_error_and_free("permission denied", 126, data, cmd_list);  
 		else if(errno == ENOENT)
 			ft_error_and_free("command not found" ,127, data, cmd_list); 
 		else 
 			ft_error_and_free("command not found", 1, data, cmd_list);
+
 	}
 
 }
