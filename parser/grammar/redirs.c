@@ -147,8 +147,6 @@ void ft_handle_redirections(t_redir *redir, t_cmd *cmd)
         }
 		
         cmd->fd_in = fd;
-		//free(tmp_file);
-		//printf("hola\n");
 
 	}
 

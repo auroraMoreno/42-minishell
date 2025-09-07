@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 17:05:32 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 01:16:29 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,8 @@ char			**ft_sort_alpha(char **env);
 void			ft_print_export(char **env, t_cmd *cmd);
 char			*ft_cd_go_home(char **env_cpy, char *path);
 int				ft_cd_errors(int err_number, t_data *data); //TO-DO formatear el mensaje de error que sea mas parecido a bash
+void			ft_update_cd(t_data *data, char *old_path, char *new_path);
+int				ft_check_new_path(char *new_path, char *old_path, t_data *data, char *msg);
 int				ft_check_n_flag(char *flags);
 long			ft_atoi_exit_code(char *str_code);
 int				ft_remove_element(char ***env_cpy, char *var_name);
