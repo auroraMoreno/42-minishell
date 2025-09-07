@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-bool	token_is_quoted(char *token_value)
+bool	str_is_quoted(char *token_value)
 {
 	if (!token_value || !*token_value)
 		return (false);
