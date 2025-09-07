@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 23:18:00 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 23:19:22 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 		}
 		else
 			path = get_route(cmd->argv[0], data->env_cpy, data);
+
+		if (!path)
+        {
+            free(key);  // Liberar key antes de salir
+            ft_error_and_free("command not found", 127, data, cmd_list);
+        }
+
 		
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
