@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/06 20:59:46 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/07 14:33:13 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,40 +53,47 @@ void ft_exec_cmd(t_cmd *cmd, t_data *data)
     //ft_close_fds(data); // HEREDOC???
     // TO-DO: free cmd_list!! ???
     
-    if (cmd->argv[0][0] == '/')
+    if(!ft_get_key("PATH"))
     {
-        path = cmd->argv[0]; 
-    }
-    else if (cmd->argv[0][0] == '.')
-    {
-        char *cwd = getcwd(NULL, 0);
-        if (cwd == NULL)
-        {
-            ft_error_and_free("getcwd error", 1, data);
-            return;
-        }
-        path = ft_strjoin(cwd, "/");
-        if (!path)
-        {
-            ft_error_and_free("malloc error", 1, data);
-            return;
-        }
-        char *temp = ft_strjoin(path, cmd->argv[0]);  
-        free(path);
-        path = temp;
-        free(cwd);
+        ft_formatted_error("command not found", "bash: ", data);
     }
     else
-        path = get_route(cmd->argv[0], data->env_cpy, data);
-    //execve errors: efault, enametoolong
-    execve(path,cmd->argv, data->env_cpy);
-    //TO-DO: error & free 
-    if(errno == EACCES) //error 126 no tiene permisos
-        ft_error_and_free("permission denied", 126, data);  
-    else if(errno == ENOENT) //error 127 no encuentra
-        ft_error_and_free("command not found" ,127, data); 
-    else 
-        ft_error_and_free("error", 1, data);
+    {
+        if (cmd->argv[0][0] == '/')
+        {
+            path = cmd->argv[0]; 
+        }
+        else if (cmd->argv[0][0] == '.')
+        {
+            char *cwd = getcwd(NULL, 0);
+            if (cwd == NULL)
+            {
+                ft_error_and_free("getcwd error", 1, data);
+                return;
+            }
+            path = ft_strjoin(cwd, "/");
+            if (!path)
+            {
+                ft_error_and_free("malloc error", 1, data);
+                return;
+            }
+            char *temp = ft_strjoin(path, cmd->argv[0]);  
+            free(path);
+            path = temp;
+            free(cwd);
+        }
+        else
+            path = get_route(cmd->argv[0], data->env_cpy, data);
+        //execve errors: efault, enametoolong
+        execve(path,cmd->argv, data->env_cpy);
+        //TO-DO: error & free 
+        if(errno == EACCES) //error 126 no tiene permisos
+            ft_error_and_free("permission denied", 126, data);  
+        else if(errno == ENOENT) //error 127 no encuentra
+            ft_error_and_free("command not found" ,127, data); 
+        else 
+            ft_error_and_free("command not found", 1, data);
+    }
 
 }
 
