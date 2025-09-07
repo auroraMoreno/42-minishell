@@ -28,7 +28,7 @@ bool	str_is_quoted(char *token_value)
 	return (NO_QUOTE);
 }*/
 
-char	*remove_quotes(char *str)
+/*char	*remove_quotes(char *str)
 {
 	int		i;
 	int		j;
@@ -58,7 +58,7 @@ char	*remove_quotes(char *str)
 	}
 	new_str[new_str_len] = '\0';
 	return (new_str);
-}
+}*/
 
 char	*copy_str(char *str)
 {
@@ -66,8 +66,6 @@ char	*copy_str(char *str)
 		return (NULL);
 	if (!*str)
 		return (ft_strdup(""));
-	if (!token_is_quoted(str))
-		return (ft_strdup(str));
 	else
-		return (remove_quotes(str));
+		return (ft_strdup(str));
 }

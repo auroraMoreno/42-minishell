@@ -60,7 +60,7 @@ char	*push_token(char *cmd, int start, int end)
 	to_trim = ft_substr(cmd, start, size);
 	if (!to_trim)
 		return (NULL);
-	token = ft_strtrim(to_trim, " ");
+	token = ft_strtrim(to_trim, " \t\r\n\v\f");
 	free(to_trim);
 	if (!token)
 		return (NULL);
@@ -81,25 +81,16 @@ char	**tokens_split(char *cmd, int token_nbr, int *delimiters_pos)
 	while (i < token_nbr)
 	{
 		tokens[i] = push_token(cmd, delimiters_pos[j], delimiters_pos[j + 1]);
-		if (!tokens[i])
+		if (!tokens[i] || tokens[i][0] == '\0')
 		{
+			if (tokens[i])
+				free(tokens[i]);
+			tokens[i] = NULL;
 			free_matrix(tokens);
 			return (NULL);
 		}
-		if (!*tokens) //entramos acaso aqu´??
-		{
-			free (tokens[i]);
-			tokens[i] = NULL;
-			delimiters_pos[j] += 1;
-			printf("delimiter_pos[%d] = %d\n", j, delimiters_pos[j]);
-			delimiters_pos[j + 1] += 1;
-			printf("delimiter_pos[%d] = %d\n", j + 1, delimiters_pos[j + 1]);
-		}
-		else
-		{
-			i++;
-			j++;
-		}
+		i++;
+		j++;
 	}
 	tokens[i] = NULL;
 	return (tokens);
@@ -112,43 +103,23 @@ char	**input_to_tokens(char *cmd)
 	int		*delimiters_pos;
 	char	**tokens;
 
-	cmd_trimmed = ft_strtrim(cmd, " ");
+	delimiters_pos = NULL;
+	cmd_trimmed = ft_strtrim(cmd, " \t\r\n\v\f");
 	if (!cmd_trimmed)
 		return (NULL);
 	token_nbr = count_tokens(cmd_trimmed);
 	if (token_nbr < 1)
-	{
-		free (cmd_trimmed);
-		if (token_nbr == -1)
-		{
-			errno = EINVAL;
-			perror("Syntax error");
-			errno = 0;
-		}
-		return (NULL);
-	}
+		return (free_tkn_maker(token_nbr, cmd_trimmed, delimiters_pos));
 	if (token_nbr == 1)
 		return (just_one_token(cmd_trimmed));
 	delimiters_pos = (int *)malloc((token_nbr + 1) * sizeof(int));
 	if (!delimiters_pos)
-	{
-		free (cmd_trimmed);
-		return (NULL);
-	}
+		return (free_tkn_maker(token_nbr, cmd_trimmed, NULL));
 	if (find_delimiters(cmd_trimmed, token_nbr, delimiters_pos) == -1)
-	{
-		free (cmd_trimmed);
-		free (delimiters_pos);
-		return (NULL);
-	}
+		return (free_tkn_maker(token_nbr, cmd_trimmed, delimiters_pos));
 	tokens = tokens_split(cmd_trimmed, token_nbr, delimiters_pos);
 	if (!tokens)
-	{
-		free (cmd_trimmed);
-		free (delimiters_pos);
-		return (NULL);
-	}
-	free (cmd_trimmed);
-	free (delimiters_pos);
+		return (free_tkn_maker(token_nbr, cmd_trimmed, delimiters_pos));
+	free_tkn_maker(token_nbr, cmd_trimmed, delimiters_pos);
 	return (tokens);
 }

@@ -22,19 +22,20 @@ int	main(int argc, char **argv, char **envp)
 	int		last_status;
 	t_env	*env;
 
+	(void)argv;
 	last_status = 0;
 	env = extract_env(envp);
 	if (argc == 1)
 	{
 		if (isatty(STDIN_FILENO))
 			interactiv_ms(env, &last_status);
-		else
-			no_interactive_ms(env, &last_status);
+		//else
+		//	no_interactive_ms(env, &last_status);
 	}
-	else if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
+	/*else if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
 		run_one_command(argv[2], env, &last_status);
 	else if (argc == 2)
-		run_script_file(argv[1], env, &last_status);
+		run_script_file(argv[1], env, &last_status);*/
 	else
 		last_status = 2;
 	return (last_status);

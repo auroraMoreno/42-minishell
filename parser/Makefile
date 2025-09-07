@@ -6,7 +6,7 @@
 #    By: cesar <cesar@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/19 18:40:03 by ccarro-d          #+#    #+#              #
-#    Updated: 2025/09/06 01:01:59 by cesar            ###   ########.fr        #
+#    Updated: 2025/09/07 23:57:52 by cesar            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ OBJ_DIR = obj
 LIBFT = $(LIBFT_DIR)/libft.a
 
 # Sources
-SRC = 	parser.c						\
+SRC = 	main.c							\
+		environment.c					\
+		parser.c						\
 		lexer/input_to_tokens.c 		\
 		lexer/char_is_functions.c 		\
 		lexer/check_char_functions.c	\
@@ -31,9 +33,15 @@ SRC = 	parser.c						\
 		lexer/check_syntax.c			\
 		grammar/tokens_to_cmds.c		\
 		grammar/words.c					\
+		grammar/asgn_words.c			\
 		grammar/redirs.c				\
 		grammar/quotes.c				\
 		grammar/print_cmds.c			\
+		expander/expander.c				\
+		expander/expansion_len.c		\
+		expander/craft_expansion.c		\
+		expander/expander_utils.c		\
+		free.c							\
 		utils.c
 
 # Objects and dependencies in OBJ_DIR
@@ -56,19 +64,19 @@ ifeq ($(READLINE),1)
 
     # Includes (if Homebrew is installed)
     ifneq ($(BREW_PREFIX),)
-      CFLAGS  += -I$(READLINE_PREFIX)/include -I$(NCURSES_PREFIX)/include
-      LDFLAGS += -L$(READLINE_PREFIX)/lib -lreadline \
-                 #-L$(NCURSES_PREFIX)/lib  -lncurses
-    else
-      # Typical fallback in mac ARM
-      CFLAGS  += -I/opt/homebrew/opt/readline/include
-      LDFLAGS += -L/opt/homebrew/opt/readline/lib -lreadline
-    endif
+	  CFLAGS  += -I$(READLINE_PREFIX)/include -I$(NCURSES_PREFIX)/include
+	  LDFLAGS += -L$(READLINE_PREFIX)/lib -lreadline \
+				 #-L$(NCURSES_PREFIX)/lib  -lncurses
+	else
+	  # Typical fallback in mac ARM
+	  CFLAGS  += -I/opt/homebrew/opt/readline/include
+	  LDFLAGS += -L/opt/homebrew/opt/readline/lib -lreadline
+	endif
   else
-    # Linux (just enough with:)
-    LDFLAGS += -lreadline -lncurses
-    # If requested by the linker
-    # LDFLAGS += -lreadline -lncurses
+	# Linux (just enough with:)
+	LDFLAGS += -lreadline -lncurses
+	# If requested by the linker
+	# LDFLAGS += -lreadline -lncurses
   endif
 endif
 

@@ -61,7 +61,7 @@ int check_array(int *delimiters_pos, int token_number)
 	return (0);
 }
 
-int	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
+int	fill_delimiters_core(char *cmd, int token_nbr, int *delimiters_pos)
 {
 	int		nbr;
 	int		i;
@@ -77,24 +77,24 @@ int	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
 	delimiters_pos[nbr++] = 0;
 	while (cmd[i] && nbr < token_nbr)
 	{
-		//printf("NBR = %d\n", nbr);
-		//printf("	cmd[i]=%c (i=%d) and cmd[start]=%c (start=%d)\n", cmd[i], i, cmd[start], start);
 		if (is_quote(cmd[i]))
 			check_quote(&in_quote, &quote_chr, cmd[i]);
-		if (!in_quote && (check_delimiter(i, start, cmd, nbr) != -1)) // porque al llamar dos veces a get_delimiters(), la primera modificaría "i" y "start" antes de la segunda
+		if (!in_quote && check_delimiter(i, start, cmd, nbr) != -1)
 		{
 			if (check_delimiter(i, start, cmd, nbr) >= delimiters_pos[nbr - 1])
 				delimiters_pos[nbr++] = get_delimiter(&i, &start, cmd, &nbr);
 		}
 		i++;
 	}
-	//printf("NBR = %d\n", nbr);
+	return (nbr);
+}
+
+int	find_delimiters(char *cmd, int token_nbr, int *delimiters_pos)
+{
+	int	nbr;
+
+	nbr = fill_delimiters_core(cmd, token_nbr, delimiters_pos);
+	(void)nbr;
 	delimiters_pos[token_nbr] = ft_strlen(cmd);
-	i = 0;
-	while (i <= token_nbr)
-	{
-		//printf("delimiter pos %d = %d\n", i, delimiters_pos[i]);
-		i++;
-	}
 	return (check_array(delimiters_pos, token_nbr));
 }

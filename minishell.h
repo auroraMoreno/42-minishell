@@ -6,7 +6,7 @@
 /*   By: cesar <cesar@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 19:19:05 by cesar            ###   ########.fr       */
+/*   Updated: 2025/09/08 01:06:02 by cesar            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@
 #include <signal.h>
 #include  <errno.h>
 #include <stdbool.h>
-
-typedef struct s_expand_ctx
-{
-    t_env *env;
-    int   *last_status;
-}   t_expand_ctx;
 
 typedef enum e_quote_type {
 	NO_QUOTE,
@@ -48,6 +42,12 @@ typedef struct s_env {
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_expand_ctx
+{
+    t_env *env;
+    int   *last_status;
+}   t_expand_ctx;
 
 typedef struct s_assign {
 	char			*key;
@@ -114,11 +114,25 @@ typedef struct s_builtin_type
 
 }t_built_in_type;
 
+// MAIN <> PARSER <> ENV
+
+int	main(int argc, char **argv, char **envp);
+void	interactiv_ms(t_env *env, int *last_status);
+
+t_env	*extract_env(char **envp);
+int	set_var(t_env *node, char *envp);
+int	list_vars(t_env **head, t_env *node);
+t_env	*env_fail(t_env **head, t_env *node);
+void	free_env_list(t_env **head);
+
+t_cmd	*parse_input(t_env *env, char *cmd, int *last_status);
 
 
 //LEXER
 
 t_cmd			*parse_input(t_env *env, char *cmd, int *last_status);
+t_token			*lexer(char *cmd, int *last_status);
+t_cmd			*grammar(t_token	*token_list, t_env *env, int *last_status);
 void			print_tokens(t_token *token_list);
 
 char			**input_to_tokens(char *cmd);
@@ -162,9 +176,12 @@ t_cmd	*tokens_to_cmds(t_token *token_list);
 
 int	argv_len(char **argv);
 char	**push_to_argv(char **argv, char *arg);
+bool	check_builtin(char	*exec);
 int	add_word(t_cmd *current_cmd, t_token **token_list, bool *exec_seen);
+
 int	set_assign(t_assign *asgn_wrd, char	*wrd);
 int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool *exec_seen);
+void	append_asgn_node(t_cmd *current_cmd, t_assign *asgn_wrd);
 
 int	is_redir(t_token *token_list);
 int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen);
@@ -174,7 +191,7 @@ int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd);
 
 bool	str_is_quoted(char *token_value);
 // t_quote_type type_of_quote(char *token_value);
-char	*remove_quotes(char *str);
+// char	*remove_quotes(char *str);
 char	*copy_str(char *str);
 
 void	print_argv(char **argv);
@@ -184,12 +201,37 @@ void	print_redir(t_redir *redirs);
 void	print_cmds(t_cmd *cmds);
 
 
-//UTILS
+// EXPANDER
+int		expand_cmds(t_cmd *cmd_list, t_env *env, int *last_status);
+int		expand_argv(char **argv, t_env *env, int *last_status);
+int		expand_asgns(t_assign *assgns, t_env *env, int *last_status);
+int		expand_redir(t_redir *redirs, t_env *env, int *last_status);
+char	*expand_and_rem_quotes(char *in, t_env *env, int *last_status);
+
+size_t	expansion_len(char *in, t_env *env, int *last_status);
+void	quote_status(char c, bool *in_quote, t_quote_type *q_type, size_t *len);
+size_t	handle_dollar_len(char *in, int *i, t_env *env, int *last_status);
+size_t	digits_len(int nbr);
+size_t	var_len(char *in, int *pos, t_env *env);
+
+char	*craft_out(char *in, char *out, t_env *env, int *last_status);
+int	handle_quote_char(char c, t_quote_type *quote_type);
+int	handle_dollar_copy(char *in, int *i, char *out, t_expand_ctx *ctx);
+int	expand_var(char *in, int *i, char *out, t_env *env);
+
+int	potential_var(char c);
+size_t	scan_var_name(char *in, int pos);
+t_env	*find_var(char *var, t_env *env, size_t len);
+
+
+//FREE
+char	**free_tkn_maker(int token_nbr, char *cmd_trimmed, int *delimiters_pos);
 void	free_matrix(char **matrix);
 void	free_token_list(t_token *token_list);
 t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
 void	free_redirs(t_redir *redirs);
 void	free_assignments(t_assign *assignments);
+
 
 typedef struct s_data // usar struct pipex de cesar
 {
