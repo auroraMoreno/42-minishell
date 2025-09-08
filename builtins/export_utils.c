@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 17:44:45 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 09:29:44 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:30:28 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,26 +93,21 @@ char	**ft_sort_alpha(char **env)
 	int		j;
 	int		len;
 	char	*aux;
-	char	*key1;
-	char	*key2;
 
-	len = ft_get_env_size(env);
 	i = 0;
-	while (i < len - 1)
+	len = ft_get_env_size(env);
+	while (i < len)
 	{
-		j = 0;
-		while (j < len - i - 1)
+		j = -1;
+		while (++j < (len - i - 1))
 		{
-			key1 = ft_get_key(env[j]);
-			key2 = ft_get_key(env[j + 1]);
-			if (ft_strcmp(key1, key2) > 0)
+			aux = env[j];
+			if (ft_strcmp(env[j], env[j + 1]) > 0)
 			{
 				aux = env[j];
 				env[j] = env[j + 1];
 				env[j + 1] = aux;
 			}
-			(free(key1), free(key2));
-			j++;
 		}
 		i++;
 	}
