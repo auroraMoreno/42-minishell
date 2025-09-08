@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 21:07:20 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/09/08 22:06:32 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ char	*exec_heredoc(char *key_word, t_data *data)
 		aux = ft_strjoin(str, "\n");
 		free(str);
 		str = aux;
+		free(input);
 		free(input_x);
 	}
 	aux = str;
