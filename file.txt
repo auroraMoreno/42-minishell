@@ -1,4 +1,0 @@
-OLDPWD=/home/aumoreno/minishell/42-minishell/builtins
-PWD=/home/aumoreno/minishell/42-minishell
-OLDPWD=/home/aumoreno/minishell/42-minishell
-PWD=/home/aumoreno

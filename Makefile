@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
+#    By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/09/08 17:55:27 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/09/08 21:00:17 by ccarro-d         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ SRCS = 	init.c \
 		parser/grammar/asgn_words.c \
 		parser/grammar/redirs.c \
 		parser/grammar/quotes.c \
-		parser/grammar/print_cmds.c	\
 		parser/utils.c	\
 		parser/free.c \
 		parser/expander/expander.c \

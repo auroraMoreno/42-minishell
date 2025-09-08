@@ -6,7 +6,7 @@
 /*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 20:28:33 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/09/08 21:07:20 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ char	*exec_heredoc(char *key_word, t_data *data)
 	}
 	aux = str;
 	str = create_file(str);
-	free(aux);
-	return (str);
+	return (free(aux), str);
 }
 
 char	*ft_heredoc(char *delimitter, t_data *data)

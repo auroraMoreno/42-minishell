@@ -6,7 +6,7 @@
 /*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 20:01:05 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/09/08 21:06:50 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ft_run_shell(t_data *data, int *last_status)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
-	int *last_status;
+	int		*last_status;
 
 	(void)argc;
 	(void)argv;

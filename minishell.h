@@ -6,101 +6,106 @@
 /*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 20:52:30 by ccarro-d         ###   ########.fr       */
+/*   Updated: 2025/09/08 21:05:44 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
-#include "./libft/libft.h"
-#include "./gnl/get_next_line.h"
-#include <unistd.h>
-#include <limits.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include  <errno.h>
-#include <stdbool.h>
+# include "./gnl/get_next_line.h"
+# include "./libft/libft.h"
+# include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdbool.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
-#define SUCCESS 0
-#define ERROR -1
-#define FORK_ERROR -2
+# define SUCCESS 0
+# define ERROR -1
+# define FORK_ERROR -2
 
-extern sig_atomic_t g_signal;
+extern sig_atomic_t	g_signal;
 
-typedef enum e_quote_type {
+typedef enum e_quote_type
+{
 	NO_QUOTE,
 	SINGLE_QUOTE,
 	DOUBLE_QUOTE
-}	t_quote_type;
+}					t_quote_type;
 
-typedef enum e_redir_type {
-	R_IN,		// <
-	R_OUT,		// >
-	R_APPEND,	// >>
-	R_HEREDOC// <<
-}	t_redir_type;
+typedef enum e_redir_type
+{
+	R_IN,
+	R_OUT,
+	R_APPEND,
+	R_HEREDOC
+}					t_redir_type;
 
-typedef struct s_env {
+typedef struct s_env
+{
 	char			*key;
 	char			*value;
 	struct s_env	*next;
-}	t_env;
+}					t_env;
 
 typedef struct s_expand_ctx
 {
-    t_env *env;
-    int   *last_status;
-}   t_expand_ctx;
+	t_env			*env;
+	int				*last_status;
+}					t_expand_ctx;
 
-typedef struct s_assign {
+typedef struct s_assign
+{
 	char			*key;
 	char			*value;
 	struct s_assign	*next;
-}	t_assign;
+}					t_assign;
 
-typedef struct s_redir {
-	int				from_fd;          // fd origen que rediriges (por defecto 0 para < y <<, 1 para > y >>, o el IO_NUMBER si lo hubo)
-	t_redir_type	redir_type;             // tipo de redirección
-	char			*target;           // filename (>, >>, <) o delimitador (<<)
-	bool			heredoc_quoted_delim;     // 1 si delimitador estaba entre comillas -> no expandir heredoc
-	char			*heredoc_tmpfile;  // si guardas el heredoc en un tmpfile
+typedef struct s_redir
+{
+	int				from_fd;
+	t_redir_type	redir_type;
+	char			*target;
+	bool			heredoc_quoted_delim;
+	char			*heredoc_tmpfile;
 	struct s_redir	*next;
-} t_redir;
+}					t_redir;
 
-typedef struct s_cmd {
-    char     **argv;        // argv[0] = ejecutable, resto args (ya con quote removal / expansiones)
-    t_assign   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
-    t_redir  *redirs;       // lista de redirecciones (0..N)
-    bool       is_builtin;   // opcional
+typedef struct s_cmd
+{
+	char			**argv;
+	t_assign		*assignments;
+	t_redir			*redirs;
+	bool			is_builtin;
 	char			*infile;
 	char			*outfile;
 	int				fd_in;
 	int				fd_out;
 	pid_t			id_process;
-    struct s_cmd *next;     // siguiente en el pipeline
-} t_cmd;
+	struct s_cmd	*next;
+}					t_cmd;
 
 typedef struct s_data
 {
-	char *prompt;
-	char *cmd_line;
-	int exit_status;
-	char *pwd;
-	t_env *env; // TO-DO deberia ser ** ?
-	char *built_ins[7];
-    char **env_cpy;
-	t_cmd *cmd_list;
-	int shell_lvl;
-	int cmd_nbr;
-	char **heredoc_content; //TO-DO: moverlo a la struct redir
-	int 	heredoc_fds[2];
-}
-t_data;
+	char			*prompt;
+	char			*cmd_line;
+	int				exit_status;
+	char			*pwd;
+	t_env			*env;
+	char			*built_ins[7];
+	char			**env_cpy;
+	t_cmd			*cmd_list;
+	int				shell_lvl;
+	int				cmd_nbr;
+	char			**heredoc_content;
+	int				heredoc_fds[2];
+}					t_data;
 
 typedef enum e_token_type
 {
@@ -112,240 +117,231 @@ typedef enum e_token_type
 	HEREDOC,
 	IO_NUMBER,
 	ASSIGNMENT_WORD,
-}	t_token_type;
-
+}					t_token_type;
 
 typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
 	struct s_token	*next;
-}	t_token;
+}					t_token;
 
 typedef struct s_builtin_type
 {
-    char *built_in_name;
-    int (*foo)();
+	char			*built_in_name;
+	int				(*foo)();
 
-}t_built_in_type;
+}					t_built_in_type;
 
-// MAIN <> PARSER <> ENV
+t_cmd				*parse_input(t_data *data, int *last_status);
 
-t_cmd	*parse_input(t_data *data, int *last_status);
-
-
-t_env	*extract_env(char **envp);
-int	set_var(t_env *node, char *envp);
-int	list_vars(t_env **head, t_env *node);
-t_env	*env_fail(t_env **head, t_env *node);
-void	free_env_list(t_env **head);
+t_env				*extract_env(char **envp);
+int					set_var(t_env *node, char *envp);
+int					list_vars(t_env **head, t_env *node);
+t_env				*env_fail(t_env **head, t_env *node);
+void				free_env_list(t_env **head);
 
 /*init functions*/
-void			ft_init_data(t_data *data, char **env);
-t_cmd 			*ft_init_cmd(char *cmd, t_built_in_type built_ins[]);
-t_list			*ft_init_env(char *envp[]);
-void 			ft_init_builtins(t_data *data);
-char 			**ft_cpy_env(char **env);
-int				ft_get_env_size(char **env);
-void			ft_run_shell(t_data *data, int *last_status);
-void			ft_exit_eof(int exit_status, t_data *data);
+void				ft_init_data(t_data *data, char **env);
+void				ft_init_builtins(t_data *data);
+char				**ft_cpy_env(char **env);
+int					ft_get_env_size(char **env);
+void				ft_run_shell(t_data *data, int *last_status);
+void				ft_exit_eof(int exit_status, t_data *data);
 
-//LEXER
+// LEXER
 
-t_token			*lexer(char *cmd, int *last_status);
-t_cmd			*grammar(t_token	*token_list, t_data *data);
-void			print_tokens(t_token *token_list);
+t_token				*lexer(char *cmd, int *last_status);
+t_cmd				*grammar(t_token *token_list, t_data *data);
 
-char			**input_to_tokens(char *cmd);
-int				count_tokens(char *cmd);
-char			**just_one_token(char *cmd_trimmed);
-char			**tokens_split(char *cmd, int token_nbr, int *delimiters_pos);
-char			*push_token(char *cmd, int start, int end);
+char				**input_to_tokens(char *cmd);
+int					count_tokens(char *cmd);
+char				**just_one_token(char *cmd_trimmed);
+char				**tokens_split(char *cmd, int token_nbr,
+						int *delimiters_pos);
+char				*push_token(char *cmd, int start, int end);
 
-int				find_delimiters(char *cmd, int token_nbr, int *delimiters_pos);
-int				get_delimiter(int *i, int *start, char *cmd, int *nbr);
-int				check_delimiter(int i, int start, char *cmd, int nbr);
-int				check_array(int *delimiters_pos, int token_number);
+int					find_delimiters(char *cmd, int token_nbr,
+						int *delimiters_pos);
+int					get_delimiter(int *i, int *start, char *cmd, int *nbr);
+int					check_delimiter(int i, int start, char *cmd, int nbr);
+int					check_array(int *delimiters_pos, int token_number);
 
-int				is_space(char c);
-int				is_quote(char c);
-int				is_operator(char c);
+int					is_space(char c);
+int					is_quote(char c);
+int					is_operator(char c);
 
-void			check_quote(bool *in_quote, char *quote_chr, char to_check);
-void			check_space(int *i, int *start, char *cmd, int *nbr);
-void			check_operator(int *i, int *start, char *cmd, int *nbr);
-void			check_no_quote(int *i, int *start, char *cmd, int *nbr);
+void				check_quote(bool *in_quote, char *quote_chr, char to_check);
+void				check_space(int *i, int *start, char *cmd, int *nbr);
+void				check_operator(int *i, int *start, char *cmd, int *nbr);
+void				check_no_quote(int *i, int *start, char *cmd, int *nbr);
 
-int				check_syntax(t_token *token_list, int *last_status);
-int				syntax_error(t_token	*token_list, int *last_status);
-int				check_pipe(t_token *token_list, int count, int *last_status);
-int				check_redir(t_token *token_list, int *last_status);
-int				check_io_num(t_token *token_list);
+int					check_syntax(t_token *token_list, int *last_status);
+int					syntax_error(t_token *token_list, int *last_status);
+int					check_pipe(t_token *token_list, int count,
+						int *last_status);
+int					check_redir(t_token *token_list, int *last_status);
+int					check_io_num(t_token *token_list);
 
-t_token			*tokens_in_list(char	**tokens);
-t_token_type	get_token_type(char	*token);
-t_token			*new_token(char	*token, t_token_type token_type);
-void			add_token(t_token **head, t_token *new);
+t_token				*tokens_in_list(char **tokens);
+t_token_type		get_token_type(char *token);
+t_token				*new_token(char *token, t_token_type token_type);
+void				add_token(t_token **head, t_token *new);
 
-//GRAMMAR
+// GRAMMAR
 
-int	new_cmd(t_cmd **current_cmd);
-int	craft_cmd(t_cmd *current_cmd, t_token **token_list, t_data *data);
-int	content_in_cmd(t_cmd *current_cmd);
-void	add_cmd(t_cmd **cmd_lst_start, t_cmd **cmd_lst_end, t_cmd *current_cmd);
-t_cmd	*tokens_to_cmds(t_token *token_list, t_data *data);
+int					new_cmd(t_cmd **current_cmd);
+int					craft_cmd(t_cmd *current_cmd, t_token **token_list,
+						t_data *data);
+int					content_in_cmd(t_cmd *current_cmd);
+void				add_cmd(t_cmd **cmd_lst_start, t_cmd **cmd_lst_end,
+						t_cmd *current_cmd);
+t_cmd				*tokens_to_cmds(t_token *token_list, t_data *data);
 
-int	argv_len(char **argv);
-char	**push_to_argv(char **argv, char *arg);
-bool	check_builtin(char	*exec);
-int	add_word(t_cmd *current_cmd, t_token **token_list, bool *exec_seen);
+int					argv_len(char **argv);
+char				**push_to_argv(char **argv, char *arg);
+bool				check_builtin(char *exec);
+int					add_word(t_cmd *current_cmd, t_token **token_list,
+						bool *exec_seen);
 
-int	set_assign(t_assign *asgn_wrd, char	*wrd);
-int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool *exec_seen);
-void	append_asgn_node(t_cmd *current_cmd, t_assign *asgn_wrd);
+int					set_assign(t_assign *asgn_wrd, char *wrd);
+int					add_asgn_wrd(t_cmd *current_cmd, t_token **token_list,
+						bool *exec_seen);
+void				append_asgn_node(t_cmd *current_cmd, t_assign *asgn_wrd);
 
-int	is_redir(t_token *token_list);
-int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen);
-int catalogue_redir(t_redir_type *redir_type, t_token_type token_type);
-int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd);
-int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd, t_data *data);
+int					is_redir(t_token *token_list);
+int					add_io_num(t_cmd *current_cmd, t_token **token_list,
+						int *pending_fd, bool *exec_seen);
+int					catalogue_redir(t_redir_type *redir_type,
+						t_token_type token_type);
+int					set_redir(t_redir *redir, t_token **token_list,
+						int *pending_fd);
+int					add_redir(t_cmd *current_cmd, t_token **token_list,
+						int *pending_fd, t_data *data);
 
-bool	str_is_quoted(char *token_value);
-// t_quote_type type_of_quote(char *token_value);
-// char	*remove_quotes(char *str);
-char	*copy_str(char *str);
-
-void	print_argv(char **argv);
-void	print_assgn(t_assign *assign);
-void	print_redir_type(t_redir_type redir_type);
-void	print_redir(t_redir *redirs);
-void	print_cmds(t_cmd *cmds);
-
+bool				str_is_quoted(char *token_value);
+char				*copy_str(char *str);
 
 // EXPANDER
-int		expand_cmds(t_cmd *cmd_list, t_env *env, int *last_status);
-int		exec_expansions(t_cmd *cmd_list, t_env *env, int *last_status);
-int		expand_argv(char **argv, t_env *env, int *last_status);
-int		expand_asgns(t_assign *assgns, t_env *env, int *last_status);
-int		expand_redir(t_redir *redirs, t_env *env, int *last_status);
-char	*expand_and_rem_quotes(char *in, t_env *env, int *last_status);
+int					expand_cmds(t_cmd *cmd_list, t_env *env, int *last_status);
+int					exec_expansions(t_cmd *cmd_list, t_env *env,
+						int *last_status);
+int					expand_argv(char **argv, t_env *env, int *last_status);
+int					expand_asgns(t_assign *assgns, t_env *env,
+						int *last_status);
+int					expand_redir(t_redir *redirs, t_env *env, int *last_status);
+char				*expand_and_rem_quotes(char *in, t_env *env,
+						int *last_status);
 
-size_t	expansion_len(char *in, t_env *env, int *last_status);
-void	quote_status(char c, bool *in_quote, t_quote_type *q_type, size_t *len);
-size_t	handle_dollar_len(char *in, int *i, t_env *env, int *last_status);
-size_t	digits_len(int nbr);
-size_t	var_len(char *in, int *pos, t_env *env);
+size_t				expansion_len(char *in, t_env *env, int *last_status);
+void				quote_status(char c, bool *in_quote, t_quote_type *q_type,
+						size_t *len);
+size_t				handle_dollar_len(char *in, int *i, t_env *env,
+						int *last_status);
+size_t				digits_len(int nbr);
+size_t				var_len(char *in, int *pos, t_env *env);
 
-char	*craft_out(char *in, char *out, t_env *env, int *last_status);
-int	handle_quote_char(char c, t_quote_type *quote_type);
-int	handle_dollar_copy(char *in, int *i, char *out, t_expand_ctx *ctx);
-int	expand_var(char *in, int *i, char *out, t_env *env);
+char				*craft_out(char *in, char *out, t_env *env,
+						int *last_status);
+int					handle_quote_char(char c, t_quote_type *quote_type);
+int					handle_dollar_copy(char *in, int *i, char *out,
+						t_expand_ctx *ctx);
+int					expand_var(char *in, int *i, char *out, t_env *env);
 
-int	potential_var(char c);
-size_t	scan_var_name(char *in, int pos);
-t_env	*find_var(char *var, t_env *env, size_t len);
+int					potential_var(char c);
+size_t				scan_var_name(char *in, int pos);
+t_env				*find_var(char *var, t_env *env, size_t len);
 
-
-//FREE
-char	**free_tkn_maker(int token_nbr, char *cmd_trimmed, int *delimiters_pos);
-void	free_matrix(char **matrix);
-void	free_token_list(t_token *token_list);
-t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
-void	free_redirs(t_redir *redirs);
-void	free_assignments(t_assign *assignments);
-
+// FREE
+char				**free_tkn_maker(int token_nbr, char *cmd_trimmed,
+						int *delimiters_pos);
+void				free_matrix(char **matrix);
+void				free_token_list(t_token *token_list);
+t_cmd				*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
+void				free_redirs(t_redir *redirs);
+void				free_assignments(t_assign *assignments);
 
 /*EXECUTER*/
-void			ft_prepare_executer(t_cmd *cmd_list, t_data *data);
-void			ft_executer(t_cmd *cmd_list, t_data *data);
-int				ft_single_cmd(t_cmd *cmd, t_data *data);
-int				ft_multiple_commands(t_cmd *cmd_list, t_data *data);
-void			ft_handle_fds(t_cmd *cmd, int fds[]);
-char			*ft_build_path(char *key, t_cmd *cmd, t_data *data, t_cmd *cmd_list);
-void			ft_do_execve(char *path, t_cmd *cmd, t_cmd *cmd_list, t_data *data);
-void			ft_path_not_found(char *key, t_cmd *cmd_list, t_data *data);
+void				ft_executer(t_cmd *cmd_list, t_data *data);
+int					ft_single_cmd(t_cmd *cmd, t_data *data);
+int					ft_multiple_commands(t_cmd *cmd_list, t_data *data);
+void				ft_handle_fds(t_cmd *cmd, int fds[]);
+char				*ft_build_path(char *key, t_cmd *cmd, t_data *data,
+						t_cmd *cmd_list);
+void				ft_do_execve(char *path, t_cmd *cmd, t_cmd *cmd_list,
+						t_data *data);
+void				ft_path_not_found(char *key, t_cmd *cmd_list, t_data *data);
 
 /*executer utils*/
-void			ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);
-pid_t			ft_create_fork(t_cmd *cmd, t_data *data, t_cmd *cmd_list);
-void			ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list);
-int				ft_return_status(int status);
-int				ft_wait_children_process(t_cmd *cmd_list);
-
+pid_t				ft_create_fork(t_cmd *cmd, t_data *data, t_cmd *cmd_list);
+void				ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list);
+int					ft_return_status(int status);
+int					ft_wait_children_process(t_cmd *cmd_list);
 
 /*BUILT IN functions*/
-int				ft_built_ins(t_cmd *cmd, t_data *data);
-int				ft_check_built_in(char *cmd, char *built_ins[]);
-int				ft_echo(t_cmd *cmd);
-int				ft_cd(t_cmd *cmd, t_data *data);
-int				ft_pwd(t_cmd *cmd, t_data *data);
-int				ft_unset(t_cmd *cmd, t_data *data);
-int 			ft_env(t_cmd *cmd, t_data *data);
-int 			ft_exit(t_cmd *cmd, t_data *data);
-int				ft_export(t_cmd *cmd, t_data *data);
+int					ft_built_ins(t_cmd *cmd, t_data *data);
+int					ft_check_built_in(char *cmd, char *built_ins[]);
+int					ft_echo(t_cmd *cmd);
+int					ft_cd(t_cmd *cmd, t_data *data);
+int					ft_pwd(t_cmd *cmd, t_data *data);
+int					ft_unset(t_cmd *cmd, t_data *data);
+int					ft_env(t_cmd *cmd, t_data *data);
+int					ft_exit(t_cmd *cmd, t_data *data);
+int					ft_export(t_cmd *cmd, t_data *data);
 
 /*export & other built ins' utils*/
-int				ft_find_in_env_cpy(char **env, char *key);
-int				ft_check_variables(char *var);
-char			**ft_add_env_cpy(char **env_cpy, char *key, char *value);
-void			ft_process_values(char *key_val, char **key,  char **val);
-char			*ft_get_key(char *str);
-char			**ft_sort_alpha(char **env);
-int				ft_print_export(char **env, t_cmd *cmd);
-char			*ft_cd_go_home(char **env_cpy, char *path);
-int				ft_cd_errors(int err_number, t_data *data); //TO-DO formatear el mensaje de error que sea mas parecido a bash
-void			ft_update_cd(t_data *data, char *old_path, char *new_path);
-int				ft_check_new_path(char *new_path, char *old_path, t_data *data, char *msg);
-int				ft_check_n_flag(char *flags);
-long			ft_atoi_exit_code(char *str_code);
-int				ft_remove_element(char ***env_cpy, char *var_name);
-void			ft_free_export(char *key, char *value);
-void			ft_update_env_value(t_data *data, int index_key, char *key, char *value);
-void			ft_update_env(char **env_cpy, char *key, char *value);
-int				ft_cd_no_args(char *old_path, t_data *data);
-int				ft_cd_too_many_args(char *old_path, t_data *data);
-void			ft_cd_updt_and_free(t_data *data, char *new_path, char *old_path);
-int				ft_cwd_not_found_error(char *old_path, t_data *data);
-int				ft_cd_chdir_error(char *old_path, t_data *data);
+int					ft_find_in_env_cpy(char **env, char *key);
+int					ft_check_variables(char *var);
+char				**ft_add_env_cpy(char **env_cpy, char *key, char *value);
+void				ft_process_values(char *key_val, char **key, char **val);
+char				*ft_get_key(char *str);
+char				**ft_sort_alpha(char **env);
+int					ft_print_export(char **env, t_cmd *cmd);
+char				*ft_cd_go_home(char **env_cpy, char *path);
+int					ft_cd_errors(int err_number, t_data *data);
+		// TO-DO formatear el mensaje de error que sea mas parecido a bash
+int					ft_check_n_flag(char *flags);
+long				ft_atoi_exit_code(char *str_code);
+int					ft_remove_element(char ***env_cpy, char *var_name);
+void				ft_free_export(char *key, char *value);
+void				ft_update_env_value(t_data *data, int index_key, char *key,
+						char *value);
+void				ft_update_env(char **env_cpy, char *key, char *value);
+int					ft_cd_no_args(char *old_path, t_data *data);
+int					ft_cd_too_many_args(char *old_path, t_data *data);
+void				ft_cd_updt_and_free(t_data *data, char *new_path,
+						char *old_path);
+int					ft_cwd_not_found_error(char *old_path, t_data *data);
+int					ft_cd_chdir_error(char *old_path, t_data *data);
 
 /*signals*/
-void			ft_handle_sigint(int sig);
-void			ft_check_gsignal(t_data *data);
-void			ft_signals_main(void);
+void				ft_handle_sigint(int sig);
+void				ft_check_gsignal(t_data *data);
+void				ft_signals_main(void);
 
 /*REDIRECTS/HEREDOC*/
-char		*exec_heredoc(char *key_word, t_data *data);
-char			*ft_heredoc(char *delimitter, t_data *data);
-void			ft_handle_redirections(t_redir *redir, t_cmd *cmd, t_data *data);
-void			ft_redir_append(t_redir *redir, t_cmd *cmd);
-void			ft_redir_out(t_redir *redir, t_cmd *cmd);
-void			ft_redir_in(t_redir *redir, t_cmd *cmd);
-
-
-/*heredoc utils*/
-char			*ft_read_content_heredoc(int fd);
-ssize_t			ft_read_bytes(int fd, char **buffer, char **content, int buffer_size);
-int				ft_update_content(char *content, t_data *data);
-void			ft_remove_heredoc_lines(int from, t_data *data);
+char				*exec_heredoc(char *key_word, t_data *data);
+char				*ft_heredoc(char *delimitter, t_data *data);
+void				ft_handle_redirections(t_redir *redir, t_cmd *cmd,
+						t_data *data);
+void				ft_redir_append(t_redir *redir, t_cmd *cmd);
+void				ft_redir_out(t_redir *redir, t_cmd *cmd);
+void				ft_redir_in(t_redir *redir, t_cmd *cmd);
 
 /*utils*/
-t_list 			*ft_process_env_values(char *key_val);
-char 			*ft_find_equal_sign(char *str);
-int 			ft_strcmp(const char *s1, const char *s2);
-char			*find_route(char *instruction, char *path);
-char			*get_route(char *cmd, char **envp, t_data *data);
-void			ft_close_unused_fds(t_cmd *cmd_list, t_cmd *current);
-t_cmd			*ft_cmd_last(t_cmd *cmd_list);
-int				ft_is_number(char	*token);
-
+int					ft_strcmp(const char *s1, const char *s2);
+char				*find_route(char *instruction, char *path);
+char				*get_route(char *cmd, char **envp, t_data *data);
+void				ft_close_unused_fds(t_cmd *cmd_list, t_cmd *current);
+t_cmd				*ft_cmd_last(t_cmd *cmd_list);
+int					ft_is_number(char *token);
 
 /*freeing memory methods*/
-void 			ft_free_env(t_list **env_list);
-void			ft_free_env_node(void *content);
-void			ft_free_all(t_data *data, t_cmd *cmd_list);
+void				ft_free_all(t_data *data, t_cmd *cmd_list);
 
 /*error methods*/
-void			ft_error_and_free(char *msg, int error_code, t_data *data, t_cmd  *cmd_list);
-int				ft_formatted_error(char *msg, char *cmd, t_data *data);
+void				ft_error_and_free(char *msg, int error_code, t_data *data,
+						t_cmd *cmd_list);
+int					ft_formatted_error(char *msg, char *cmd, t_data *data);
 
 #endif
