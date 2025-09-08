@@ -15,7 +15,7 @@ int	is_redir(t_token *token_list)
 int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen)
 {
 	long long	val;
-	
+
 	if (!current_cmd || !token_list || !*token_list || !pending_fd)
 		return (0);
 	if (!(*token_list)->next || !is_redir((*token_list)->next))
@@ -66,11 +66,9 @@ int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd)
 	else // REDIR_OUT || REDIR_APPEND
 		redir->from_fd = 1;
 	if ((*token_list)->type == HEREDOC)
-		redir->heredoc_quoted_delim = token_is_quoted(next->value);
+		redir->heredoc_quoted_delim = str_is_quoted(next->value);
 	else
 		redir->heredoc_quoted_delim = false;
-	redir->heredoc_tmpfile = NULL;
-	redir->next = NULL;
 	return (1);
 }
 

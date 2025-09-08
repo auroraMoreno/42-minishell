@@ -44,26 +44,23 @@ void	check_operator(int *i, int *start, char *cmd, int *nbr)
 			op_count++;
 			(*i)++;
 		}
-		// Agrupa de dos en dos
-		*nbr += op_count / 2;
-		*nbr += op_count % 2;
-		*start = *i;
-		(*i)--; // porque el while principal hará i++
+		*nbr += op_count / 2 + op_count % 2; // Agrupa de dos en dos
 	}
 	else // solo para '|'
 	{
 		(*nbr)++;
-		*start = *i + 1;
+		(*i)++;
 	}
+	while (is_space(cmd[*i]))
+		(*i)++;
+	*start = *i;
+	(*i)--; // porque el while principal hará i++
 }
 
 void	check_no_quote(int *i, int *start, char *cmd, int *nbr)
 {
-	//printf("NBR = %d\n", *nbr);
-	//printf("	before cmd[i]=%c and cmd[start]=%c\n", cmd[*i], cmd[*start]);
 	if (is_space(cmd[*i]))
 		check_space(i, start, cmd, nbr);
 	else if (is_operator(cmd[*i]))
 		check_operator(i, start, cmd, nbr);
-	//printf("	after cmd[i]=%c and cmd[start]=%c\n", cmd[*i], cmd[*start]);
 }
