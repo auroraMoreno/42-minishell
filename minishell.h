@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 11:16:31 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:32:15 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void 			ft_init_builtins(t_data *data);
 char 			**ft_cpy_env(char **env);
 int				ft_get_env_size(char **env);
 void			ft_run_shell(t_data *data);
-
+void			ft_exit_eof(int exit_status, t_data *data);
 
 //LEXER
 
@@ -266,6 +266,8 @@ int				ft_remove_element(char ***env_cpy, char *var_name);
 
 /*signals*/
 void			ft_handle_sigint(int sig);
+void			ft_check_gsignal(t_data *data);
+void			ft_signals_main(void);
 
 /*REDIRECTS/HEREDOC*/
 char			*ft_heredoc(char *delimitter);

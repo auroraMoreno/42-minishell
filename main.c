@@ -6,11 +6,33 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 10:37:17 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:29:42 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_signals_main(void)
+{
+	signal(SIGINT, ft_handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ft_check_gsignal(t_data *data)
+{
+	if (g_signal != 0)
+	{
+		data->exit_status = g_signal;
+		g_signal = 0;
+	}
+}
+
+void	ft_exit_eof(int exit_status, t_data *data)
+{
+	ft_free_all(data, data->cmd_list);
+	ft_putendl_fd("exit", STDERR_FILENO);
+	exit(exit_status);
+}
 
 void	ft_run_shell(t_data *data)
 {
@@ -18,20 +40,13 @@ void	ft_run_shell(t_data *data)
 
 	while (1)
 	{
-		signal(SIGINT, ft_handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
+		ft_signals_main();
 		data->cmd_line = readline(data->prompt);
-		if (g_signal != 0)
-		{
-			data->exit_status = g_signal;
-			g_signal = 0;
-		}
+		ft_check_gsignal(data);
 		if (!data->cmd_line)
 		{
 			exit_status = data->exit_status;
-			ft_free_all(data, data->cmd_list);
-			ft_putendl_fd("exit", STDERR_FILENO);
-			exit(exit_status);
+			ft_exit_eof(exit_status, data);
 		}
 		add_history(data->cmd_line);
 		data->cmd_list = parse_input(data->cmd_line);
