@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
+#    By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/09/08 13:39:20 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/09/08 17:55:27 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,25 @@ NAME = minishell
 SRCS = 	init.c \
 		main.c \
 		parser/parser.c \
+		parser/environment.c \
 		parser/lexer/input_to_tokens.c \
 		parser/lexer/char_is_functions.c \
 		parser/lexer/check_char_functions.c \
 		parser/lexer/find_tokens_delimiters.c \
 		parser/lexer/tokens_in_list.c \
+		parser/lexer/check_syntax.c \
 		parser/grammar/tokens_to_cmds.c	\
 		parser/grammar/words.c \
+		parser/grammar/asgn_words.c \
 		parser/grammar/redirs.c \
 		parser/grammar/quotes.c \
 		parser/grammar/print_cmds.c	\
 		parser/utils.c	\
+		parser/free.c \
+		parser/expander/expander.c \
+		parser/expander/expansion_len.c \
+		parser/expander/craft_expansion.c \
+		parser/expander/expander_utils.c \
 		executer.c \
 		executer_utils.c \
 		builtins/built_ins.c \

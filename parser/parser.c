@@ -16,7 +16,7 @@ t_token	*lexer(char *cmd, int *last_status)
 	free_matrix(tokens);
 	if (!token_list)
 		return (NULL);
-	print_tokens(token_list); // comentar
+	//print_tokens(token_list); // comentar
 	if (!check_syntax(token_list, last_status))
 	{
 		free_token_list(token_list);
@@ -33,11 +33,11 @@ t_cmd	*grammar(t_token	*token_list, t_env *env, int *last_status)
 	free_token_list(token_list);
 	if (!cmd_list)
 		return (NULL);
-	print_cmds(cmd_list); //comentar
+	//print_cmds(cmd_list); //comentar
 	if (!expand_cmds(cmd_list, env, last_status))
 		return (free_cmds(cmd_list, NULL));
-	printf("\nlista de comandos tras expander y quote removal:\n");
-	print_cmds(cmd_list); //comentar
+	//printf("\nlista de comandos tras expander y quote removal:\n");
+	//print_cmds(cmd_list); //comentar
 	//if (!build_hds(cmd_list, env, last_status))
 	//	return (free_cmds(cmd_list, NULL));
 	return (cmd_list);

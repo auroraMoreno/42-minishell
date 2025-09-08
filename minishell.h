@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 14:24:58 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:56:51 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 #define ERROR -1
 #define FORK_ERROR -2
 
-extern int g_signal; 
+extern sig_atomic_t g_signal; 
 
 typedef enum e_quote_type {
 	NO_QUOTE,
@@ -91,7 +91,7 @@ typedef struct s_data
 	char *cmd_line;
 	int exit_status; 
 	char *pwd;
-	t_list **env; // TO-DO deberia ser ** ? 
+	t_env *env; // TO-DO deberia ser ** ? 
 	char *built_ins[7];
     char **env_cpy;
 	t_cmd *cmd_list;
@@ -122,26 +122,10 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-/*typedef struct s_cmd
-{
-	char			**argv;
-	char			*infile;
-	char			*outfile;
-	int				append;
-	int				heredoc;
-	struct s_cmd	*next;
-	int				io_number;	// fd target por defecto (si se aplica)
-	t_list			*assignments;	// lista de char* "NAME=VALUE" para este cmd
-	int				infile_fd;	// -1 si sin open (si quieres)
-	int				outfile_fd;	// -1 si sin open
-	char			*heredoc_tmpfile;	// si guardas heredoc
-	struct s_cmd *next;     // siguiente en el pipeline
-}	t_cmd;*/
-
 typedef struct s_builtin_type
 {
     char *built_in_name;
-    int (*foo)(); //considerar un union para distintos prototypes
+    int (*foo)();
 
 }t_built_in_type;
 
@@ -158,13 +142,6 @@ void	free_env_list(t_env **head);
 
 t_cmd	*parse_input(t_env *env, char *cmd, int *last_status);
 
-typedef struct s_env
-{
-    char *key;
-    char *value;
-
-}t_env;
-
 
 /*init functions*/
 void			ft_init_data(t_data *data, char **env);
@@ -173,7 +150,7 @@ t_list			*ft_init_env(char *envp[]);
 void 			ft_init_builtins(t_data *data);
 char 			**ft_cpy_env(char **env);
 int				ft_get_env_size(char **env);
-void			ft_run_shell(t_data *data);
+void			ft_run_shell(t_data *data, int *last_status);
 void			ft_exit_eof(int exit_status, t_data *data);
 
 //LEXER
@@ -281,7 +258,6 @@ void	free_redirs(t_redir *redirs);
 void	free_assignments(t_assign *assignments);
 
 
-
 /*EXECUTER*/
 void			ft_prepare_executer(t_cmd *cmd_list, t_data *data);
 void			ft_executer(t_cmd *cmd_list, t_data *data);
@@ -368,7 +344,6 @@ t_cmd			*ft_cmd_last(t_cmd *cmd_list);
 void 			ft_free_env(t_list **env_list);
 void			ft_free_env_node(void *content);
 void			ft_free_all(t_data *data, t_cmd *cmd_list);
-void			ft_free_matrix(char **matrix);
 
 /*error methods*/
 void			ft_error_and_free(char *msg, int error_code, t_data *data, t_cmd  *cmd_list);

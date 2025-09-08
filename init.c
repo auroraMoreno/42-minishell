@@ -6,7 +6,7 @@
 /*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 11:42:05 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 18:28:16 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:43:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	ft_init_data(t_data *data, char **env)
 		ft_putendl_fd("exit", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	data->env = extract_env(env);
 	ft_init_builtins(data);
 	data->prompt = "minishell>";
 	data->cmd_line = NULL;

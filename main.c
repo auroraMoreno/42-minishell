@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 11:29:42 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 18:12:19 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_exit_eof(int exit_status, t_data *data)
 	exit(exit_status);
 }
 
-void	ft_run_shell(t_data *data)
+void	ft_run_shell(t_data *data, int *last_status)
 {
 	int	exit_status;
 
@@ -49,7 +49,7 @@ void	ft_run_shell(t_data *data)
 			ft_exit_eof(exit_status, data);
 		}
 		add_history(data->cmd_line);
-		data->cmd_list = parse_input(data->cmd_line);
+		data->cmd_list = parse_input(data->env, data->cmd_line, last_status);
 		ft_executer(data->cmd_list, data);
 		if (data->cmd_list)
 		{
@@ -65,7 +65,8 @@ void	ft_run_shell(t_data *data)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
-
+	int *last_status;
+	
 	(void)argc;
 	(void)argv;
 	data = malloc(sizeof(t_data));
@@ -74,7 +75,8 @@ int	main(int argc, char **argv, char **env)
 	ft_init_data(data, env);
 	signal(SIGINT, ft_handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	ft_run_shell(data);
+	last_status = &(data->exit_status);
+	ft_run_shell(data, last_status);
 	ft_free_all(data, data->cmd_list);
 	return (data->exit_status);
 }
