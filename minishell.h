@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 12:15:56 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:52:16 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ char			**ft_add_env_cpy(char **env_cpy, char *key, char *value);
 void			ft_process_values(char *key_val, char **key,  char **val);
 char			*ft_get_key(char *str);
 char			**ft_sort_alpha(char **env);
-void			ft_print_export(char **env, t_cmd *cmd);
+int				ft_print_export(char **env, t_cmd *cmd);
 char			*ft_cd_go_home(char **env_cpy, char *path);
 int				ft_cd_errors(int err_number, t_data *data); //TO-DO formatear el mensaje de error que sea mas parecido a bash
 void			ft_update_cd(t_data *data, char *old_path, char *new_path);
@@ -267,6 +267,8 @@ int				ft_check_new_path(char *new_path, char *old_path, t_data *data, char *msg
 int				ft_check_n_flag(char *flags);
 long			ft_atoi_exit_code(char *str_code);
 int				ft_remove_element(char ***env_cpy, char *var_name);
+void			ft_free_export(char *key, char *value);
+void			ft_update_env_value(t_data *data, int index_key, char *key, char *value);
 
 /*signals*/
 void			ft_handle_sigint(int sig);
