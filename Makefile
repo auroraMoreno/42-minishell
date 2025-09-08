@@ -6,7 +6,7 @@
 #    By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 09:17:20 by aumoreno          #+#    #+#              #
-#    Updated: 2025/09/08 12:13:21 by aumoreno         ###   ########.fr        #
+#    Updated: 2025/09/08 13:39:20 by aumoreno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS = 	init.c \
 		executer_utils.c \
 		builtins/built_ins.c \
 		builtins/cd.c \
+		builtins/cd_utils.c \
 		builtins/echo.c \
 		builtins/env.c  \
 		builtins/exit.c \

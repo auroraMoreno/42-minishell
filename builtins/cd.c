@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:02:06 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 09:02:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 13:38:23 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,32 +92,17 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	{
 		path = ft_cd_go_home(data->env_cpy, path);
 		if (!path)
-		{
-			free(old_path);
-			return (ft_formatted_error("HOME not set", "-bash: cd ", data));
-		}
+			ft_cd_no_args(old_path, data);
 	}
 	else if (cmd->argv[2])
-	{
-		free(old_path);
-		return (ft_formatted_error("too many arguments", "-bash: cd ", data));
-	}
+		return (ft_cd_too_many_args(old_path, data));
 	else
 		path = cmd->argv[1];
 	if (chdir (path) == -1)
-	{
-		free(old_path);
-		return (ft_cd_errors(errno, data));
-	}
+		return (ft_cd_chdir_error(old_path, data));
 	new_path = getcwd(NULL, 0);
 	if (!new_path)
-	{
-		free(old_path);
-		return (ft_formatted_error("path not found", "pwd", data));
-	}
-	ft_update_env(data->env_cpy, "OLDPWD", old_path);
-	ft_update_env(data->env_cpy, "PWD", new_path);
-	free(new_path);
-	free(old_path);
+		return (ft_cwd_not_found_error(old_path, data));
+	ft_cd_updt_and_free(data, new_path, old_path);
 	return (0);
 }

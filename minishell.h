@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 12:52:16 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 13:41:47 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,12 @@ long			ft_atoi_exit_code(char *str_code);
 int				ft_remove_element(char ***env_cpy, char *var_name);
 void			ft_free_export(char *key, char *value);
 void			ft_update_env_value(t_data *data, int index_key, char *key, char *value);
+void			ft_update_env(char **env_cpy, char *key, char *value);
+int				ft_cd_no_args(char *old_path, t_data *data);
+int				ft_cd_too_many_args(char *old_path, t_data *data);
+void			ft_cd_updt_and_free(t_data *data, char *new_path, char *old_path);
+int				ft_cwd_not_found_error(char *old_path, t_data *data);
+int				ft_cd_chdir_error(char *old_path, t_data *data);
 
 /*signals*/
 void			ft_handle_sigint(int sig);
