@@ -6,18 +6,28 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:04:52 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 10:16:19 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:14:45 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	ft_do_execve(char *path, t_cmd *cmd, t_cmd *cmd_list, t_data *data)
+{
+	execve(path, cmd->argv, data->env_cpy);
+	free(path);
+	if (errno == EACCES)
+		ft_error_and_free("permission denied", 126, data, cmd_list);
+	else if (errno == ENOENT)
+		ft_error_and_free("command not found", 127, data, cmd_list);
+	else
+		ft_error_and_free("command not found", 1, data, cmd_list);
+}
+
 void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 {
 	int		exit_code;
 	char	*path;
-	char	*cwd;
-	char	*temp;
 	char	*key;
 
 	if (cmd->is_builtin)
@@ -30,45 +40,14 @@ void	ft_exec_cmd(t_cmd *cmd, t_data *data, t_cmd *cmd_list)
 		ft_error_and_free("command not found", 127, data, cmd_list);
 	key = ft_get_key("PATH");
 	if (!key)
-	{
-		free(key);
 		ft_formatted_error("command not found", "bash: ", data);
-	}
 	else
 	{
-		if (cmd->argv[0][0] == '/')
-			path = cmd->argv[0];
-		else if (cmd->argv[0][0] == '.')
-		{
-			cwd = getcwd(NULL, 0);
-			if (cwd == NULL)
-				ft_error_and_free("getcwd error", 1, data, cmd_list);
-			path = ft_strjoin(cwd, "/");
-			if (!path)
-				ft_error_and_free("malloc error", 1, data, cmd_list);
-			temp = ft_strjoin(path, cmd->argv[0]);
-			free(path);
-			path = temp;
-			free(cwd);
-		}
-		else
-			path = get_route(cmd->argv[0], data->env_cpy, data);
-		if (!path)
-		{
-			free(key);
-			ft_error_and_free("command not found", 127, data, cmd_list);
-		}
+		path = ft_build_path(key, cmd, data, cmd_list);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		free(key);
-		execve(path, cmd->argv, data->env_cpy);
-		free(path);
-		if (errno == EACCES)
-			ft_error_and_free("permission denied", 126, data, cmd_list);
-		else if (errno == ENOENT)
-			ft_error_and_free("command not found", 127, data, cmd_list);
-		else
-			ft_error_and_free("command not found", 1, data, cmd_list);
+		ft_do_execve(path, cmd, cmd_list, data);
 	}
 }
 

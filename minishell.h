@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 11:41:48 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:15:56 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,9 @@ void			ft_executer(t_cmd *cmd_list, t_data *data);
 int				ft_single_cmd(t_cmd *cmd, t_data *data);
 int				ft_multiple_commands(t_cmd *cmd_list, t_data *data);
 void			ft_handle_fds(t_cmd *cmd, int fds[]);
+char			*ft_build_path(char *key, t_cmd *cmd, t_data *data, t_cmd *cmd_list);
+void			ft_do_execve(char *path, t_cmd *cmd, t_cmd *cmd_list, t_data *data);
+void			ft_path_not_found(char *key, t_cmd *cmd_list, t_data *data);
 
 /*executer utils*/
 void			ft_child_process(t_cmd *cmd, int fd_input, int fd_output, t_data *data);

@@ -1,3 +1,4 @@
 PWD=/home/aumoreno/minishell/42-minishell
 OLDPWD=/home/aumoreno/minishell
 PWD=/home/aumoreno/minishell/42-minishell
+PWD=/home/aumoreno/minishell/42-minishell
