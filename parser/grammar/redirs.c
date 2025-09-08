@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 18:25:07 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 18:26:48 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:35:35 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,32 +84,29 @@ int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd)
 	return (1);
 }
 
-int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd)
+int	add_redir(t_cmd *cur_cmd, t_token **tkn_list, int *pending_fd, t_data *data)
 {
 	t_redir	*redir;
 	t_redir	*tmp;
 
-	if (!current_cmd || !token_list || !*token_list || !pending_fd)
+	if (!cur_cmd || !tkn_list || !*tkn_list || !pending_fd)
 		return (0);
 	redir = (t_redir *)ft_calloc(1, sizeof(t_redir));
 	if (!redir)
 		return (0);
-	if (!set_redir(redir, token_list, pending_fd))
-	{
-		free (redir);
-		return (0);
-	}
-	if (!current_cmd->redirs)
-		current_cmd->redirs = redir;
+	if (!set_redir(redir, tkn_list, pending_fd))
+		return (free (redir), 0);
+	if (!cur_cmd->redirs)
+		cur_cmd->redirs = redir;
 	else
 	{
-		tmp = current_cmd->redirs;
+		tmp = cur_cmd->redirs;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = redir;
 	}
-	ft_handle_redirections(redir, current_cmd);
-	*token_list = (*token_list)->next->next;
+	ft_handle_redirections(redir, cur_cmd, data);
+	*tkn_list = (*tkn_list)->next->next;
 	*pending_fd = -1;
 	return (1);
 }

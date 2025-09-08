@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 18:20:27 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 18:20:29 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:36:00 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,24 @@ t_env	*find_var(char *var, t_env *env, size_t len)
 		match = match->next;
 	}
 	return (NULL);
+}
+
+int	exec_expansions(t_cmd *cmd_list, t_env *env, int *last_status)
+{
+	if (cmd_list->argv)
+	{
+		if (!expand_argv(cmd_list->argv, env, last_status))
+			return (0);
+	}
+	if (cmd_list->assignments)
+	{
+		if (!expand_asgns(cmd_list->assignments, env, last_status))
+			return (0);
+	}
+	if (cmd_list->redirs)
+	{
+		if (!expand_redir(cmd_list->redirs, env, last_status))
+			return (0);
+	}
+	return (1);
 }

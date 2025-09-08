@@ -3,37 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 10:32:43 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:28:33 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	there_doc(void)
-{
-	char	*file_name;
-	int		i;
-	char	*nbr;
-
-	i = 0;
-	while (i < 100000)
-	{
-		nbr = ft_itoa(i);
-		file_name = ft_strjoin("/tmp/.heredoc_", nbr);
-		free(nbr);
-		if (!access(file_name, F_OK))
-			unlink(file_name);
-		else
-			i = -2;
-		free(file_name);
-		i++;
-		if (i == -1)
-			break ;
-	}
-}
 
 static char	*create_file(char *str)
 {
@@ -59,9 +36,10 @@ static char	*create_file(char *str)
 	return (file_name);
 }
 
-static char	*exec_heredoc(char *key_word)
+char	*exec_heredoc(char *key_word, t_data *data)
 {
 	char	*input;
+	char	*input_x;
 	char	*str;
 	char	*aux;
 	char	*prompt;
@@ -73,13 +51,14 @@ static char	*exec_heredoc(char *key_word)
 		input = readline(prompt);
 		if (input == NULL || ft_strcmp(input, key_word) == 0)
 			break ;
-		aux = ft_strjoin(str, input);
+		input_x = expand_and_rem_quotes(input, data->env, &(data->exit_status));
+		aux = ft_strjoin(str, input_x);
 		free(str);
 		str = aux;
 		aux = ft_strjoin(str, "\n");
 		free(str);
 		str = aux;
-		free(input);
+		free(input_x);
 	}
 	aux = str;
 	str = create_file(str);
@@ -87,7 +66,7 @@ static char	*exec_heredoc(char *key_word)
 	return (str);
 }
 
-char	*ft_heredoc(char *delimitter)
+char	*ft_heredoc(char *delimitter, t_data *data)
 {
 	char	*str;
 	int		pipefd[2];
@@ -99,7 +78,7 @@ char	*ft_heredoc(char *delimitter)
 	{
 		close(pipefd[0]);
 		signal(SIGINT, SIG_DFL);
-		str = exec_heredoc(delimitter);
+		str = exec_heredoc(delimitter, data);
 		ft_putstr_fd(str, pipefd[1]);
 		close(pipefd[1]);
 		exit(EXIT_SUCCESS);

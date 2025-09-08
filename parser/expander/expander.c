@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 18:20:51 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 18:21:02 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:28:49 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,21 +107,8 @@ int	expand_cmds(t_cmd *cmd_list, t_env *env, int *last_status)
 	tmp = cmd_list;
 	while (tmp)
 	{
-		if (tmp->argv)
-		{
-			if (!expand_argv(tmp->argv, env, last_status))
-				return (0);
-		}
-		if (tmp->assignments)
-		{
-			if (!expand_asgns(tmp->assignments, env, last_status))
-				return (0);
-		}
-		if (tmp->redirs)
-		{
-			if (!expand_redir(tmp->redirs, env, last_status))
-				return (0);
-		}
+		if (!exec_expansions(cmd_list, env, last_status))
+			return (0);
 		tmp = tmp->next;
 	}
 	return (1);

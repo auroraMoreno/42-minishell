@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:27:26 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 18:12:19 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:01:05 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_run_shell(t_data *data, int *last_status)
 			ft_exit_eof(exit_status, data);
 		}
 		add_history(data->cmd_line);
-		data->cmd_list = parse_input(data->env, data->cmd_line, last_status);
+		data->cmd_list = parse_input(data, last_status);
 		ft_executer(data->cmd_list, data);
 		if (data->cmd_list)
 		{
@@ -66,7 +66,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
 	int *last_status;
-	
+
 	(void)argc;
 	(void)argv;
 	data = malloc(sizeof(t_data));

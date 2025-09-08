@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 17:56:51 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:52:30 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 #define ERROR -1
 #define FORK_ERROR -2
 
-extern sig_atomic_t g_signal; 
+extern sig_atomic_t g_signal;
 
 typedef enum e_quote_type {
 	NO_QUOTE,
@@ -77,8 +77,8 @@ typedef struct s_cmd {
     t_assign   *assignments;  // lista de "NAME=VALUE" previas al ejecutable
     t_redir  *redirs;       // lista de redirecciones (0..N)
     bool       is_builtin;   // opcional
-	char			*infile; 
-	char			*outfile; 
+	char			*infile;
+	char			*outfile;
 	int				fd_in;
 	int				fd_out;
 	pid_t			id_process;
@@ -89,15 +89,15 @@ typedef struct s_data
 {
 	char *prompt;
 	char *cmd_line;
-	int exit_status; 
+	int exit_status;
 	char *pwd;
-	t_env *env; // TO-DO deberia ser ** ? 
+	t_env *env; // TO-DO deberia ser ** ?
 	char *built_ins[7];
     char **env_cpy;
 	t_cmd *cmd_list;
 	int shell_lvl;
 	int cmd_nbr;
-	char **heredoc_content; //TO-DO: moverlo a la struct redir 
+	char **heredoc_content; //TO-DO: moverlo a la struct redir
 	int 	heredoc_fds[2];
 }
 t_data;
@@ -131,17 +131,14 @@ typedef struct s_builtin_type
 
 // MAIN <> PARSER <> ENV
 
-int	main(int argc, char **argv, char **envp);
-void	interactiv_ms(t_env *env, int *last_status);
+t_cmd	*parse_input(t_data *data, int *last_status);
+
 
 t_env	*extract_env(char **envp);
 int	set_var(t_env *node, char *envp);
 int	list_vars(t_env **head, t_env *node);
 t_env	*env_fail(t_env **head, t_env *node);
 void	free_env_list(t_env **head);
-
-t_cmd	*parse_input(t_env *env, char *cmd, int *last_status);
-
 
 /*init functions*/
 void			ft_init_data(t_data *data, char **env);
@@ -155,9 +152,8 @@ void			ft_exit_eof(int exit_status, t_data *data);
 
 //LEXER
 
-t_cmd			*parse_input(t_env *env, char *cmd, int *last_status);
 t_token			*lexer(char *cmd, int *last_status);
-t_cmd			*grammar(t_token	*token_list, t_env *env, int *last_status);
+t_cmd			*grammar(t_token	*token_list, t_data *data);
 void			print_tokens(t_token *token_list);
 
 char			**input_to_tokens(char *cmd);
@@ -194,10 +190,10 @@ void			add_token(t_token **head, t_token *new);
 //GRAMMAR
 
 int	new_cmd(t_cmd **current_cmd);
-int	craft_cmd(t_cmd *current_cmd, t_token **token_list);
+int	craft_cmd(t_cmd *current_cmd, t_token **token_list, t_data *data);
 int	content_in_cmd(t_cmd *current_cmd);
 void	add_cmd(t_cmd **cmd_lst_start, t_cmd **cmd_lst_end, t_cmd *current_cmd);
-t_cmd	*tokens_to_cmds(t_token *token_list);
+t_cmd	*tokens_to_cmds(t_token *token_list, t_data *data);
 
 int	argv_len(char **argv);
 char	**push_to_argv(char **argv, char *arg);
@@ -212,7 +208,7 @@ int	is_redir(t_token *token_list);
 int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen);
 int catalogue_redir(t_redir_type *redir_type, t_token_type token_type);
 int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd);
-int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd);
+int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd, t_data *data);
 
 bool	str_is_quoted(char *token_value);
 // t_quote_type type_of_quote(char *token_value);
@@ -228,6 +224,7 @@ void	print_cmds(t_cmd *cmds);
 
 // EXPANDER
 int		expand_cmds(t_cmd *cmd_list, t_env *env, int *last_status);
+int		exec_expansions(t_cmd *cmd_list, t_env *env, int *last_status);
 int		expand_argv(char **argv, t_env *env, int *last_status);
 int		expand_asgns(t_assign *assgns, t_env *env, int *last_status);
 int		expand_redir(t_redir *redirs, t_env *env, int *last_status);
@@ -317,8 +314,9 @@ void			ft_check_gsignal(t_data *data);
 void			ft_signals_main(void);
 
 /*REDIRECTS/HEREDOC*/
-char			*ft_heredoc(char *delimitter);
-void			ft_handle_redirections(t_redir *redir, t_cmd *cmd);
+char		*exec_heredoc(char *key_word, t_data *data);
+char			*ft_heredoc(char *delimitter, t_data *data);
+void			ft_handle_redirections(t_redir *redir, t_cmd *cmd, t_data *data);
 void			ft_redir_append(t_redir *redir, t_cmd *cmd);
 void			ft_redir_out(t_redir *redir, t_cmd *cmd);
 void			ft_redir_in(t_redir *redir, t_cmd *cmd);
@@ -338,6 +336,7 @@ char			*find_route(char *instruction, char *path);
 char			*get_route(char *cmd, char **envp, t_data *data);
 void			ft_close_unused_fds(t_cmd *cmd_list, t_cmd *current);
 t_cmd			*ft_cmd_last(t_cmd *cmd_list);
+int				ft_is_number(char	*token);
 
 
 /*freeing memory methods*/

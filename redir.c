@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:01:23 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 11:14:22 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:05:19 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_redir_append(t_redir *redir, t_cmd *cmd)
 	cmd->fd_out = fd;
 }
 
-void	ft_handle_redirections(t_redir *redir, t_cmd *cmd)
+void	ft_handle_redirections(t_redir *redir, t_cmd *cmd, t_data *data)
 {
 	char	*tmp_file;
 	int		fd;
@@ -56,7 +56,7 @@ void	ft_handle_redirections(t_redir *redir, t_cmd *cmd)
 		ft_redir_append(redir, cmd);
 	else if (redir->redir_type == R_HEREDOC)
 	{
-		tmp_file = ft_heredoc(redir->target);
+		tmp_file = ft_heredoc(redir->target, data);
 		redir->heredoc_tmpfile = tmp_file;
 		fd = open(redir->heredoc_tmpfile, O_RDONLY);
 		if (fd == -1)

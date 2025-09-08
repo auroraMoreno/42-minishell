@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_to_cmds.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccarro-d <ccarro-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 18:27:14 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 18:27:45 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:04:14 by ccarro-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	new_cmd(t_cmd **current_cmd)
 	return (1);
 }
 
-int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
+int	craft_cmd(t_cmd *current_cmd, t_token **token_list, t_data *data)
 {
 	bool	exec_seen;
 	int		pending_fd;
@@ -47,7 +47,7 @@ int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 		else if ((*token_list)->type == IO_NUMBER)
 			ret = add_io_num(current_cmd, token_list, &pending_fd, &exec_seen);
 		else if (is_redir(*token_list))
-			ret = add_redir(current_cmd, token_list, &pending_fd);
+			ret = add_redir(current_cmd, token_list, &pending_fd, data);
 		else
 			return (0);
 		if (!ret)
@@ -82,7 +82,7 @@ void	add_cmd(t_cmd **cmd_lst_start, t_cmd **cmd_lst_end, t_cmd *current_cmd)
 	return ;
 }
 
-t_cmd	*tokens_to_cmds(t_token *token_list)
+t_cmd	*tokens_to_cmds(t_token *token_list, t_data *data)
 {
 	t_cmd	*cmd_list_start;
 	t_cmd	*cmd_list_end;
@@ -94,7 +94,7 @@ t_cmd	*tokens_to_cmds(t_token *token_list)
 	{
 		if (!new_cmd(&current_cmd))
 			return (free_cmds(cmd_list_start, NULL));
-		if (!craft_cmd(current_cmd, &token_list))
+		if (!craft_cmd(current_cmd, &token_list, data))
 			return (free_cmds(cmd_list_start, current_cmd));
 		if (!content_in_cmd(current_cmd))
 			return (free_cmds(cmd_list_start, current_cmd));
