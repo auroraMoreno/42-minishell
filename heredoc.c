@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 21:46:57 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 00:10:55 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 10:32:43 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,13 @@ static char	*exec_heredoc(char *key_word)
 		input = readline(prompt);
 		if (input == NULL || ft_strcmp(input, key_word) == 0)
 			break ;
-        
-        aux = ft_strjoin(str, input);
-        free(str);
-        str = aux;
-        
-        aux = ft_strjoin(str, "\n");
-        free(str);
-        str = aux;
-        
-        free(input);
+		aux = ft_strjoin(str, input);
+		free(str);
+		str = aux;
+		aux = ft_strjoin(str, "\n");
+		free(str);
+		str = aux;
+		free(input);
 	}
 	aux = str;
 	str = create_file(str);
@@ -90,11 +87,11 @@ static char	*exec_heredoc(char *key_word)
 	return (str);
 }
 
-char	*heredoc(char *key_word)
+char	*ft_heredoc(char *delimitter)
 {
 	char	*str;
-	pid_t	id;
 	int		pipefd[2];
+	pid_t	id;
 
 	pipe(pipefd);
 	id = fork();
@@ -102,11 +99,10 @@ char	*heredoc(char *key_word)
 	{
 		close(pipefd[0]);
 		signal(SIGINT, SIG_DFL);
-		str = exec_heredoc(key_word);
-		//printf("CREATE FILE:%s\n", str);
+		str = exec_heredoc(delimitter);
 		ft_putstr_fd(str, pipefd[1]);
 		close(pipefd[1]);
-		exit(EXIT_SUCCESS); 
+		exit(EXIT_SUCCESS);
 	}
 	close(pipefd[1]);
 	signal(SIGINT, SIG_IGN);

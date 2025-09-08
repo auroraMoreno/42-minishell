@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 01:16:29 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 10:31:17 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void	free_token_list(t_token *token_list);
 t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
 void	free_redirs(t_redir *redirs);
 void	free_assignments(t_assign *assignments);
-void	ft_handle_redirections(t_redir *redir, t_cmd *cmd);
+void ft_handle_redirections(t_redir *redir, t_cmd *cmd);
 
 
 /*EXECUTER*/
@@ -268,7 +268,7 @@ int				ft_remove_element(char ***env_cpy, char *var_name);
 void			ft_handle_sigint(int sig);
 
 /*REDIRECTS/HEREDOC*/
-int				ft_heredoc(int from_token, char *delimitter, t_data *data);
+char			*ft_heredoc(char *delimitter);
 int				ft_heredoc_write_content(int from_token, char *delimitter, t_data *data);
 int				ft_heredoc_read_more_content(t_data *data);
 
@@ -277,7 +277,6 @@ char			*ft_read_content_heredoc(int fd);
 ssize_t			ft_read_bytes(int fd, char **buffer, char **content, int buffer_size);
 int				ft_update_content(char *content, t_data *data);
 void			ft_remove_heredoc_lines(int from, t_data *data);
-char			*heredoc(char *key_word);
 
 /*utils*/
 t_list 			*ft_process_env_values(char *key_val);

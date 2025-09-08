@@ -98,56 +98,8 @@ int	add_redir(t_cmd *current_cmd, t_token **token_list, int *pending_fd)
 			tmp = tmp->next;
 		tmp->next = redir;
 	}
-
-	//HANDLE REDIR AQUI??
 	ft_handle_redirections(redir, current_cmd);
-
-	*token_list = (*token_list)->next->next; // Avanzo 2 (redir + target)
+	*token_list = (*token_list)->next->next;
 	*pending_fd = -1;
 	return (1);
-}
-
-void ft_handle_redirections(t_redir *redir, t_cmd *cmd)
-{
-	int fd;
-	//int heredoc_flag = 0;
-
-	if(redir->redir_type == R_IN)
-	{
-		fd = open(redir->target, O_RDONLY);
-		if(fd < 0 || (redir->redir_type == R_IN && access(redir->target, R_OK) != 0))
-			ft_putendl_fd("FD error", STDOUT_FILENO); // deberia exit?
-		cmd->fd_in = fd;
-	}
-	else if(redir->redir_type == R_OUT)
-	{
-        fd = open(redir->target, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-        if (fd == -1)
-			ft_putendl_fd("FD error", STDOUT_FILENO); // deberia exit?
-        cmd->fd_out = fd;
-	}
-	else if(redir->redir_type == R_APPEND)
-	{
-		fd = open(redir->target, O_CREAT | O_WRONLY | O_APPEND, 0644);
-        if (fd == -1)
-			ft_putendl_fd("FD error", STDOUT_FILENO); // deberia exit?
-        cmd->fd_out = fd;
-	}
-	else if(redir->redir_type == R_HEREDOC)
-	{
-
-		char *tmp_file = heredoc(redir->target);
-		redir->heredoc_tmpfile = tmp_file;
-		fd = open(redir->heredoc_tmpfile, O_RDONLY);
-		
-		if (fd == -1)
-        {
-			ft_putendl_fd("Error opening heredoc file", STDOUT_FILENO);
-            exit(EXIT_FAILURE);
-        }
-		
-        cmd->fd_in = fd;
-
-	}
-
 }

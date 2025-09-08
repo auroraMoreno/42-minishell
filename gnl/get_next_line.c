@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 21:43:34 by ccarro-d          #+#    #+#             */
-/*   Updated: 2025/09/07 00:06:15 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 09:55:37 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-
 	stash[fd] = ft_read_line(fd, stash[fd]);
-	//printf("paso por el gnl !!!!\n");
-	//printf("FD GNL: %d\n", fd);
 	if (!stash[fd])
 		return (NULL);
 	stash_len = gnl_strlen(stash[fd]);
