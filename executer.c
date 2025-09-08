@@ -6,11 +6,23 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 12:02:03 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 10:23:36 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:39:00 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_handle_fds(t_cmd *cmd, int fds[])
+{
+	if (cmd->fd_out == STDOUT_FILENO)
+		cmd->fd_out = fds[1];
+	else
+		close(fds[1]);
+	if (cmd->next->fd_in == STDIN_FILENO)
+		cmd->next->fd_in = fds[0];
+	else
+		close(fds[0]);
+}
 
 int	ft_multiple_commands(t_cmd *cmd_list, t_data *data)
 {
@@ -25,14 +37,7 @@ int	ft_multiple_commands(t_cmd *cmd_list, t_data *data)
 		{
 			if (pipe(fds) == -1)
 				ft_error_and_free("pipe error", 1, data, cmd_list);
-			if (cmd->fd_out == STDOUT_FILENO)
-				cmd->fd_out = fds[1];
-			else
-				close(fds[1]);
-			if (cmd->next->fd_in == STDIN_FILENO)
-				cmd->next->fd_in = fds[0];
-			else
-				close(fds[0]);
+			ft_handle_fds(cmd, fds);
 		}
 		cmd->id_process = ft_create_fork(cmd, data, cmd_list);
 		if (cmd->id_process == FORK_ERROR)
