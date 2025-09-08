@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   craft_expansion.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:19:06 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:19:59 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	expand_var(char *in, int *i, char *out, t_env *env)
@@ -76,12 +88,12 @@ int	handle_dollar_copy(char *in, int *i, char *out, t_expand_ctx *ctx)
 	return (written);
 }
 
-t_expand_ctx	gain_context(t_env *env, int *last_status, t_quote_type *quote_type)
+t_expand_ctx	gain_context(t_env *env, int *status, t_quote_type *quote_type)
 {
 	t_expand_ctx	ctx;
 
 	*quote_type = NO_QUOTE;
-	ctx.last_status = last_status;
+	ctx.last_status = status;
 	ctx.env = env;
 	return (ctx);
 }

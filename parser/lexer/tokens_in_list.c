@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokens_in_list.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:34:41 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:44:17 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	ft_is_assignment(char	*token)
 {
 	int	i;
+
 	if (!token || !*token)
 		return (0);
 	if (!(ft_isalpha(token[0]) || token[0] == '_'))
@@ -15,22 +28,6 @@ int	ft_is_assignment(char	*token)
 		i++;
 	}
 	return (token[i] == '=');
-}
-
-int	ft_is_number(char	*token)
-{
-	int	i;
-
-	if (!token || !*token)
-		return (0);
-	i = 0;
-	while (token[i])
-	{
-		if (!ft_isdigit(token[i]))
-			return (0);
-		i++;
-	}
-	return (i);
 }
 
 t_token_type	get_token_type(char	*token)
@@ -81,40 +78,6 @@ void	add_token(t_token **head, t_token *new)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
-	return ;
-}
-
-void	print_tokens(t_token *token_list)
-{
-	int		i;
-	char	*type;
-
-	i = 1;
-	while (token_list)
-	{
-		if (token_list->type == PIPE)
-			type = "PIPE";
-		else if (token_list->type == REDIR_IN)
-			type = "REDIR_IN";
-		else if (token_list->type == REDIR_OUT)
-			type = "REDIR_OUT";
-		else if (token_list->type == HEREDOC)
-			type = "HEREDOC";
-		else if (token_list->type == REDIR_APPEND)
-			type = "REDIR_APPEND";
-		else if (token_list->type == IO_NUMBER)
-			type = "IO_NUMBER";
-		else if (token_list->type == ASSIGNMENT_WORD)
-			type = "ASSIGNMENT_WORD";
-		else if (token_list->type == WORD)
-			type = "WORD";
-		else
-			type = "UNKNOWN";
-		printf("token %d in list = %s (type = %s)\n", i, token_list->value, type);
-		token_list = token_list->next;
-		i++;
-	}
-	printf("\n");
 	return ;
 }
 

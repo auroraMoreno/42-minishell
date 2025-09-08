@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirs.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:25:07 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:26:48 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	is_redir(t_token *token_list)
@@ -12,24 +24,24 @@ int	is_redir(t_token *token_list)
 	return (0);
 }
 
-int	add_io_num(t_cmd *current_cmd, t_token **token_list, int *pending_fd, bool *exec_seen)
+int	add_io_num(t_cmd *curr_cmd, t_token **tokens, int *pend_fd, bool *exec_seen)
 {
 	long long	val;
 
-	if (!current_cmd || !token_list || !*token_list || !pending_fd)
+	if (!curr_cmd || !tokens || !*tokens || !pend_fd)
 		return (0);
-	if (!(*token_list)->next || !is_redir((*token_list)->next))
-		return (add_word(current_cmd, token_list, exec_seen));
+	if (!(*tokens)->next || !is_redir((*tokens)->next))
+		return (add_word(curr_cmd, tokens, exec_seen));
 	else
-		val = ft_atoi((*token_list)->value);
+		val = ft_atoi((*tokens)->value);
 	if (val < 0 || val > INT_MAX)
-		return (add_word(current_cmd, token_list, exec_seen));
-	*pending_fd = (int)val;
-	*token_list = (*token_list)->next;
+		return (add_word(curr_cmd, tokens, exec_seen));
+	*pend_fd = (int)val;
+	*tokens = (*tokens)->next;
 	return (1);
 }
 
-int catalogue_redir(t_redir_type *redir_type, t_token_type token_type)
+int	catalogue_redir(t_redir_type *redir_type, t_token_type token_type)
 {
 	if (token_type == REDIR_IN)
 		*redir_type = R_IN;
@@ -63,7 +75,7 @@ int	set_redir(t_redir *redir, t_token **token_list, int *pending_fd)
 		redir->from_fd = *pending_fd;
 	else if (redir->redir_type == R_IN || redir->redir_type == R_HEREDOC)
 		redir->from_fd = 0;
-	else // REDIR_OUT || REDIR_APPEND
+	else
 		redir->from_fd = 1;
 	if ((*token_list)->type == HEREDOC)
 		redir->heredoc_quoted_delim = str_is_quoted(next->value);

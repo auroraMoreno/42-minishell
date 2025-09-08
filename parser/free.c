@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:37:40 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:42:55 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 char	**free_tkn_maker(int token_nbr, char *cmd_trimmed, int *delimiters_pos)
@@ -12,20 +24,6 @@ char	**free_tkn_maker(int token_nbr, char *cmd_trimmed, int *delimiters_pos)
 	if (delimiters_pos)
 		free (delimiters_pos);
 	return (NULL);
-}
-
-void	free_matrix(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-	{
-		free(matrix[i]);
-		i++;
-	}
-	free(matrix);
-	return ;
 }
 
 void	free_token_list(t_token *token_list)
@@ -45,11 +43,11 @@ void	free_token_list(t_token *token_list)
 
 void	free_assignments(t_assign *assignments)
 {
-	t_assign *tmp;
+	t_assign	*tmp;
 
 	while (assignments)
 	{
-		tmp	= assignments;
+		tmp = assignments;
 		assignments = assignments->next;
 		if (tmp->key)
 			free (tmp->key);

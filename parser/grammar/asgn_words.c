@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   asgn_words.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:23:28 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:23:57 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	set_assign(t_assign *asgn_wrd, char	*wrd)
@@ -47,7 +59,7 @@ int	add_asgn_wrd(t_cmd *current_cmd, t_token **token_list, bool *exec_seen)
 	t_assign	*asgn_wrd;
 
 	if (!current_cmd || !token_list || !*token_list)
-		return (0);	
+		return (0);
 	if (*exec_seen)
 		return (add_word(current_cmd, token_list, exec_seen));
 	asgn_wrd = (t_assign *)ft_calloc(1, sizeof(t_assign));

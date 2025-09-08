@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_char_functions.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:30:23 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:31:05 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	check_quote(bool *in_quote, char *quote_chr, char to_check)
@@ -31,22 +43,22 @@ void	check_space(int *i, int *start, char *cmd, int *nbr)
 void	check_operator(int *i, int *start, char *cmd, int *nbr)
 {
 	char	op;
-	int 	op_count;
+	int		op_count;
 
 	if (*i > *start)
 		(*nbr)++;
 	op = cmd[*i];
 	op_count = 0;
-	if (op == '<' || op == '>') // Agrupa todos los < o > seguidos
+	if (op == '<' || op == '>')
 	{
 		while (cmd[*i] == op)
 		{
 			op_count++;
 			(*i)++;
 		}
-		*nbr += op_count / 2 + op_count % 2; // Agrupa de dos en dos
+		*nbr += op_count / 2 + op_count % 2;
 	}
-	else // solo para '|'
+	else
 	{
 		(*nbr)++;
 		(*i)++;
@@ -54,7 +66,7 @@ void	check_operator(int *i, int *start, char *cmd, int *nbr)
 	while (is_space(cmd[*i]))
 		(*i)++;
 	*start = *i;
-	(*i)--; // porque el while principal hará i++
+	(*i)--;
 }
 
 void	check_no_quote(int *i, int *start, char *cmd, int *nbr)

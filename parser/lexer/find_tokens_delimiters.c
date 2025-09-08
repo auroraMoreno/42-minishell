@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_tokens_delimiters.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:32:13 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:33:28 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int	check_delimiter(int i, int start, char * cmd, int nbr)
+int	check_delimiter(int i, int start, char *cmd, int nbr)
 {
 	int	j;
 	int	fake_start;
 	int	aux;
-	// uso copias para no alterar los valores de "i", "start" y "nbr"
+
 	j = i;
 	fake_start = start;
 	aux = nbr;
@@ -20,7 +32,6 @@ int	get_delimiter(int *i, int *start, char *cmd, int *nbr)
 	int	j;
 	int	fake_start;
 	int	aux;
-	// uso una copia de "nbr" porque en la llamada a la función, nbr es también el iterador de "delimiter_pos"
 
 	j = *i;
 	fake_start = *start;
@@ -44,7 +55,7 @@ int	get_delimiter(int *i, int *start, char *cmd, int *nbr)
 	return (*start);
 }
 
-int check_array(int *delimiters_pos, int token_number)
+int	check_array(int *delimiters_pos, int token_number)
 {
 	int	i;
 
@@ -53,7 +64,6 @@ int check_array(int *delimiters_pos, int token_number)
 		return (-1);
 	while (i < (token_number + 1))
 	{
-		//printf("delimiter_por[%d] = %d && delimiter_pos[%d] = %d\n", i, delimiters_pos[i], (i - 1), delimiters_pos[i - 1]);
 		if (delimiters_pos[i] <= delimiters_pos[i - 1])
 			return (-1);
 		i++;

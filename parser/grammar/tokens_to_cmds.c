@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokens_to_cmds.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/08 18:27:14 by aumoreno          #+#    #+#             */
+/*   Updated: 2025/09/08 18:27:45 by aumoreno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	new_cmd(t_cmd **current_cmd)
@@ -18,8 +30,8 @@ int	new_cmd(t_cmd **current_cmd)
 
 int	craft_cmd(t_cmd *current_cmd, t_token **token_list)
 {
-	bool	exec_seen; // TO DO: ver por qué usarlo
-	int		pending_fd; // TO DO: ver por qué usarlo
+	bool	exec_seen;
+	int		pending_fd;
 	int		ret;
 
 	if (!current_cmd || !*token_list || !(*token_list)->value)
