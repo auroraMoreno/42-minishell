@@ -6,7 +6,7 @@
 /*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 12:54:37 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/08 10:31:17 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:16:31 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void	free_token_list(t_token *token_list);
 t_cmd	*free_cmds(t_cmd *cmd_list_start, t_cmd *current_cmd);
 void	free_redirs(t_redir *redirs);
 void	free_assignments(t_assign *assignments);
-void ft_handle_redirections(t_redir *redir, t_cmd *cmd);
+
 
 
 /*EXECUTER*/
@@ -269,8 +269,11 @@ void			ft_handle_sigint(int sig);
 
 /*REDIRECTS/HEREDOC*/
 char			*ft_heredoc(char *delimitter);
-int				ft_heredoc_write_content(int from_token, char *delimitter, t_data *data);
-int				ft_heredoc_read_more_content(t_data *data);
+void			ft_handle_redirections(t_redir *redir, t_cmd *cmd);
+void			ft_redir_append(t_redir *redir, t_cmd *cmd);
+void			ft_redir_out(t_redir *redir, t_cmd *cmd);
+void			ft_redir_in(t_redir *redir, t_cmd *cmd);
+
 
 /*heredoc utils*/
 char			*ft_read_content_heredoc(int fd);
@@ -284,7 +287,8 @@ char 			*ft_find_equal_sign(char *str);
 int 			ft_strcmp(const char *s1, const char *s2);
 char			*find_route(char *instruction, char *path);
 char			*get_route(char *cmd, char **envp, t_data *data);
-
+void			ft_close_unused_fds(t_cmd *cmd_list, t_cmd *current);
+t_cmd			*ft_cmd_last(t_cmd *cmd_list);
 
 
 /*freeing memory methods*/
