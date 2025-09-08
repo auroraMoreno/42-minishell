@@ -3,125 +3,118 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumoreno <aumoreno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumoreno < aumoreno@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 17:44:45 by aumoreno          #+#    #+#             */
-/*   Updated: 2025/09/07 22:57:40 by aumoreno         ###   ########.fr       */
+/*   Updated: 2025/09/08 09:29:44 by aumoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char *ft_get_key(char *str)
+char	*ft_get_key(char *str)
 {
-    int i = 0;
+	int	i;
 
-    while(str[i] && str[i] != '=')
-        i++;
-      
-    return(ft_substr(str, 0, i));
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	return (ft_substr(str, 0, i));
 }
 
-char **ft_add_env_cpy(char **env_cpy, char *key, char *value)
+char	**ft_add_env_cpy(char **env_cpy, char *key, char *value)
 {
-	int env_len;
-	char *new_var;
-	char *temp;
-	char **new_env;
+	int		env_len;
+	int		i;
+	char	*new_var;
+	char	*temp;
+	char	**new_env;
 
-	if(value == NULL)
+	if (value == NULL)
 		return (env_cpy);
 	env_len = ft_get_env_size(env_cpy);
-	temp = ft_strjoin(key,"=");
+	temp = ft_strjoin(key, "=");
 	new_var = ft_strjoin(temp, value);
 	new_env = ft_calloc(env_len + 2, sizeof(char *));
-
-	int i = 0;
-	while(i < env_len)
+	i = 0;
+	while (i < env_len)
 	{
 		new_env[i] = env_cpy[i];
-		// printf("old_env: %s\n", env_cpy[i]);
-		// printf("new_env: %s\n", new_env[i]);
 		i++;
 	}
-	
 	new_env[env_len] = new_var;
 	new_env[env_len + 1] = NULL;
-	
-
 	free(temp);
-	//free(new_var);
 	free(env_cpy);
-	return new_env;	
+	return (new_env);
 }
 
-int ft_find_in_env_cpy(char **env, char *key)
+int	ft_find_in_env_cpy(char **env, char *key)
 {
-    int i = 0;
-    char *curr_key;
-    
-    while(env[i])
-    {
-      curr_key = ft_get_key(env[i]);
-      
-      if(ft_strcmp(curr_key, key) == 0)
-      {
-        free(curr_key);
-        return (i);
-      }
-      free(curr_key);
-      i++;
-    }
+	int		i;
+	char	*curr_key;
 
-    return (-1);
+	i = 0;
+	while (env[i])
+	{
+		curr_key = ft_get_key(env[i]);
+		if (ft_strcmp(curr_key, key) == 0)
+		{
+			free(curr_key);
+			return (i);
+		}
+		free(curr_key);
+		i++;
+	}
+	return (-1);
 }
 
-int ft_check_variables(char *var)
+int	ft_check_variables(char *var)
 {
-    int i;
-    if(!var || !var[0] || var[0] == '=')
-      return (0);
-    //si no empieza con _ o no es letra
-    if(!(ft_isalpha(var[0]) || var[0] == '_'))
-      return (0);
-    
-    i = 1;
-    while(var[i] && var[i] != '=')
-    {
-        if(!(ft_isalnum(var[i]) || var[i] == '_'))
-          return(0);
-        i++;
-    }
-    
-    return (1);
-      
+	int	i;
+
+	if (!var || !var[0] || var[0] == '=')
+		return (0);
+	if (!(ft_isalpha(var[0]) || var[0] == '_'))
+		return (0);
+	i = 1;
+	while (var[i] && var[i] != '=')
+	{
+		if (!(ft_isalnum(var[i]) || var[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-// Función para ordenar el array env alfabéticamente por la clave
-char **ft_sort_alpha(char **env) {
-    int i = 0, j;
-    int len = ft_get_env_size(env);
-    char *aux;
-    char *key1;
-    char *key2;
+char	**ft_sort_alpha(char **env)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*aux;
+	char	*key1;
+	char	*key2;
 
-    while (i < len - 1) {
-        j = 0;
-        while (j < len - i - 1) 
-        {
-          key1= ft_get_key(env[j]);
-          key2= ft_get_key(env[j + 1]);
-          if (ft_strcmp(key1, key2) > 0) 
-          {
-              aux = env[j];
-              env[j] = env[j + 1];
-              env[j + 1] = aux;
-          }
-          free(key1);
-          free(key2);
-          j++;
-        }
-        i++;
-    }
-    return (env);
+	len = ft_get_env_size(env);
+	i = 0;
+	while (i < len - 1)
+	{
+		j = 0;
+		while (j < len - i - 1)
+		{
+			key1 = ft_get_key(env[j]);
+			key2 = ft_get_key(env[j + 1]);
+			if (ft_strcmp(key1, key2) > 0)
+			{
+				aux = env[j];
+				env[j] = env[j + 1];
+				env[j + 1] = aux;
+			}
+			(free(key1), free(key2));
+			j++;
+		}
+		i++;
+	}
+	return (env);
 }
